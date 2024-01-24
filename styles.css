@@ -1,10 +1,15 @@
-body{
+/* fonts */
+@font-face { font-family: BigNoodle; src: url("fonts/big_noodle_titling.ttf"); }
+@font-face { font-family: Avenir; src: url("fonts/Avenir Next LT Pro Regular.otf"); }
+
+body {
+    font-family: Avenir;
     background-color: white;
-    color: #212529;
+    color: #333333;
     margin: 0;
 }
 
-body.dark-mode{
+body.dark-mode {
     color: #d3d3d3;
 
     .nav-link, .btn, a {
@@ -58,11 +63,6 @@ body h5, h6{
     color: #006225;
 }
 
-header{
-    background-color: #ffffff;
-    height: 70px;
-}
-
 main{
     background-color: #f5f5f5;
     min-height: calc(100vh - 200px);
@@ -84,6 +84,26 @@ footer button{
 .link {
     color: #006225;
     font-weight: 600;
+}
+
+/* nav styles */
+
+#grc-logo {
+    height: 70px;
+}
+
+nav {
+    background-color: #2C882B;
+    a {
+        border-bottom: solid 3px #2C882B !important;
+        font-family: BigNoodle;
+        font-size: 1.7rem !important;
+    }
+}
+
+nav a:hover {
+    background-color: white;
+    border-bottom: solid 3px  #D14900 !important;
 }
 
 /* form styles */
@@ -131,19 +151,6 @@ footer button{
 .warning {
     color: #D14900;
 }
-
-/* nav styles */
-
-#grc-logo {
-    height: 80px;
-}
-
-.nav-container {
-    background-color: #2C882B;
-}
-
-
-
 
 @media screen and (max-width: 1000px) {
     #main-container {
