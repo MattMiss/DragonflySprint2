@@ -1,0 +1,253 @@
+body{
+    background-color: white;
+    color: #212529;
+    margin: 0;
+}
+
+body.dark-mode{
+    color: #d3d3d3;
+
+    .nav-link, .btn, a {
+        color: #bbb;
+    }
+
+    .navbar-brand{
+        color: #d3d3d3
+    }
+
+    .nav-container{
+        background-color: #4d4d4d;
+    }
+
+    main{
+        background-color: #333333;
+    }
+
+    footer{
+        background-color: #4d4d4d;
+        position: relative;
+    }
+    .btn{
+        color: #bbb;
+    }
+
+    .dashboard-top>div {
+        border: 3px solid #bbb;
+    }
+
+    .form-header {
+        background-color: rgba(220, 220, 220,.1);
+        border: solid 1px rgba(220, 220, 220,.125);
+        border-bottom: none;
+    }
+
+    .form-container {
+        border: solid 1px rgba(220, 220, 220,.125);
+    }
+
+    .reminder-div{
+        border: 1px solid #bbb;
+    }
+
+    #new-app-btn{
+        border: 2px solid #bbb;
+    }
+}
+
+body h5, h6{
+    color: #006225;
+}
+
+header{
+    background-color: #ffffff;
+    height: 70px;
+}
+
+main{
+    background-color: #f5f5f5;
+    min-height: calc(100vh - 200px);
+}
+
+footer{
+    background-color: #ffffff;
+    /*height: 130px;*/
+}
+
+footer button{
+    border-radius: 0;
+}
+
+#bio-container p {
+    text-align: justify;
+}
+
+.link {
+    color: #006225;
+    font-weight: 600;
+}
+
+/* form styles */
+.form-header {
+    background-color: rgba(0,0,0,.03);
+    border: solid 1px rgba(0,0,0,.125);
+    border-bottom: none;
+    margin-bottom: 0;
+    padding: 1rem;
+}
+
+.form-container {
+    border: solid 1px rgba(0,0,0,.125);
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3rem;
+}
+
+.form-body {
+    width: 90%;
+}
+
+/*input[type='radio']:checked {*/
+/*    background-color: grey;*/
+/*    border-color: grey;*/
+/*}*/
+
+.submit-btn {
+    background-color: white;
+    border: 1px solid #545454;
+    border-radius: 2px;
+    color: #2c882b;
+    font-weight: 600;
+    padding: 7px 10px 7px 10px;
+}
+
+.submit-btn-hover {
+    background-color: #6CB443;
+    border: 1px solid #6CB443;
+    border-radius: 2px;
+    font-weight: 600;
+    padding: 7px 10px 7px 10px;
+}
+
+.warning {
+    color: #D14900;
+}
+
+/* nav styles */
+
+#grc-logo {
+    height: 80px;
+}
+
+.nav-container {
+    background-color: #2C882B;
+}
+
+
+
+
+@media screen and (max-width: 1000px) {
+    #main-container {
+        max-width: 90%;
+    }
+    .app-list, .reminders, .software-dev-img, .about-program {
+        width: 100%;
+        margin-bottom: 25px;
+    }
+    .software-dev-img {
+        width: 80%;
+        margin: auto auto 25px;
+    }
+    #new-app-container, #update-account-container {
+        width: 50%;
+    }
+    .app-button-inner {
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .app-button-outer {
+        width:50%;
+    }
+    .title {
+        text-align: center;
+        width:66.66666666666%;
+    }
+}
+
+.app-list{
+    gap: 10px;
+    padding: 15px;
+}
+
+.app-list-item{
+    margin: 6px 0;
+    align-items: center;
+}
+
+.app-list-item .btn{
+    width: 100%;
+}
+
+.app-list-item .btn-update:hover{
+    background-color: #6CB443;
+}
+
+.app-list-item .btn-delete:hover{
+    background-color: red;
+}
+
+.dashboard-top{
+    gap: 10px;
+    margin-bottom: 20px;
+
+}
+
+.reminders{
+    padding: 15px;
+}
+
+.welcome-info{
+    margin-top: 20px;
+}
+
+.reminder-div{
+    padding: 5px;
+    margin-bottom: 10px;
+    align-items: center;
+    border: 1px solid black;
+}
+
+.reminder-div .btn{
+    width: 100%;
+}
+
+.reminder-div .btn:hover{
+    background-color: #6CB443;
+}
+
+.btn-reminder-more{
+    color: black;
+}
+
+a {
+    color: purple;
+}
+
+.dashboard-top>div{
+    border: 3px solid black;
+}
+
+.resources-list{
+    gap: 10px
+}
+
+.resources-list>li{
+    border: none;
+    background-color: transparent;
+}
+
+#new-app-btn{
+    border: 2px solid black;
+}

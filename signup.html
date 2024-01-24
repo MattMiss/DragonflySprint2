@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign-up</title>
+    <link href="styles.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<div class="nav-container">
+    <div class="container p-1">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="index.html">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="signup.html">Sign Up</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="applicationform.html">Add New Application</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="contact.html">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+<main>
+    <div class="container p-3" id="main-container">
+        <div class="d-flex justify-content-end">
+            <div class="form-check form-switch">
+                <label class="form-check-label" for="dark-mode-switch">Dark Mode</label>
+                <input class="form-check-input" type="checkbox" role="switch" id="dark-mode-switch">
+            </div>
+        </div>
+        <h3 class="form-header p-3 mb-0">Sign-up</h3>
+        <div class="form-container mb-5">
+            <div class="form-body">
+                <form method="post" action="https://dragonfly.greenriverdev.com/vardump.php" onsubmit="return validateForm()" class="my-3">
+                    <div class="mb-3">
+                        <label for="input-name" class="form-label">Name*</label>
+                        <input type="text" class="form-control" id="input-name" name="name" placeholder="First and Last Name" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="input-email" class="form-label">Email*</label>
+                        <input type="email" class="form-control" id="input-email" name="email" placeholder="e.g. example@email.com" required>
+                        <small id="email-message">Note: an @greenriver.edu email is preferred</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="input-cohort-num" class="form-label">Cohort Number*</label>
+                        <input type="number" class="form-control" id="input-cohort-num" name="cohort-num" min="1" max="100" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <p>Status</p>
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" id="seekingInternship" name="status" value="true">
+                            <label for="seekingInternship" class="form-check-label">Seeking Internship</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" id="seekingJob" name="status" value="true">
+                            <label for="seekingJob" class="form-check-label">Seeking Job</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" id="notSearching" name="status" value="true">
+                            <label for="notSearching" class="form-check-label">Not Actively Searching</label>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="input-roles" class="form-label">What roles are you looking for?*</label>
+                        <textarea type="text" class="form-control" id="input-roles" name="roles" minlength="50" maxlength="500" placeholder="Type here..." required></textarea>
+                    </div>
+
+                    <button id="submit-btn" type="submit" class="submit-btn">Submit</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</main>
+<footer>
+    <div class="container p-3 ">
+        <h6>RESOURCES:</h6>
+        <ul class="list-unstyled justify-content-center resources-list list-group list-group-horizontal-sm list-group-flush">
+            <li class="list-group-item p-0 m-0">
+                <a href="https://www.linkedin.com/" target="_blank" class="btn btn-light
+                 text-dark btn-sm">
+                    <img src="images/In-Blue-Logo.png" alt="5" style="max-height: 25px">LinkedIn
+                </a>
+            </li>
+            <li class="list-group-item p-0 m-0">
+                <a href="https://www.indeed.com/" target="_blank" class="btn btn-light
+                 text-dark btn-sm">
+                    <img src="images/Indeed_Logo_RGB.png" alt="5" style="max-height: 25px">
+                </a>
+            </li>
+            <li class="list-group-item p-0 m-0">
+                <a href="https://www.devs.greenrivertech.net/studentResources" target="_blank" class="btn btn-light
+                 text-dark btn-sm">
+                    <img src="images/sdev_logo.png" alt="5" style="max-height: 25px"> Green River Tech
+                </a>
+            </li>
+            <li class="list-group-item p-0 m-0">
+                <a href="https://www.glassdoor.com/index.htm" target="_blank" class="btn btn-light
+                 text-dark btn-sm">
+                    <img src="images/new-glassdoor-icon-1-300x239.jpg" alt="5" style="max-height: 25px"> Glassdoor
+                </a>
+            </li>
+            <li class="list-group-item p-0 m-0">
+                <a href="https://www.levels.fyi/?compare=Amazon,Microsoft,Facebook&track=Software%20Engineer" target="_blank" class="btn btn-light
+                 text-dark btn-sm">
+                    <img src="images/levelsfyi.png" alt="5" style="max-height: 25px">Levels FYI
+                </a>
+            </li>
+            <li class="list-group-item p-0 m-0">
+                <a href="https://www.google.com/search?q=software+development+jobs" target="_blank" class="btn btn-light text-dark btn-sm">
+                    More
+                </a>
+            </li>
+        </ul>
+    </div>
+</footer>
+<script src="js/signupscript.js"></script>
+</body>
+</html>
