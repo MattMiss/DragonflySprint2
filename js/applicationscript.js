@@ -1,3 +1,4 @@
+const status = document.getElementById("application-status")
 const darkModeSwitch = document.getElementById("dark-mode-switch");
 const submit = document.getElementById("submit-btn");
 
@@ -7,6 +8,15 @@ window.onload = function() {
     setupListeners();
 }
 
+function validateForm() {
+    let selection = status.options[status.selectedIndex].value;
+    var tinyText = document.getElementById("application-wrong")
+    if(selection === "select") {
+        tinyText.innerHTML = "Please select an option."
+        status.focus();
+        return false;
+    }
+}
 function setupListeners(){
     setupMouseListeners();
     setupDarkModeListener();
