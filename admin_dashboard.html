@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <!-- Latest compiled and minified CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css"/>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-sm sticky-top py-1 ">
+    <div class="container-fluid">
+        <img src="images/GRC_Logo_White.png" alt="GreenRiver College logo" id="grc-logo">
+        <button type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" class="navbar-toggler"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbar-menu">
+            <ul class="navbar-nav nav-underline">
+                <li><a href="index.html" class="nav-link ms-4">User Dashboard</a></li>
+                <li><a href="#" class="nav-link ms-4">Admin Dashboard</a></li>
+                <li><a href="signup.html" class="nav-link">Sign-up</a></li>
+                <li><a href="applicationform.html" class="nav-link">New Application</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+        <div class="d-flex justify-content-end">
+            <div class="form-check form-switch">
+                <label class="form-check-label" for="dark-mode-switch">Dark Mode</label>
+                <input class="form-check-input" type="checkbox" role="switch" id="dark-mode-switch">
+            </div>
+        </div>
+    </div>
+</nav>
+
+<main>
+    <div class="container p-3" id="main-container">
+
+        <div class="row dashboard-top">
+            <div class="app-list col-8">
+                <h3>Recent Applications</h3>
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Status</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="app-list-item">
+                        <td>01/22/2024</td>
+                        <td>Costco</td>
+                        <td>Applied</td>
+                        <td>
+                            <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
+                        </td>
+                        <td>
+                            <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr class="app-list-item">
+                        <td>01/19/2024</td>
+                        <td>REI</td>
+                        <td>Applied</td>
+                        <td>
+                            <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
+                        </td>
+                        <td>
+                            <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr class="app-list-item">
+                        <td>01/15/2024</td>
+                        <td>Starbucks</td>
+                        <td>Interviewing</td>
+                        <td>
+                            <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
+                        </td>
+                        <td>
+                            <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr class="app-list-item">
+                        <td>01/10/2024</td>
+                        <td>Microsoft</td>
+                        <td>Pending</td>
+                        <td>
+                            <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
+                        </td>
+                        <td>
+                            <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr class="app-list-item">
+                        <td >01/02/2024</td>
+                        <td>T-Mobile</td>
+                        <td>Inactive</td>
+                        <td>
+                            <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
+                        </td>
+                        <td>
+                            <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p class="title mx-auto" style="display: block; width:100px; color: green">More</p>
+
+            </div>
+            <div class="reminders col ">
+                <div>
+                    <h3>Reminders</h3>
+                    <table class="table table-hover">
+                        <tr class="reminder-div">
+                            <td class="col-8">Follow up with XYZ</td>
+                            <td class="col-4">
+                                <a href="#" class="btn border border-3 border-success">View</a>
+                            </td>
+                        </tr>
+                        <tr class="reminder-div">
+                            <td>3 Incomplete apps</td>
+                            <td>
+                                <a href="#" class="btn border border-3 border-success">View</a>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="row reminder-div">
+                        <div class="text-center">
+                            <a href="#" class="btn-reminder-more border-black">Find More Opportunities</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="row p-3">
+            <div class="col-8 d-flex" id="new-app-container">
+                <a href="#" id="new-app-btn" class="btn mx-auto p-2">Add NEW APP</a>
+            </div>
+            <div class="col-4 text-center" id="update-account-container">
+                <a href="#" class="" style="color:green">Update Account Setting</a>
+            </div>
+        </div>
+        <div class="row dashboard-top">
+            <div class="user-list">
+                <h3>Users</h3>
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="app-list-item">
+                        <td>Theo Red</td>
+                        <td>red.ted@student.greenriver.edu</td>
+                        <td>
+                            <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
+                        </td>
+                        <td>
+                            <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr class="app-list-item">
+                        <td>Susan Blue</td>
+                        <td>blue.sue@student.greenriver.edu</td>
+                        <td>
+                            <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
+                        </td>
+                        <td>
+                            <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr class="app-list-item">
+                        <td>Samwise Green</td>
+                        <td>green.sam@student.greenriver.edu</td>
+                        <td>
+                            <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
+                        </td>
+                        <td>
+                            <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr class="app-list-item">
+                        <td>Penelope Purple</td>
+                        <td>purple.penny@student.greenriver.edu</td>
+                        <td>
+                            <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
+                        </td>
+                        <td>
+                            <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr class="app-list-item">
+                        <td>August Orange</td>
+                        <td>orange.august@student.greenriver.edu</td>
+                        <td>
+                            <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
+                        </td>
+                        <td>
+                            <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p class="title mx-auto" style="display: block; width:100px; color: green">More</p>
+            </div>
+        </div>
+        <div class="row welcome-info">
+            <div>
+                <p>Welcome to the Green River College Software Development Application Tracking Tool (ATT). The purpose of this tool is to provide a centralized place to track your job/internship applications that can be helpful in your application journey! </p>
+            </div>
+        </div>
+
+        <div class="row text-wrap">
+            <div class="software-dev-img col-3">
+                <img src="images/it-software-dev.jpg" alt="5" class="img-fluid col-3" style="width: 500px">
+            </div>
+
+            <div class="about-program col-9">
+                <h5>About Our Program</h5>
+                <p>Prepare for an exciting career in tech with a Bachelor of Applied Science in Software Development. Affordable tuition, instructors who care, access to tech industry mentors, and project-based learning make our applied bachelor’s program a popular destination for computing majors throughout the Seattle-Tacoma region. This degree prepares graduates for high-demand jobs such as software developer, web developer, software developer in test, and quality assurance (QA) analyst. Learn more at <a class="link" href="https://www.greenriver.edu/students/academics/degrees-programs/bachelor-of-applied-science/bachelors-in-software-development/">GreenRiver.edu</a></p>
+            </div>
+        </div>
+    </div>
+</main>
+<footer>
+    <div class="container p-3 ">
+        <h6>RESOURCES:</h6>
+        <ul class="list-unstyled justify-content-center resources-list list-group list-group-horizontal-sm list-group-flush">
+            <li class="list-group-item p-0 m-0">
+                <a href="https://www.linkedin.com/" target="_blank" class="btn btn-light
+                 text-dark btn-sm">
+                    <img src="images/In-Blue-Logo.png" alt="5" style="max-height: 25px">LinkedIn
+                </a>
+            </li>
+            <li class="list-group-item p-0 m-0">
+                <a href="https://www.indeed.com/" target="_blank" class="btn btn-light
+                 text-dark btn-sm">
+                    <img src="images/Indeed_Logo_RGB.png" alt="5" style="max-height: 25px">
+                </a>
+            </li>
+            <li class="list-group-item p-0 m-0">
+                <a href="https://www.devs.greenrivertech.net/studentResources" target="_blank" class="btn btn-light
+                 text-dark btn-sm">
+                    <img src="images/sdev_logo.png" alt="5" style="max-height: 25px"> Green River Tech
+                </a>
+            </li>
+            <li class="list-group-item p-0 m-0">
+                <a href="https://www.glassdoor.com/index.htm" target="_blank" class="btn btn-light
+                 text-dark btn-sm">
+                    <img src="images/new-glassdoor-icon-1-300x239.jpg" alt="5" style="max-height: 25px"> Glassdoor
+                </a>
+            </li>
+            <li class="list-group-item p-0 m-0">
+                <a href="https://www.levels.fyi/?compare=Amazon,Microsoft,Facebook&track=Software%20Engineer" target="_blank" class="btn btn-light
+                 text-dark btn-sm">
+                    <img src="images/levelsfyi.png" alt="5" style="max-height: 25px">Levels FYI
+                </a>
+            </li>
+            <li class="list-group-item p-0 m-0">
+                <a href="https://www.google.com/search?q=software+development+jobs" target="_blank" class="btn btn-light text-dark btn-sm">
+                    More
+                </a>
+            </li>
+        </ul>
+    </div>
+</footer>
+<script src="js/script.js"></script>
+</body>
+</html>

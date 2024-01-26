@@ -3,7 +3,7 @@
 @font-face { font-family: Avenir; src: url("fonts/Avenir Next LT Pro Regular.otf"); }
 
 body {
-    font-family: Avenir;
+    font-family: "AvenirNext LT Pro", Avenir, Arial;
     background-color: white;
     color: #333333;
     margin: 0;
@@ -59,8 +59,9 @@ body.dark-mode {
     }
 }
 
-body h5, h6{
+body h5, h6, h4, h3{
     color: #006225;
+    font-family: BigNoodle;
 }
 
 main{
@@ -193,6 +194,11 @@ nav a:hover {
     align-items: center;
 }
 
+.user-list{
+    gap: 10px;
+    padding: 15px;
+}
+
 .app-list-item .btn{
     width: 100%;
 }
@@ -223,7 +229,7 @@ nav a:hover {
     padding: 5px;
     margin-bottom: 10px;
     align-items: center;
-    border: 1px solid black;
+    /*border: 1px solid black;*/
 }
 
 .reminder-div .btn{
