@@ -1,15 +1,22 @@
-const darkModeSwitch = document.getElementById("dark-mode-switch");
+const status = document.getElementById("application-status")
 const submit = document.getElementById("submit-btn");
-
-window.onload = function() {
+window.addEventListener('load', function() {
     setTodayDate();
     set2WeekDate();
     setupListeners();
-}
+});
 
+function validateForm() {
+    let selection = status.options[status.selectedIndex].value;
+    var tinyText = document.getElementById("application-wrong")
+    if(selection === "select") {
+        tinyText.innerHTML = "Please select an option."
+        status.focus();
+        return false;
+    }
+}
 function setupListeners(){
     setupMouseListeners();
-    setupDarkModeListener();
 }
 
 function setTodayDate() {
@@ -47,22 +54,13 @@ function set2WeekDate() {
     document.getElementById('two-weeks').value = twoWeekDay;
 }
 
-function setupDarkModeListener() {
-    let darkModeOn = false;
-
-    darkModeSwitch.addEventListener("change", () => {
-        darkModeOn ? document.body.classList.remove('dark-mode') : document.body.classList.add('dark-mode');
-        darkModeOn = !darkModeOn;
-    });
-}
-
 function setupMouseListeners(){
-    submit.addEventListener("mouseover", (Event) => {
+    submit.addEventListener("mouseover", () => {
         submit.className += "-hover";
 
     });
 
-    submit.addEventListener("mouseout", (Event) => {
+    submit.addEventListener("mouseout", () => {
         submit.className = "submit-btn";
 
     });
