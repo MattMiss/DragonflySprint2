@@ -3,19 +3,17 @@ const name = document.getElementById("input-name");
 const email = document.getElementById("input-email");
 const cohortNumber = document.getElementById("input-cohort-num");
 const roles = document.getElementById("input-roles");
-const darkModeSwitch = document.getElementById("dark-mode-switch");
 const submit = document.getElementById("submit-btn");
 const MIN = 1;
 const MAX = 100;
 const MIN_CHARACTERS = 50;
 const MAX_CHARACTERS = 500;
 
-window.onload = function() {
+window.addEventListener('load', function() {
     setupListeners();
-}
+});
 
 function setupListeners(){
-    setupDarkModeListener()
     setupMouseListener();
 }
 
@@ -85,22 +83,13 @@ email.addEventListener("input", (Event) => {
 // }
 
 function setupMouseListener(){
-    submit.addEventListener("mouseover", (Event) => {
+    submit.addEventListener("mouseover", () => {
         submit.className += "-hover";
 
     });
 
-    submit.addEventListener("mouseout", (Event) => {
+    submit.addEventListener("mouseout", () => {
         submit.className = "submit-btn";
 
-    });
-}
-
-function setupDarkModeListener(){
-    let darkModeOn = false;
-
-    darkModeSwitch.addEventListener("change", () => {
-        darkModeOn ? document.body.classList.remove('dark-mode') : document.body.classList.add('dark-mode');
-        darkModeOn = !darkModeOn;
     });
 }

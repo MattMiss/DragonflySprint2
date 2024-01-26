@@ -3,46 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <title>Sign-up</title>
+    <!-- Load theme from localstorage -->
+    <script src="js/themescript.js"></script>
     <link href="styles.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-<div class="nav-container">
-    <div class="container p-1">
-        <nav class="navbar navbar-expand-lg">
-            <div class="container-fluid">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="index.html">Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="signup.html">Sign Up</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="applicationform.html">Add New Application</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="contact.html">Contact</a>
-                        </li>
-                    </ul>
+<div class="nav-container sticky-top">
+    <nav class="navbar navbar-expand-sm py-1 ">
+        <div class="container-fluid">
+            <img src="images/GRC_Logo_White.png" alt="GreenRiver College logo" id="grc-logo">
+            <button type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" class="navbar-toggler"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse mx-4" id="navbar-menu">
+                <ul class="navbar-nav nav-underline">
+                    <li><a href="index.html" class="nav-link">User Dashboard</a></li>
+                    <li><a href="admin_dashboard.html" class="nav-link">Admin Dashboard</a></li>
+                    <li><a href="#" class="nav-link">Sign-up</a></li>
+                    <li><a href="applicationform.html" class="nav-link">New Application</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+                </ul>
+            </div>
+            <div class="d-flex justify-content-end">
+                <div class="form-check form-switch">
+                    <label class="form-check-label" for="dark-mode-switch">Dark Mode</label>
+                    <input class="form-check-input" type="checkbox" role="switch" id="dark-mode-switch">
                 </div>
             </div>
-        </nav>
-    </div>
+        </div>
+    </nav>
 </div>
 <main>
     <div class="container p-3" id="main-container">
-        <div class="d-flex justify-content-end">
-            <div class="form-check form-switch">
-                <label class="form-check-label" for="dark-mode-switch">Dark Mode</label>
-                <input class="form-check-input" type="checkbox" role="switch" id="dark-mode-switch">
-            </div>
-        </div>
         <h3 class="form-header p-3 mb-0">Sign-up</h3>
         <div class="form-container mb-5">
             <div class="form-body">
@@ -133,6 +125,7 @@
         </ul>
     </div>
 </footer>
+<script src="js/main.js"></script>
 <script src="js/signupscript.js"></script>
 </body>
 </html>

@@ -2,75 +2,45 @@
 @font-face { font-family: BigNoodle; src: url("fonts/big_noodle_titling.ttf"); }
 @font-face { font-family: Avenir; src: url("fonts/Avenir Next LT Pro Regular.otf"); }
 
-body {
-    font-family: "AvenirNext LT Pro", Avenir, Arial;
-    background-color: white;
-    color: #333333;
-    margin: 0;
+:root{
+    --font-color: black;
+    --bg-color-primary: #F5F5F5;
+    --bg-color-secondary: white;
+    --header-color: #006225;
+    --outline-color: black;
+    --form-outline-color: rgba(0,0,0,.125);
+    --form-header-color: rgba(0,0,0,.03);
+}
+:root[data-theme="dark"] {
+    --font-color: #c1bfbd;
+    --bg-color-primary: #333;
+    --bg-color-secondary: #4d4d4d;
+    --header-color: #2C882B;
+    --outline-color: #BBB;
+    --form-outline-color: rgba(220, 220, 220,.125);
+    --form-header-color: rgba(220, 220, 220,.1);
 }
 
-body.dark-mode {
-    color: #d3d3d3;
-
-    .nav-link, .btn, a {
-        color: #bbb;
-    }
-
-    .navbar-brand{
-        color: #d3d3d3
-    }
-
-    .nav-container{
-        background-color: #4d4d4d;
-    }
-
-    main{
-        background-color: #333333;
-    }
-
-    footer{
-        background-color: #4d4d4d;
-        position: relative;
-    }
-    .btn{
-        color: #bbb;
-    }
-
-    .dashboard-top>div {
-        border: 3px solid #bbb;
-    }
-
-    .form-header {
-        background-color: rgba(220, 220, 220,.1);
-        border: solid 1px rgba(220, 220, 220,.125);
-        border-bottom: none;
-    }
-
-    .form-container {
-        border: solid 1px rgba(220, 220, 220,.125);
-    }
-
-    .reminder-div{
-        border: 1px solid #bbb;
-    }
-
-    #new-app-btn{
-        border: 2px solid #bbb;
-    }
+body {
+    color: var(--font-color) !important;
 }
 
 body h5, h6, h4, h3{
-    color: #006225;
-    font-family: BigNoodle;
+    color: var(--header-color);
+    font-family: BigNoodle, sans-serif;
+}
+
+.btn, .nav-link, a {
+    color: var(--font-color);
 }
 
 main{
-    background-color: #f5f5f5;
+    background-color: var(--bg-color-primary);
     min-height: calc(100vh - 200px);
 }
 
 footer{
-    background-color: #ffffff;
+    background-color: var(--bg-color-secondary);
     /*height: 130px;*/
 }
 
@@ -97,7 +67,7 @@ nav {
     background-color: #2C882B;
     a {
         border-bottom: solid 3px #2C882B !important;
-        font-family: BigNoodle;
+        font-family: BigNoodle sans-serif;
         font-size: 1.7rem !important;
     }
 }
@@ -109,15 +79,15 @@ nav a:hover {
 
 /* form styles */
 .form-header {
-    background-color: rgba(0,0,0,.03);
-    border: solid 1px rgba(0,0,0,.125);
+    background-color: var(--form-header-color);
+    border: solid 1px var(--form-outline-color);
     border-bottom: none;
     margin-bottom: 0;
     padding: 1rem;
 }
 
 .form-container {
-    border: solid 1px rgba(0,0,0,.125);
+    border: solid 1px var(--form-outline-color);
     display: flex;
     justify-content: center;
     margin-bottom: 3rem;
@@ -189,14 +159,14 @@ nav a:hover {
     padding: 15px;
 }
 
-.app-list-item{
-    margin: 6px 0;
-    align-items: center;
-}
-
 .user-list{
     gap: 10px;
     padding: 15px;
+}
+
+.app-list-item{
+    margin: 6px 0;
+    align-items: center;
 }
 
 .app-list-item .btn{
@@ -229,7 +199,6 @@ nav a:hover {
     padding: 5px;
     margin-bottom: 10px;
     align-items: center;
-    /*border: 1px solid black;*/
 }
 
 .reminder-div .btn{
@@ -249,7 +218,7 @@ a {
 }
 
 .dashboard-top>div{
-    border: 3px solid black;
+    border: 3px solid var(--outline-color);
 }
 
 .resources-list{
@@ -262,5 +231,6 @@ a {
 }
 
 #new-app-btn{
-    border: 2px solid black;
+    border: 2px solid var(--outline-color);
 }
+
