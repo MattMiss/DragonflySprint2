@@ -17,123 +17,120 @@
         <button type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" class="navbar-toggler"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbar-menu">
             <ul class="navbar-nav nav-underline">
-                <li><a href="#" class="nav-link ms-4">Dashboard</a></li>
+                <li><a href="#" class="nav-link ms-4">User Dashboard</a></li>
+                <li><a href="admin_dashboard.html" class="nav-link ms-4">Admin Dashboard</a></li>
                 <li><a href="signup.html" class="nav-link">Sign-up</a></li>
                 <li><a href="applicationform.html" class="nav-link">New Application</a></li>
                 <li><a href="contact.html" class="nav-link">Contact</a></li>
             </ul>
         </div>
+        <div class="d-flex justify-content-end">
+            <div class="form-check form-switch">
+                <label class="form-check-label" for="dark-mode-switch">Dark Mode</label>
+                <input class="form-check-input" type="checkbox" role="switch" id="dark-mode-switch">
+            </div>
+        </div>
     </div>
 </nav>
-
     <main>
         <div class="container p-3" id="main-container">
-            <div class="d-flex justify-content-end">
-                <div class="form-check form-switch">
-                    <label class="form-check-label" for="dark-mode-switch">Dark Mode</label>
-                    <input class="form-check-input" type="checkbox" role="switch" id="dark-mode-switch">
-                </div>
-            </div>
             <div class="row dashboard-top">
                 <div class="app-list col-8">
-                    <div class="row">
-                        <h5>Recent Applications</h5>
-                    </div>
-                    <div class="row app-list-item">
-                        <div class="col-2">Date</div>
-                        <div class="title col-4">Title</div>
-                        <div class="col-2">Status</div>
-                        <div class="app-button-outer col-2">
-                            <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
-                        </div>
-                        <div class="app-button-outer col-2">
-                            <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
-                        </div>
-                    </div>
-                    <div class="row app-list-item">
-                        <div class="col-2">Date</div>
-                        <div class="title col-4">Title</div>
-                        <div class="col-2">Status</div>
-                        <div class="app-button-outer col-2">
-                            <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
-                        </div>
-                        <div class="app-button-outer col-2">
-                            <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
-                        </div>
-                    </div>
-                    <div class="row app-list-item">
-                        <div class="col-2">Date</div>
-                        <div class="title col-4">Title</div>
-                        <div class="col-2">Status</div>
-                        <div class="app-button-outer col-2">
-                            <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
-                        </div>
-                        <div class="app-button-outer col-2">
-                            <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
-                        </div>
-                    </div>
-                    <div class="row app-list-item">
-                        <div class="col-2">Date</div>
-                        <div class="title col-4">Title</div>
-                        <div class="col-2">Status</div>
-                        <div class="app-button-outer col-2">
-                            <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
-                        </div>
-                        <div class="app-button-outer col-2">
-                            <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
-                        </div>
-                    </div>
-                    <div class="row app-list-item">
-                        <div class="col-2">Date</div>
-                        <div class="title col-4">Title</div>
-                        <div class="col-2">Status</div>
-                        <div class="app-button-outer col-2">
-                            <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
-                        </div>
-                        <div class="app-button-outer col-2">
-                            <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
-                        </div>
-                    </div>
-                    <div class="row app-list-item">
-                        <div class="col-2">Date</div>
-                        <div class="title col-4">Title</div>
-                        <div class="col-2">Status</div>
-                        <div class="app-button-outer col-2">
-                            <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
-                        </div>
-                        <div class="app-button-outer col-2">
-                            <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
-                        </div>
-                    </div>
+                    <h3>Recent Applications</h3>
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Date</th>
+                                <th scope="col">Title</th>
+                                <th scope="col">Status</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="app-list-item">
+                                <td>01/22/2024</td>
+                                <td>Costco</td>
+                                <td>Applied</td>
+                                <td>
+                                    <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
+                                </td>
+                                <td>
+                                    <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
+                                </td>
+                            </tr>
+                            <tr class="app-list-item">
+                                <td>01/19/2024</td>
+                                <td>REI</td>
+                                <td>Applied</td>
+                                <td>
+                                    <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
+                                </td>
+                                <td>
+                                    <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
+                                </td>
+                            </tr>
+                            <tr class="app-list-item">
+                                <td>01/15/2024</td>
+                                <td>Starbucks</td>
+                                <td>Interviewing</td>
+                                <td>
+                                    <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
+                                </td>
+                                <td>
+                                    <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
+                                </td>
+                            </tr>
+                            <tr class="app-list-item">
+                                <td>01/10/2024</td>
+                                <td>Microsoft</td>
+                                <td>Pending</td>
+                                <td>
+                                    <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
+                                </td>
+                                <td>
+                                    <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
+                                </td>
+                            </tr>
+                            <tr class="app-list-item">
+                                <td >01/02/2024</td>
+                                <td>T-Mobile</td>
+                                <td>Inactive</td>
+                                <td>
+                                    <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
+                                </td>
+                                <td>
+                                    <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                     <p class="title mx-auto" style="display: block; width:100px; color: green">More</p>
 
                 </div>
                 <div class="reminders col ">
                     <div>
-                        <h5>Reminders</h5>
-                        <div>
-                            <div class="row reminder-div">
-                                <div class="col-8">
-                                    Follow up with XYZ
-                                </div>
-                                <div class="col-4">
+                        <h3>Reminders</h3>
+                        <table class="table table-hover">
+                            <tr class="reminder-div">
+                                <td class="col-8">Follow up with XYZ</td>
+                                <td class="col-4">
                                     <a href="#" class="btn border border-3 border-success">View</a>
-                                </div>
-                            </div>
-                            <div class="row reminder-div">
-                                <div class="col-8">
-                                    3 Incomplete APPS
-                                </div>
-                                <div class="col-4">
+                                </td>
+                            </tr>
+                            <tr class="reminder-div">
+                                <td>3 Incomplete apps</td>
+                                <td>
                                     <a href="#" class="btn border border-3 border-success">View</a>
-                                </div>
-                            </div>
-                            <div class="row reminder-div">
-                                <div class="col">
-                                    <a href="#" class="btn-reminder-more border-black">Find More Opportunities</a>
-                                </div>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="row reminder-div">
+                            <div class="text-center">
+                                <a href="#" class="btn-reminder-more border-black">Find More Opportunities</a>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -141,7 +138,7 @@
                 <div class="col-8 d-flex" id="new-app-container">
                     <a href="#" id="new-app-btn" class="btn mx-auto p-2">Add NEW APP</a>
                 </div>
-                <div class="col-4" id="update-account-container">
+                <div class="col-4 text-center" id="update-account-container">
                     <a href="#" class="" style="color:green">Update Account Setting</a>
                 </div>
             </div>
