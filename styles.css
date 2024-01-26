@@ -6,6 +6,7 @@
     --font-color: black;
     --bg-color-primary: #F5F5F5;
     --bg-color-secondary: white;
+    --nav-color: #6CB443;
     --header-color: #006225;
     --outline-color: black;
     --form-outline-color: rgba(0,0,0,.125);
@@ -15,6 +16,7 @@
     --font-color: #c1bfbd;
     --bg-color-primary: #333;
     --bg-color-secondary: #4d4d4d;
+    --nav-color: #006225;
     --header-color: #2C882B;
     --outline-color: #BBB;
     --form-outline-color: rgba(220, 220, 220,.125);
@@ -64,9 +66,9 @@ footer button{
 }
 
 nav {
-    background-color:  #6CB443;
+    background-color:  var(--nav-color);
     a {
-        border-bottom: solid 4px  #6CB443 !important;
+        border-bottom: solid 4px  var(--nav-color) !important;
         font-family: BigNoodle;
         font-size: 1.7rem !important;
     }
