@@ -93,9 +93,9 @@ footer button{
 }
 
 nav {
-    background-color: #2C882B;
+    background-color:  #6CB443;
     a {
-        border-bottom: solid 3px #2C882B !important;
+        border-bottom: solid 4px  #6CB443 !important;
         font-family: BigNoodle;
         font-size: 1.7rem !important;
     }
@@ -103,7 +103,7 @@ nav {
 
 nav a:hover {
     background-color: white;
-    border-bottom: solid 3px  #D14900 !important;
+    border-bottom: solid 4px  #D14900 !important;
 }
 
 /* form styles */
