@@ -7,6 +7,8 @@
     <script src="js/themescript.js"></script>
     <!-- Latest compiled and minified CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="styles.css"/>
     <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -40,14 +42,13 @@
         <div class="row dashboard-top">
             <div class="app-list col-8">
                 <h3>Recent Applications</h3>
-                <table class="table table-striped table-hover">
+                <table class="dash-table">
                     <thead>
                     <tr>
-                        <th scope="col">Date</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Status</th>
-                        <th></th>
-                        <th></th>
+                        <th scope="col" style="width: 20%">Date</th>
+                        <th scope="col" style="width: 40%">Title</th>
+                        <th scope="col" style="width: 20%">Status</th>
+                        <th style="width: 20%"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -55,55 +56,45 @@
                         <td>01/22/2024</td>
                         <td>Costco</td>
                         <td>Applied</td>
-                        <td>
-                            <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
-                        </td>
-                        <td>
-                            <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
+                        <td class="app-button-outer">
+                            <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
+                            <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                     <tr class="app-list-item">
                         <td>01/19/2024</td>
                         <td>REI</td>
                         <td>Applied</td>
-                        <td>
-                            <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
-                        </td>
-                        <td>
-                            <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
+                        <td class="app-button-outer">
+                            <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
+                            <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                     <tr class="app-list-item">
                         <td>01/15/2024</td>
                         <td>Starbucks</td>
                         <td>Interviewing</td>
-                        <td>
-                            <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
-                        </td>
-                        <td>
-                            <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
+                        <td class="app-button-outer">
+                            <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
+                            <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                     <tr class="app-list-item">
                         <td>01/10/2024</td>
                         <td>Microsoft</td>
                         <td>Pending</td>
-                        <td>
-                            <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
-                        </td>
-                        <td>
-                            <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
+                        <td class="app-button-outer">
+                            <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
+                            <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                     <tr class="app-list-item">
                         <td >01/02/2024</td>
                         <td>T-Mobile</td>
                         <td>Inactive</td>
-                        <td>
-                            <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
-                        </td>
-                        <td>
-                            <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
+                        <td class="app-button-outer">
+                            <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
+                            <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                     </tbody>
@@ -114,7 +105,7 @@
             <div class="reminders col ">
                 <div>
                     <h3>Reminders</h3>
-                    <table class="table table-hover">
+                    <table class="dash-table">
                         <tr class="reminder-div">
                             <td class="col-8">Follow up with XYZ</td>
                             <td class="col-4">
@@ -148,7 +139,7 @@
         <div class="row dashboard-top">
             <div class="user-list">
                 <h3>Users</h3>
-                <table class="table table-striped table-hover">
+                <table class="dash-table">
                     <thead>
                     <tr>
                         <th scope="col">Name</th>
