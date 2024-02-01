@@ -4,23 +4,30 @@
 
 :root{
     --font-color: black;
-    --bg-color-primary: #F5F5F5;
-    --bg-color-secondary: white;
+    --bg-color-primary: white;
+    --bg-color-secondary: #f3f3f3;
     --nav-color: #6CB443;
     --header-color: #006225;
+    --footer-color: white;
     --outline-color: black;
     --form-outline-color: rgba(0,0,0,.125);
     --form-header-color: rgba(0,0,0,.03);
+    --table-header-color: #ddd;
+    --table-hd-font-color: black;
+    --table-hover-color: rgba(108, 180, 67, 0.15);
 }
 
 :root[data-theme="dark"] {
-    --font-color: #c1bfbd;
+    --font-color: #ddd;
     --bg-color-primary: #333;
-    --bg-color-secondary: #4d4d4d;
+    --bg-color-secondary: #1d1d1d;
     --nav-color: #006225;
-    --header-color: #2C882B;
+    --header-color: #b9b9b9;
+    --footer-color: #4D4D4D;
     --outline-color: #BBB;
     --form-outline-color: rgba(220, 220, 220,.125);
+    --table-header-color: #aaa;
+    --table-hd-font-color: black;
     --form-header-color: rgba(220, 220, 220,.1);
 }
 
@@ -43,7 +50,7 @@ main{
 }
 
 footer{
-    background-color: var(--bg-color-secondary);
+    background-color: var(--footer-color);
     /*height: 130px;*/
 }
 
@@ -246,7 +253,7 @@ a {
 }
 
 .dashboard-top>div{
-    border: 3px solid var(--outline-color);
+
 }
 
 .resources-list{
@@ -262,3 +269,36 @@ a {
     border: 2px solid var(--outline-color);
 }
 
+.dash-table{
+    width: 100%;
+}
+
+.dash-table th{
+    padding: 10px;
+    background-color: var(--table-header-color);
+    color: var(--table-hd-font-color);
+}
+
+.dash-table td{
+    padding: 10px;
+}
+
+.dash-table tr:nth-child(odd){background-color: var(--bg-color-secondary);}
+
+.dash-table tr:hover{
+    background-color: var(--table-hover-color);
+}
+
+.dash-table i{
+    color: #EEE;
+}
+
+.dash-table .btn{
+    border-radius: 0;
+}
+
+.app-button-outer{
+    display: flex;
+    justify-content: space-between;
+    padding-left: -10px;
+}
