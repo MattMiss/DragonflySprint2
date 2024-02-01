@@ -12,6 +12,7 @@
     --form-outline-color: rgba(0,0,0,.125);
     --form-header-color: rgba(0,0,0,.03);
 }
+
 :root[data-theme="dark"] {
     --font-color: #c1bfbd;
     --bg-color-primary: #333;
@@ -96,7 +97,7 @@ nav a:hover {
 }
 
 .form-body {
-    width: 90%;
+    width: 80%;
 }
 
 /*input[type='radio']:checked {*/
@@ -138,8 +139,15 @@ nav a:hover {
     background-size: cover;
     background-image: linear-gradient(rgb(0,98,37, 1), rgb(44,136,43, 0.7)), url("images/greenriverCampus(1).png") !important;
 
-    h4 {
+    h3 {
         color: white !important;
+    }
+
+    .content {
+        width: 70% !important;
+        .message-box {
+            height: 6rem !important;
+        }
     }
 }
 
