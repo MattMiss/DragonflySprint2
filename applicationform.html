@@ -5,8 +5,8 @@
     <title>Application Form</title>
     <!-- Load theme from localstorage -->
     <script src="js/themescript.js"></script>
-    <link href="styles.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="styles.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
@@ -43,16 +43,25 @@
                     <input type="text" class="form-control" id="job-name" name="job-name" required>
                 </div>
                 <div class="mb-4">
+                    <label for="employer-name" class="form-label">Employer Name*</label>
+                    <input type="text" class="form-control" id="employer-name" name="employer-name" required>
+                </div>
+                <div class="mb-4">
                     <label for="job-url" class="form-label">Job Description URL*</label>
                     <input type="text" class="form-control" id="job-url" name="job-url" required>
+                </div>
+                <div class="mb-4">
+                    <label for="job-description" class="form-label">Job Description</label>
+                    <textarea class="form-control" id="job-description" name="job-description"
+                              placeholder="Little summary of the role of the job..." rows="3"></textarea>
                 </div>
                 <div class="mb-4">
                     <label for="today" class="form-label">Date of Application*</label>
                     <input type="date" class="form-control" id="today" name="app-date" required>
                 </div>
                 <div class="mb-4">
-                    <label class = "mb-3">Application Status*</label><br>
-                    <div class="form-check">
+                    <label for="application-status" class="mb-3" >Application Status*</label><br>
+                    <!--<div class="form-check">
                         <input class="form-check-input" type="radio" name="application-status" id="need-to-apply" value="need-to-apply" required>
                         <label class="form-check-label" for="need-to-apply">Need to Apply</label>
                     </div>
@@ -76,11 +85,22 @@
                         <input class="form-check-input" type="radio" name="application-status" id="inactive" value="inactive">
                         <label class="form-check-label" for="inactive">Inactive/Expired</label>
                     </div>
+                    -->
+                    <select name="application-status" id="application-status">
+                        <option value="select">Select an option</option>
+                        <option value="need-to-apply">Need to apply</option>
+                        <option value="applied">Applied</option>
+                        <option value="interviewing">Interviewing</option>
+                        <option value="rejected">Rejected</option>
+                        <option value="accepted">Accepted</option>
+                        <option value="inactive">Inactive/Expired</option>
+                    </select>
+                    <div id="application-wrong"></div>
                 </div>
                 <div class="mb-4">
                     <label for="follow-updates" class="form-label">Updates</label>
                     <textarea class="form-control" id="follow-updates" name="follow-updates"
-                              placeholder="Who have you spoken with interviewed? Contact Info?" rows="3"></textarea>
+                              placeholder="Who have you spoken with or interviewed with?" rows="3"></textarea>
                 </div>
 
                 <div class="mb-4">
@@ -112,7 +132,5 @@
     </div>
 </footer>
 <script src="js/main.js"></script>
-<!--
 <script src="js/applicationscript.js"></script>
--->
 </body>
