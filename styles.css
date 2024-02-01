@@ -33,7 +33,7 @@ body h5, h6, h4, h3{
 }
 
 .btn, .nav-link, a {
-    color: var(--font-color);
+    color: var(--font-color) !important;
 }
 
 main{
@@ -123,6 +123,24 @@ nav a:hover {
 
 .warning {
     color: #D14900;
+}
+
+/* form receipt */
+
+.form-receipt-container {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-position: center;
+    background-size: cover;
+    background-image: linear-gradient(rgb(0,98,37, 1), rgb(44,136,43, 0.7)), url("images/greenriverCampus(1).png") !important;
+
+    h4 {
+        color: white !important;
+    }
 }
 
 @media screen and (max-width: 1000px) {
