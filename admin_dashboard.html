@@ -46,35 +46,35 @@
                 <table class="dash-table">
                     <thead>
                     <tr>
-                        <th scope="col" style="width: 20%">Date</th>
-                        <th scope="col" style="width: 40%">Title</th>
-                        <th scope="col" style="width: 20%">Status</th>
-                        <th style="width: 20%"></th>
+                        <th scope="col" class="w-20">Date</th>
+                        <th scope="col">Title</th>
+                        <th scope="col" class="w-20">Status</th>
+                        <th scope="col" class="w-btn"></th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr class="app-list-item">
                         <td>01/22/2024</td>
                         <td>Costco</td>
-                        <td>Applied</td>
+                        <td class="status status-applied"><i class="fa-solid fa-circle"></i><span>Applied</span></td>
                         <td class="app-button-outer">
-                            <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
-                            <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
+                            <button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>
+                            <button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                     <tr class="app-list-item">
                         <td>01/19/2024</td>
                         <td>REI</td>
-                        <td>Applied</td>
+                        <td class="status status-accepted"><i class="fa-solid fa-circle"></i><span>Accepted</span></td>
                         <td class="app-button-outer">
-                            <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
-                            <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
+                            <button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>
+                            <button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                     <tr class="app-list-item">
                         <td>01/15/2024</td>
                         <td>Starbucks</td>
-                        <td>Interviewing</td>
+                        <td class="status status-interviewing"><i class="fa-solid fa-circle"></i><span>Interviewing</span></td>
                         <td class="app-button-outer">
                             <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
                             <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
@@ -83,7 +83,7 @@
                     <tr class="app-list-item">
                         <td>01/10/2024</td>
                         <td>Microsoft</td>
-                        <td>Pending</td>
+                        <td class="status status-rejected"><i class="fa-solid fa-circle"></i><span>Rejected</span></td>
                         <td class="app-button-outer">
                             <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
                             <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
@@ -92,7 +92,16 @@
                     <tr class="app-list-item">
                         <td >01/02/2024</td>
                         <td>T-Mobile</td>
-                        <td>Inactive</td>
+                        <td class="status status-need-apply"><i class="fa-solid fa-circle"></i><span>Need to Apply</span></td>
+                        <td class="app-button-outer">
+                            <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
+                            <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    <tr class="app-list-item">
+                        <td >12/01/2023</td>
+                        <td>Netflix</td>
+                        <td class="status status-inactive"><i class="fa-solid fa-circle"></i><span>Inactive</span></td>
                         <td class="app-button-outer">
                             <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
                             <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
@@ -143,61 +152,50 @@
                 <table class="dash-table">
                     <thead>
                     <tr>
-                        <th scope="col">Name</th>
+                        <th scope="col" class="w-40">Name</th>
                         <th scope="col">Email</th>
-                        <th></th>
-                        <th></th>
+                        <th scope="col" class="w-btn"></th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr class="app-list-item">
                         <td>Theo Red</td>
                         <td>red.ted@student.greenriver.edu</td>
-                        <td>
-                            <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
-                        </td>
-                        <td>
-                            <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
+                        <td class="app-button-outer">
+                            <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
+                            <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                     <tr class="app-list-item">
                         <td>Susan Blue</td>
                         <td>blue.sue@student.greenriver.edu</td>
-                        <td>
-                            <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
-                        </td>
-                        <td>
-                            <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
+                        <td class="app-button-outer">
+                            <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
+                            <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                     <tr class="app-list-item">
                         <td>Samwise Green</td>
                         <td>green.sam@student.greenriver.edu</td>
-                        <td>
-                            <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
-                        </td>
-                        <td>
-                            <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
+                        <td class="app-button-outer">
+                            <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
+                            <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                     <tr class="app-list-item">
                         <td>Penelope Purple</td>
                         <td>purple.penny@student.greenriver.edu</td>
-                        <td>
-                            <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
-                        </td>
-                        <td>
-                            <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
+                        <td class="app-button-outer">
+                            <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
+                            <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                     <tr class="app-list-item">
                         <td>August Orange</td>
                         <td>orange.august@student.greenriver.edu</td>
-                        <td>
-                            <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
-                        </td>
-                        <td>
-                            <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
+                        <td class="app-button-outer">
+                            <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
+                            <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                     </tbody>
