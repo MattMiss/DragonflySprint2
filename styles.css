@@ -8,7 +8,7 @@
     --bg-color-secondary: #f3f3f3;
     --nav-color: #6CB443;
     --header-color: #006225;
-    --footer-color: white;
+    --footer-color: rgba(0,0,0,.03);
     --outline-color: black;
     --form-outline-color: rgba(0,0,0,.125);
     --form-header-color: rgba(0,0,0,.03);
@@ -22,8 +22,8 @@
     --bg-color-primary: #333;
     --bg-color-secondary: #1d1d1d;
     --nav-color: #006225;
-    --header-color: #b9b9b9;
-    --footer-color: #4D4D4D;
+    --header-color: #6CB443;
+    --footer-color: #1d1d1d;
     --outline-color: #BBB;
     --form-outline-color: rgba(220, 220, 220,.125);
     --table-header-color: #aaa;
@@ -49,14 +49,25 @@ main{
     min-height: calc(100vh - 200px);
 }
 
+/* footer styles */
 footer{
+    margin-top: 4rem;
     background-color: var(--footer-color);
-    /*height: 130px;*/
+    border-top: solid 1px var(--form-outline-color);
+    height: auto;
+    min-height: 9rem;
+
+    li {
+        border-radius: 5px;
+        max-width: 10rem;
+        width: auto;
+    }
+
+    li:hover {
+        background-color: var(--bg-color-primary);
+    }
 }
 
-footer button{
-    border-radius: 0;
-}
 
 #bio-container p {
     text-align: justify;
@@ -88,29 +99,31 @@ nav a:hover {
 }
 
 /* form styles */
-.form-header {
-    background-color: var(--form-header-color);
-    border: solid 1px var(--form-outline-color);
-    border-bottom: none;
-    margin-bottom: 0;
-    padding: 1rem;
-}
-
-.form-container {
-    border: solid 1px var(--form-outline-color);
-    display: flex;
-    justify-content: center;
-    margin-bottom: 3rem;
-}
-
 .form-body {
     width: 80%;
 }
 
-/*input[type='radio']:checked {*/
-/*    background-color: grey;*/
-/*    border-color: grey;*/
-/*}*/
+.form-header {
+    width: 70%;
+    background-color: var(--form-header-color);
+    border: solid 1px var(--form-outline-color);
+    border-bottom: none;
+    margin: 3rem auto 0 auto;
+    padding: 1rem;
+}
+
+.form-container {
+    width: 70%;
+    border: solid 1px var(--form-outline-color);
+    display: flex;
+    justify-content: center;
+    margin: 0 auto 3rem auto;
+}
+
+.form-label {
+    color: var(--header-color);
+    font-weight: 600;
+}
 
 .submit-btn {
     background-color: white;
@@ -135,27 +148,41 @@ nav a:hover {
 
 /* form receipt */
 
+.receipt-message {
+    color: var(--header-color);
+    width: 70% !important;
+    margin: 3rem auto 0 auto;
+    padding: 1rem;
+}
+
 .form-receipt-container {
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
+    width: 70%;
+    border: solid 1px var(--form-outline-color);
     display: flex;
     justify-content: center;
-    align-items: center;
-    background-position: center;
-    background-size: cover;
-    background-image: linear-gradient(rgb(0,98,37, 1), rgb(44,136,43, 0.7)), url("images/greenriverCampus(1).png") !important;
+    margin: 0 auto 3rem auto;
+    /* Old background styles */
+    /*width: 100%;*/
+    /*height: 100vh;*/
+    /*overflow: hidden;*/
+    /*align-items: center;*/
+    /*background-position: center;*/
+    /*background-size: cover;*/
+    background-image: linear-gradient(var(--nav-color), var(--header-color)) !important;
 
-    h3 {
-        color: white !important;
+    .receipt-content {
+        width: 80%;
     }
 
-    .content {
-        width: 60% !important;
-        .message-box {
-            height: 6rem !important;
-        }
+    .list-group-item {
+        background-color: var(--bg-color-primary) !important;
     }
+
+    .message-box {
+        height: auto !important;
+        min-height: 4rem !important;
+    }
+
 }
 
 @media screen and (max-width: 1000px) {
