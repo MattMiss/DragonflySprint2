@@ -8,6 +8,8 @@
     <script src="js/themescript.js"></script>
     <!-- Latest compiled and minified CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="styles.css"/>
     <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -39,72 +41,70 @@
             <div class="row dashboard-top">
                 <div class="app-list col-8">
                     <h3>Recent Applications</h3>
-                    <table class="table">
+                    <table class="dash-table">
                         <thead>
-                            <tr>
-                                <th scope="col">Date</th>
-                                <th scope="col">Title</th>
-                                <th scope="col">Status</th>
-                                <th></th>
-                                <th></th>
-                            </tr>
+                        <tr>
+                            <th scope="col" class="w-20">Date</th>
+                            <th scope="col">Title</th>
+                            <th scope="col" class="w-20">Status</th>
+                            <th scope="col" class="w-btn"></th>
+                        </tr>
                         </thead>
                         <tbody>
-                            <tr class="app-list-item">
-                                <td>01/22/2024</td>
-                                <td>Costco</td>
-                                <td>Applied</td>
-                                <td>
-                                    <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
-                                </td>
-                                <td>
-                                    <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
-                                </td>
-                            </tr>
-                            <tr class="app-list-item">
-                                <td>01/19/2024</td>
-                                <td>REI</td>
-                                <td>Applied</td>
-                                <td>
-                                    <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
-                                </td>
-                                <td>
-                                    <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
-                                </td>
-                            </tr>
-                            <tr class="app-list-item">
-                                <td>01/15/2024</td>
-                                <td>Starbucks</td>
-                                <td>Interviewing</td>
-                                <td>
-                                    <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
-                                </td>
-                                <td>
-                                    <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
-                                </td>
-                            </tr>
-                            <tr class="app-list-item">
-                                <td>01/10/2024</td>
-                                <td>Microsoft</td>
-                                <td>Pending</td>
-                                <td>
-                                    <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
-                                </td>
-                                <td>
-                                    <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
-                                </td>
-                            </tr>
-                            <tr class="app-list-item">
-                                <td >01/02/2024</td>
-                                <td>T-Mobile</td>
-                                <td>Inactive</td>
-                                <td>
-                                    <button class="app-button-inner btn btn-update border border-3 border-success">Update</button>
-                                </td>
-                                <td>
-                                    <button class="app-button-inner btn btn-delete border border-3 border-danger">Delete</button>
-                                </td>
-                            </tr>
+                        <tr class="app-list-item">
+                            <td>01/22/2024</td>
+                            <td>Costco</td>
+                            <td class="status status-applied"><i class="fa-solid fa-circle"></i><span>Applied</span></td>
+                            <td class="app-button-outer">
+                                <button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>
+                                <button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr class="app-list-item">
+                            <td>01/19/2024</td>
+                            <td>REI</td>
+                            <td class="status status-accepted"><i class="fa-solid fa-circle"></i><span>Accepted</span></td>
+                            <td class="app-button-outer">
+                                <button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>
+                                <button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr class="app-list-item">
+                            <td>01/15/2024</td>
+                            <td>Starbucks</td>
+                            <td class="status status-interviewing"><i class="fa-solid fa-circle"></i><span>Interviewing</span></td>
+                            <td class="app-button-outer">
+                                <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
+                                <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr class="app-list-item">
+                            <td>01/10/2024</td>
+                            <td>Microsoft</td>
+                            <td class="status status-rejected"><i class="fa-solid fa-circle"></i><span>Rejected</span></td>
+                            <td class="app-button-outer">
+                                <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
+                                <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr class="app-list-item">
+                            <td >01/02/2024</td>
+                            <td>T-Mobile</td>
+                            <td class="status status-need-apply"><i class="fa-solid fa-circle"></i><span>Need to Apply</span></td>
+                            <td class="app-button-outer">
+                                <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
+                                <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr class="app-list-item">
+                            <td >12/01/2023</td>
+                            <td>Netflix</td>
+                            <td class="status status-inactive"><i class="fa-solid fa-circle"></i><span>Inactive</span></td>
+                            <td class="app-button-outer">
+                                <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
+                                <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
                     <p class="title mx-auto" style="display: block; width:100px; color: green">More</p>
@@ -113,7 +113,7 @@
                 <div class="reminders col ">
                     <div>
                         <h3>Reminders</h3>
-                        <table class="table table-hover">
+                        <table class="dash-table">
                             <tr class="reminder-div">
                                 <td class="col-8">Follow up with XYZ</td>
                                 <td class="col-4">
@@ -136,12 +136,69 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row p-3">
                 <div class="col-8 d-flex" id="new-app-container">
                     <a href="#" id="new-app-btn" class="btn mx-auto p-2">Add NEW APP</a>
                 </div>
                 <div class="col-4 text-center" id="update-account-container">
                     <a href="#" class="" style="color:green">Update Account Setting</a>
+                </div>
+            </div>
+            <div class="row dashboard-top">
+                <div class="user-list">
+                    <h3>Users</h3>
+                    <table class="dash-table">
+                        <thead>
+                        <tr>
+                            <th scope="col" class="w-40">Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col" class="w-btn"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="app-list-item">
+                            <td>Theo Red</td>
+                            <td>red.ted@student.greenriver.edu</td>
+                            <td class="app-button-outer">
+                                <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
+                                <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr class="app-list-item">
+                            <td>Susan Blue</td>
+                            <td>blue.sue@student.greenriver.edu</td>
+                            <td class="app-button-outer">
+                                <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
+                                <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr class="app-list-item">
+                            <td>Samwise Green</td>
+                            <td>green.sam@student.greenriver.edu</td>
+                            <td class="app-button-outer">
+                                <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
+                                <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr class="app-list-item">
+                            <td>Penelope Purple</td>
+                            <td>purple.penny@student.greenriver.edu</td>
+                            <td class="app-button-outer">
+                                <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
+                                <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr class="app-list-item">
+                            <td>August Orange</td>
+                            <td>orange.august@student.greenriver.edu</td>
+                            <td class="app-button-outer">
+                                <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
+                                <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <p class="title mx-auto" style="display: block; width:100px; color: green">More</p>
                 </div>
             </div>
             <div class="row welcome-info">

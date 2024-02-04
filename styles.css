@@ -30,6 +30,14 @@
     --table-header-color: #ddd;
     --table-hd-font-color: black;
     --table-hover-color: rgba(108, 180, 67, 0.15);
+
+    /* status colors*/
+    --status-need-apply: #d08205;
+    --status-applied: #3b5df8;
+    --status-interviewing: #d9d908;
+    --status-rejected: #e54a4a;
+    --status-accepted: #4ae34a;
+    --status-inactive: #bdbdbd;
 }
 
 :root[data-theme="dark"] {
@@ -289,15 +297,24 @@ nav a:hover {
 }
 
 .app-list-item .btn{
-    width: 100%;
+    width: 36px;
+    height: 36px;
 }
 
-.app-list-item .btn-update:hover{
+.btn-update{
     background-color: #6CB443;
 }
 
+.app-list-item .btn-update:hover{
+    background-color: #006225;
+}
+
+.btn-delete{
+    background-color: #d24747;
+}
+
 .app-list-item .btn-delete:hover{
-    background-color: red;
+    background-color: #b42c2c;
 }
 
 .dashboard-top{
@@ -383,6 +400,50 @@ a {
 
 .app-button-outer{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     padding-left: -10px;
 }
+
+.app-button-inner{
+    text-align: center;
+}
+
+.status span{
+    margin-left: 6px;
+}
+
+.status-accepted i{
+    color: var(--status-accepted) !important;
+}
+.status-applied i{
+    color: var(--status-applied) !important;
+}
+.status-inactive i{
+    color: var(--status-inactive) !important;
+}
+.status-interviewing i{
+    color: var(--status-interviewing) !important;
+}
+.status-need-apply i{
+    color: var(--status-need-apply) !important;
+}
+.status-rejected i{
+    color: var(--status-rejected) !important;
+}
+
+.w-15{
+    width: 15%;
+}
+
+.w-20{
+    width: 20%;
+}
+.w-40{
+    width: 40%;
+}
+
+.w-btn{
+    width: 110px;
+}
+
+
