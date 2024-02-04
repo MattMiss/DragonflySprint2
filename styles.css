@@ -47,11 +47,11 @@ body h5, h6, h4, h3{
 main{
     background-color: var(--bg-color-primary);
     min-height: calc(100vh - 200px);
+    padding-bottom: 3rem;
 }
 
 /* footer styles */
 footer{
-    margin-top: 4rem;
     background-color: var(--footer-color);
     border-top: solid 1px var(--form-outline-color);
     height: auto;
