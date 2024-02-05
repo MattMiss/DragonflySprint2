@@ -16,25 +16,29 @@
 
 </head>
 <body>
-<nav class="navbar navbar-expand-sm sticky-top py-1 ">
+<nav class="navbar navbar-expand-lg sticky-top py-1 ">
     <div class="container-fluid">
         <img src="images/GRC_Logo-Rich-Black.png" alt="GreenRiver College logo" id="grc-logo">
         <button type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" class="navbar-toggler"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse mx-1" id="navbar-menu">
             <ul class="navbar-nav nav-underline">
                 <li><a href="index.html" class="nav-link">User Dashboard</a></li>
-                <li><a href="admin_dashboard.html" class="nav-link">Admin Dashboard</a></li>
                 <li><a href="signup.html" class="nav-link">Sign-up</a></li>
                 <li><a href="applicationform.html" class="nav-link">New Application</a></li>
                 <li><a href="contactForm.html" class="nav-link">Contact</a></li>
-                <li><a href="admin_announcement.html" class="nav-link">Admin Announcement</a></li>
+                <li>
+                    <ul class="navbar-nav nav-underline">
+                        <li><a href="admin_dashboard.html" class="nav-link">Admin Dashboard</a></li>
+                        <li><a href="admin_announcement.html" class="nav-link">Admin Announcement</a></li>
+                    </ul>
+                </li>
+                <li class="d-flex justify-content-end" id=  "dark-mode-list-item">
+                    <div class="form-check form-switch">
+                        <label class="form-check-label" for="dark-mode-switch">Dark Mode</label>
+                        <input class="form-check-input" type="checkbox" role="switch" id="dark-mode-switch">
+                    </div>
+                </li>
             </ul>
-        </div>
-        <div class="d-flex justify-content-end">
-            <div class="form-check form-switch">
-                <label class="form-check-label" for="dark-mode-switch">Dark Mode</label>
-                <input class="form-check-input" type="checkbox" role="switch" id="dark-mode-switch">
-            </div>
         </div>
     </div>
 </nav>
@@ -158,7 +162,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr class="app-list-item">
+                    <tr class="user-list-item">
                         <td>Theo Red</td>
                         <td>red.ted@student.greenriver.edu</td>
                         <td class="app-button-outer">
@@ -166,7 +170,7 @@
                             <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
-                    <tr class="app-list-item">
+                    <tr class="user-list-item">
                         <td>Susan Blue</td>
                         <td>blue.sue@student.greenriver.edu</td>
                         <td class="app-button-outer">
@@ -174,7 +178,7 @@
                             <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
-                    <tr class="app-list-item">
+                    <tr class="user-list-item">
                         <td>Samwise Green</td>
                         <td>green.sam@student.greenriver.edu</td>
                         <td class="app-button-outer">
@@ -182,7 +186,7 @@
                             <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
-                    <tr class="app-list-item">
+                    <tr class="user-list-item">
                         <td>Penelope Purple</td>
                         <td>purple.penny@student.greenriver.edu</td>
                         <td class="app-button-outer">
@@ -190,7 +194,7 @@
                             <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
-                    <tr class="app-list-item">
+                    <tr class="user-list-item">
                         <td>August Orange</td>
                         <td>orange.august@student.greenriver.edu</td>
                         <td class="app-button-outer">

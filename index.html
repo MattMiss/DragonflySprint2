@@ -15,27 +15,32 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm sticky-top py-1 ">
-        <div class="container-fluid">
-            <img src="images/GRC_Logo-Rich-Black.png" alt="GreenRiver College logo" id="grc-logo">
-            <button type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" class="navbar-toggler"><span class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse mx-1" id="navbar-menu">
-                <ul class="navbar-nav nav-underline">
-                    <li><a href="#" class="nav-link">User Dashboard</a></li>
-                    <li><a href="admin_dashboard.html" class="nav-link">Admin Dashboard</a></li>
-                    <li><a href="signup.html" class="nav-link">Sign-up</a></li>
-                    <li><a href="applicationform.html" class="nav-link">New Application</a></li>
-                    <li><a href="contactForm.html" class="nav-link">Contact</a></li>
-                </ul>
-            </div>
-            <div class="d-flex justify-content-end">
-                <div class="form-check form-switch">
-                    <label class="form-check-label" for="dark-mode-switch">Dark Mode</label>
-                    <input class="form-check-input" type="checkbox" role="switch" id="dark-mode-switch">
-                </div>
-            </div>
+<nav class="navbar navbar-expand-lg sticky-top py-1 ">
+    <div class="container-fluid">
+        <img src="images/GRC_Logo-Rich-Black.png" alt="GreenRiver College logo" id="grc-logo">
+        <button type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" class="navbar-toggler"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse mx-1" id="navbar-menu">
+            <ul class="navbar-nav nav-underline">
+                <li><a href="index.html" class="nav-link">User Dashboard</a></li>
+                <li><a href="signup.html" class="nav-link">Sign-up</a></li>
+                <li><a href="applicationform.html" class="nav-link">New Application</a></li>
+                <li><a href="contactForm.html" class="nav-link">Contact</a></li>
+                <li>
+                    <ul class="navbar-nav nav-underline">
+                        <li><a href="admin_dashboard.html" class="nav-link">Admin Dashboard</a></li>
+                        <li><a href="admin_announcement.html" class="nav-link">Admin Announcement</a></li>
+                    </ul>
+                </li>
+                <li class="d-flex justify-content-end" id=  "dark-mode-list-item">
+                    <div class="form-check form-switch">
+                        <label class="form-check-label" for="dark-mode-switch">Dark Mode</label>
+                        <input class="form-check-input" type="checkbox" role="switch" id="dark-mode-switch">
+                    </div>
+                </li>
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
     <main>
         <div class="container p-3" id="main-container">
             <div class="row dashboard-top">
@@ -142,63 +147,6 @@
                 </div>
                 <div class="col-4 text-center" id="update-account-container">
                     <a href="#" class="" style="color:green">Update Account Setting</a>
-                </div>
-            </div>
-            <div class="row dashboard-top">
-                <div class="user-list">
-                    <h3>Users</h3>
-                    <table class="dash-table">
-                        <thead>
-                        <tr>
-                            <th scope="col" class="w-40">Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col" class="w-btn"></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr class="app-list-item">
-                            <td>Theo Red</td>
-                            <td>red.ted@student.greenriver.edu</td>
-                            <td class="app-button-outer">
-                                <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
-                                <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr class="app-list-item">
-                            <td>Susan Blue</td>
-                            <td>blue.sue@student.greenriver.edu</td>
-                            <td class="app-button-outer">
-                                <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
-                                <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr class="app-list-item">
-                            <td>Samwise Green</td>
-                            <td>green.sam@student.greenriver.edu</td>
-                            <td class="app-button-outer">
-                                <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
-                                <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr class="app-list-item">
-                            <td>Penelope Purple</td>
-                            <td>purple.penny@student.greenriver.edu</td>
-                            <td class="app-button-outer">
-                                <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
-                                <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr class="app-list-item">
-                            <td>August Orange</td>
-                            <td>orange.august@student.greenriver.edu</td>
-                            <td class="app-button-outer">
-                                <button class="app-button-inner btn btn-sm btn-success btn-update"><i class="fa-solid fa-pen"></i></button>
-                                <button class="app-button-inner btn btn-sm btn-danger btn-delete"><i class="fa-solid fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <p class="title mx-auto" style="display: block; width:100px; color: green">More</p>
                 </div>
             </div>
             <div class="row welcome-info">
