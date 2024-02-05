@@ -125,7 +125,7 @@ nav {
     background-color:  var(--nav-color);
     a {
         border-bottom: solid 4px  var(--nav-color) !important;
-        font-family: BigNoodle;
+        font-family: BigNoodle, serif;
         font-size: 1.7rem !important;
     }
 }
@@ -133,6 +133,33 @@ nav {
 nav a:hover {
     background-color: var(--nav-hover-color);
     border-bottom: solid 4px  #D14900 !important;
+}
+
+.navbar-nav {
+    width: 100%;
+}
+
+#dark-mode-list-item{
+    margin-left: auto;
+}
+
+#dark-mode-list-item > div {
+    padding-top: 15px;
+}
+
+@media screen and (max-width: 1200px) {
+    nav {
+        a {
+            font-size: 1.45rem !important;
+        }
+    }
+}
+@media screen and (max-width: 1100px) {
+    nav {
+        a {
+            font-size: 1.22rem !important;
+        }
+    }
 }
 
 /* form styles */
@@ -250,7 +277,9 @@ nav a:hover {
 
 }
 
-@media screen and (max-width: 1000px) {
+/* mobile */
+
+@media screen and (max-width: 993px) {
     #main-container {
         max-width: 90%;
     }
@@ -265,13 +294,26 @@ nav a:hover {
     #new-app-container, #update-account-container {
         width: 50%;
     }
-    .app-button-inner {
-        padding-left: 2px;
-        padding-right: 2px;
+    /*.app-button-inner {*/
+    /*    padding-left: 2px;*/
+    /*    padding-right: 2px;*/
+    /*}*/
+
+    /* nav mobile 993px */
+
+    nav {
+        a {
+            font-size: 1.7rem !important;
+        }
     }
+
+    #dark-mode-list-item > div {
+        padding-top: 0;
+    }
+
 }
 
-@media screen and (max-width: 550px) {
+@media screen and (max-width: 575px) {
     .app-button-outer {
         width:50%;
     }
@@ -279,6 +321,21 @@ nav a:hover {
         text-align: center;
         width:66.66666666666%;
     }
+
+    table tr {
+        display: flex;
+        flex-direction: column;
+    }
+
+    thead > tr {
+        flex-direction: row;
+    }
+}
+
+table td {
+    white-space: normal !important;
+    word-break: break-all;
+    word-wrap: break-word;
 }
 
 .app-list{
@@ -291,12 +348,12 @@ nav a:hover {
     padding: 15px;
 }
 
-.app-list-item{
+.app-list-item, .user-list-item{
     margin: 6px 0;
     align-items: center;
 }
 
-.app-list-item .btn{
+.app-list-item .btn, .user-list-item .btn{
     width: 36px;
     height: 36px;
 }
@@ -305,7 +362,7 @@ nav a:hover {
     background-color: #6CB443;
 }
 
-.app-list-item .btn-update:hover{
+.app-list-item .btn-update:hover {
     background-color: #006225;
 }
 
