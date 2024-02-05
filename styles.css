@@ -72,6 +72,10 @@ body h5, h6, h4, h3{
     font-family: BigNoodle, sans-serif;
 }
 
+a:link {
+    color: #4a63d0;
+}
+
 .btn, .nav-link {
     color: var(--font-color) !important;
 }
@@ -184,8 +188,18 @@ nav a:hover {
     margin: 0 auto 3rem auto;
 
     & input, & textarea {
-        background-color: var(--form-input-color);
+        background-color: var(--form-input-color) !important;
         border-color: var(--form-outline-color);
+        color: var(--font-color) !important;
+    }
+
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active{
+        background-color: var(--form-input-color) !important;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: var(--font-color) !important;
     }
 
     ::placeholder, select, input[type='date']  {
@@ -382,8 +396,35 @@ table td {
 
 .reminders{
     padding: 15px;
+    margin-bottom: 10px;
 }
 
+.reminders hr{
+    color: var(--header-color);
+}
+
+.reminder h6{
+    padding-left: 10px;
+}
+
+.reminder i{
+    text-align: center;
+    font-size: 1.2rem;
+    width: 20px;
+    height: 20px;
+}
+
+.reminder p{
+    padding-left: 34px;
+    margin-bottom: 6px;
+    font-size: .9rem;
+    font-weight: bold;
+    color: #8c8c8c;
+}
+
+.incomplete-app span{
+    font-size: 1.2rem;
+}
 .welcome-info{
     margin-top: 20px;
 }
