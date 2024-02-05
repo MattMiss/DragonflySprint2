@@ -1,10 +1,17 @@
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign-up Success</title>
-    <link href="styles.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <!-- Load theme from localstorage -->
+    <script src="js/themescript.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css"/>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
 
@@ -64,7 +71,7 @@ if(! empty($_POST)) {
     $email = $_POST['email'];
     $cohortNum = $_POST['cohort-num'];
     $status = $_POST['status'];
-    $roles = $_POST['message'];
+    $roles = $_POST['roles'];
 
     // sanitization
     $fname = strip_tags(filter_var($fname, FILTER_SANITIZE_ADD_SLASHES));
@@ -79,28 +86,33 @@ if(! empty($_POST)) {
     // make sure php checks radio button values
 
     ?>
-        <div class="form-receipt-container">
-            <div class="content">
-                <h3><?php echo 'Success! Your account has been created.'; ?></h3>
-                <ul class="list-group">
-                    <li class="list-group-item">
-                        <?php echo "Name: " . $name; ?>
-                    </li>
-                    <li class="list-group-item">
-                        <?php echo "Email: " . $email; ?>
-                    </li class="list-group-item">
-                    <li class="list-group-item">
-                        <?php echo "Cohort Number: " . $cohortNum; ?>
-                    </li>
-                    <li class="list-group-item">
-                        <?php echo "Status: " . $status; ?>
-                    </li>
-                    <li class="list-group-item message-box">
-                        <?php echo stripslashes($roles); ?>
-                    </li>
-                </ul>
+        <main>
+            <div class="container p-3" id="main-container">
+                <div class="form-receipt-container">
+                    <div class="content">
+                        <h3><?php echo 'Success! Your account has been created.'; ?></h3>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <?php echo "Name: " . $name; ?>
+                            </li>
+                            <li class="list-group-item">
+                                <?php echo "Email: " . $email; ?>
+                            </li class="list-group-item">
+                            <li class="list-group-item">
+                                <?php echo "Cohort Number: " . $cohortNum; ?>
+                            </li>
+                            <li class="list-group-item">
+                                <?php echo "Status: " . $status; ?>
+                            </li>
+                            <li class="list-group-item message-box">
+                                <?php echo stripslashes($roles); ?>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-        </div>
+        </main>
+
         <?php
 }
 ?>
@@ -109,40 +121,40 @@ if(! empty($_POST)) {
 
 <footer>
     <div class="container p-3 ">
-        <h6>RESOURCES:</h6>
+        <h3>RESOURCES:</h3>
         <ul class="list-unstyled justify-content-center resources-list list-group list-group-horizontal-sm list-group-flush">
             <li class="list-group-item p-0 m-0">
-                <a href="https://www.linkedin.com/" target="_blank" class="btn btn-light
+                <a href="https://www.linkedin.com/" target="_blank" class="btn
                  text-dark btn-sm">
                     <img src="images/In-Blue-Logo.png" alt="5" style="max-height: 25px">LinkedIn
                 </a>
             </li>
             <li class="list-group-item p-0 m-0">
-                <a href="https://www.indeed.com/" target="_blank" class="btn btn-light
+                <a href="https://www.indeed.com/" target="_blank" class="btn
                  text-dark btn-sm">
                     <img src="images/Indeed_Logo_RGB.png" alt="5" style="max-height: 25px">
                 </a>
             </li>
             <li class="list-group-item p-0 m-0">
-                <a href="https://www.devs.greenrivertech.net/studentResources" target="_blank" class="btn btn-light
+                <a href="https://www.devs.greenrivertech.net/studentResources" target="_blank" class="btn
                  text-dark btn-sm">
                     <img src="images/sdev_logo.png" alt="5" style="max-height: 25px"> Green River Tech
                 </a>
             </li>
             <li class="list-group-item p-0 m-0">
-                <a href="https://www.glassdoor.com/index.htm" target="_blank" class="btn btn-light
+                <a href="https://www.glassdoor.com/index.htm" target="_blank" class="btn
                  text-dark btn-sm">
-                    <img src="images/new-glassdoor-icon-1-300x239.jpg" alt="5" style="max-height: 25px"> Glassdoor
+                    <img src="images/glassdoor-logo.png" alt="5" style="max-height: 25px"> Glassdoor
                 </a>
             </li>
             <li class="list-group-item p-0 m-0">
-                <a href="https://www.levels.fyi/?compare=Amazon,Microsoft,Facebook&track=Software%20Engineer" target="_blank" class="btn btn-light
+                <a href="https://www.levels.fyi/?compare=Amazon,Microsoft,Facebook&track=Software%20Engineer" target="_blank" class="btn
                  text-dark btn-sm">
                     <img src="images/levelsfyi.png" alt="5" style="max-height: 25px">Levels FYI
                 </a>
             </li>
             <li class="list-group-item p-0 m-0">
-                <a href="https://www.google.com/search?q=software+development+jobs" target="_blank" class="btn btn-light text-dark btn-sm">
+                <a href="https://www.google.com/search?q=software+development+jobs" target="_blank" class="btn text-dark btn-sm">
                     More
                 </a>
             </li>
