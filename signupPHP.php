@@ -42,13 +42,6 @@
     </div>
 </nav>
 
-<main>
-    <div class="container p-3" id="main-container">
-
-<!-- TODO
-add validation for navigating to php form w/o form submission
-
--->
 <?php
 if(! empty($_POST)) {
     // removing
@@ -56,12 +49,12 @@ if(! empty($_POST)) {
         $value = trim($value);
 
         if (empty($value)) {
-            ?>
-            <div class="content">
-                <h2>Message failed to send.</h2>
-            </div>
-
-            <?php
+            echo "
+                <div class='content'>
+                    <h2>Message failed to send. Please try again.</h2>
+                    <a class='link' href='index.html'>Return home</a>
+                </div>
+            ";
             return;
         }
     }
@@ -85,68 +78,44 @@ if(! empty($_POST)) {
     // TODO
     // make sure php checks radio button values
 
-    ?>
+    echo "
         <main>
-            <div class="container p-3" id="main-container">
-                <div class="form-receipt-container">
-                    <div class="content">
-                        <h3><?php echo 'Success! Your account has been created.'; ?></h3>
-                        <ul class="list-group">
-                            <li class="list-group-item">
-                                <?php echo "Name: " . $name; ?>
-                            </li>
-                            <li class="list-group-item">
-                                <?php echo "Email: " . $email; ?>
-                            </li class="list-group-item">
-                            <li class="list-group-item">
-                                <?php echo "Cohort Number: " . $cohortNum; ?>
-                            </li>
-                            <li class="list-group-item">
-                                <?php echo "Status: " . $status; ?>
-                            </li>
-                            <li class="list-group-item message-box">
-                                <?php echo stripslashes($roles); ?>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-    <main>
-        <div class="container p-3">
-            <h3 class="receipt-message p-3 mb-0">Success! Your account has been created.</h3>
-            <div class="form-receipt-container p-3">
-                <ul class="receipt-content list-group list-group-flush">
-                    <li class="list-group-item">
-                        Name: John Doe
+            <div class='container p-3'>
+            <h3 class='receipt-message p-3 mb-0'>Success! Your account has been created.</h3>
+            <div class='form-receipt-container p-3'>
+                <ul class='receipt-content list-group list-group-flush'>
+                    <li class='list-group-item'>
+                        Name: $name
                     </li>
-                    <li class="list-group-item">
-                        Email: sample@email.com
+                    <li class='list-group-item'>
+                        Email: $email
                     </li>
-                    <li class="list-group-item">
-                        Cohort Number: 19
+                    <li class='list-group-item'>
+                        Cohort Number: $cohortNum
                     </li>
-                    <li class="list-group-item">
-                        Status: Seeking Internship
+                    <li class='list-group-item'>
+                        Status: $status
                     </li>
-                    <li class="list-group-item message-box">
-                        Junior developer
+                    <li class='list-group-item message-box'>
+                        stripslashes($roles)
                     </li>
-                    <li class="align-self-center">
-                        <a class="link" href="index.html">Return home</a>
+                    <li class='align-self-center'>
+                        <a class='link' href='index.html'>Return home</a>
                     </li>
                 </ul>
-
+        
             </div>
-        </div>
-    </main>
-
-        <?php
+            </div>
+        </main>
+    ";
+} else {
+    echo "<div class='content'>
+              <h2>Please fill out the form.</h2>
+              <a class='link' href='index.html'>Return home</a>
+          </div>
+          ";
 }
 ?>
-    </div>
-</main>
 <footer>
     <div class="container footer-div p-3 ">
         <div class="row justify-content-start">

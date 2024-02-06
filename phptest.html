@@ -55,6 +55,33 @@
                     </ul>
                 </div>
             </div>
+
+                    <main>
+            <div class="container p-3" id="main-container">
+                <div class="form-receipt-container">
+                    <div class="content">
+                        <h3><?php echo 'Success! Your account has been created.'; ?></h3>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <?php echo "Name: " . $name; ?>
+                            </li>
+                            <li class="list-group-item">
+                                <?php echo "Email: " . $email; ?>
+                            </li class="list-group-item">
+                            <li class="list-group-item">
+                                <?php echo "Cohort Number: " . $cohortNum; ?>
+                            </li>
+                            <li class="list-group-item">
+                                <?php echo "Status: " . $status; ?>
+                            </li>
+                            <li class="list-group-item message-box">
+                                <?php echo stripslashes($roles); ?>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
 -->
 
 <main>

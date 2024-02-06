@@ -51,13 +51,12 @@ if(! empty($_POST)) {
         $value = trim($value);
 
         if(empty($value)) {
-            ?>
-            <div class="content">
-                <h2>Message failed to send. Please try again.</h2>
-                <a class='link' href='index.html'>Return home</a>
-            </div>
-
-            <?php
+            echo "
+                <div class='content'>
+                    <h2>Message failed to send. Please try again.</h2>
+                    <a class='link' href='index.html'>Return home</a>
+                </div>
+            ";
             return;
         }
     }
@@ -113,7 +112,8 @@ if(! empty($_POST)) {
     echo "<div class='content'>
               <h2>Please fill out the form.</h2>
               <a class='link' href='index.html'>Return home</a>
-          </div>";
+          </div>
+          ";
 }
 ?>
     </div>
