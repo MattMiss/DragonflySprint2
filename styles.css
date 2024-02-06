@@ -494,10 +494,6 @@ a {
     background-color: transparent;
 }
 
-#new-app-btn{
-    border: 2px solid var(--outline-color);
-}
-
 .dash-table{
     width: 100%;
 }
