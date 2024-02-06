@@ -14,7 +14,7 @@ window.addEventListener('load', function() {
 });
 
 function setupListeners(){
-    setupMouseListener();
+    //setupMouseListener();
 }
 
 function validateForm(){

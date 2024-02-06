@@ -63,6 +63,7 @@
     --form-header-color: #454545;
 }
 
+
 body {
     color: var(--font-color) !important;
 }
@@ -72,7 +73,7 @@ body h5, h6, h4, h3{
     font-family: BigNoodle, sans-serif;
 }
 
-a:link {
+a:link, a:visited {
     color: #4a63d0;
 }
 
@@ -237,13 +238,14 @@ nav a:hover {
     padding: 7px 10px 7px 10px;
 }
 
-.submit-btn-hover {
+.submit-btn:hover {
     background-color: var(--submit-hover-color);
     border: 1px solid var(--submit-border-hover-color);
     border-radius: 2px;
     color: var(--submit-text-hover-color);
     font-weight: 600;
     padding: 7px 10px 7px 10px;
+    transition: .75s;
 }
 
 .warning {
@@ -291,6 +293,10 @@ nav a:hover {
 
 }
 
+.footer-jobs-div{
+    width: 500px;
+}
+
 /* mobile */
 
 @media screen and (max-width: 993px) {
@@ -325,6 +331,14 @@ nav a:hover {
         padding-top: 0;
     }
 
+
+
+}
+
+@media screen and (max-width: 768px) {
+    .footer-jobs-div{
+        width: 300px;
+    }
 }
 
 @media screen and (max-width: 575px) {
@@ -343,6 +357,14 @@ nav a:hover {
 
     thead > tr {
         flex-direction: row;
+    }
+
+    .footer-btn-div p{
+        font-size: .7rem !important;
+    }
+
+    .footer-jobs-div{
+        width: 200px;
     }
 }
 
@@ -426,7 +448,15 @@ table td {
     font-size: 1.2rem;
 }
 .welcome-info{
-    margin-top: 20px;
+    margin-top: 40px;
+    margin-bottom: 10px;
+    padding: 5px 40px 5px 40px;
+    color: var(--font-color);
+
+    hr{
+        color: var(--header-color) !important;
+    }
+
 }
 
 .reminder-div{
@@ -544,4 +574,76 @@ a {
     width: 110px;
 }
 
+
+.footer-div{
+    font-size: .8rem;
+
+    ul{
+        list-style: none;
+        font-size: .8rem;
+        padding-left: 0;
+    }
+
+    li{
+        max-width: 400px !important;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .footer-vert-line{
+        border-left: 1px solid #696969;
+    }
+
+    p{
+        font-family: BigNoodle;
+        font-size: 1rem;
+    }
+
+    a:link, a:visited{
+        color: var(--font-color);
+    }
+
+    .footer-title{
+        padding-bottom: 10px;
+        font-weight: bold;
+        font-size: .8rem;
+    }
+
+    .footer-show{
+        opacity: 1;
+        height: auto;
+        transition: 1s;
+    }
+
+    .footer-hide{
+        opacity: 0;
+        height: 0;
+        overflow: hidden;
+        transition: 1s;
+    }
+
+    .footer-logo{
+        padding: 0;
+    }
+
+    .showing{
+        color: var(--header-color);
+    }
+
+
+}
+
+#footer-jobs-btn:hover, #footer-resources-btn:hover{
+    cursor: pointer;
+}
+
+.footer-logo{
+    height: 40px;
+    width: 40px;
+}
+
+.footer-btn-div{
+    width: 20%;
+}
 

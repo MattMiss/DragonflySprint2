@@ -8,7 +8,7 @@ window.addEventListener('load', function() {
 });
 
 function setupListeners(){
-    setupMouseListeners();
+    //setupMouseListeners();
 }
 
 function validateForm(){
