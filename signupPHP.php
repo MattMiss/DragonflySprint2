@@ -97,7 +97,7 @@ if(! empty($_POST)) {
                         Status: $status
                     </li>
                     <li class='list-group-item message-box'>
-                        stripslashes($roles)
+                        " . stripslashes($roles) . "
                     </li>
                     <li class='align-self-center'>
                         <a class='link' href='index.html'>Return home</a>
