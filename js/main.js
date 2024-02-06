@@ -3,13 +3,13 @@ let footerJobsSection;
 let footerResourcesSection;
 
 window.addEventListener('load', function() {
-    console.log("Window loaded");
+    //console.log("Window loaded");
     setupDarkMode();
     setupFooterListener();
 });
 
 function setupDarkMode(){
-    console.log("Setup dark mode");
+    //console.log("Setup dark mode");
     darkModeSwitch = document.getElementById("dark-mode-switch");
     console.log(darkModeSwitch);
     if (theme !== null){
@@ -26,7 +26,7 @@ function setupDarkMode(){
 }
 
 function setDarkMode(newTheme){
-    console.log("Changed to : " + newTheme);
+    //console.log("Changed to : " + newTheme);
     document.documentElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
     theme = newTheme;
