@@ -113,6 +113,35 @@ if(! empty($_POST)) {
             </div>
         </main>
 
+    <main>
+        <div class="container p-3">
+            <h3 class="receipt-message p-3 mb-0">Success! Your account has been created.</h3>
+            <div class="form-receipt-container p-3">
+                <ul class="receipt-content list-group list-group-flush">
+                    <li class="list-group-item">
+                        Name: John Doe
+                    </li>
+                    <li class="list-group-item">
+                        Email: sample@email.com
+                    </li>
+                    <li class="list-group-item">
+                        Cohort Number: 19
+                    </li>
+                    <li class="list-group-item">
+                        Status: Seeking Internship
+                    </li>
+                    <li class="list-group-item message-box">
+                        Junior developer
+                    </li>
+                    <li class="align-self-center">
+                        <a class="link" href="index.html">Return home</a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </main>
+
         <?php
 }
 ?>

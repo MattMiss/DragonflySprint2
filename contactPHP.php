@@ -53,7 +53,8 @@ if(! empty($_POST)) {
         if(empty($value)) {
             ?>
             <div class="content">
-                <h2>Message failed to send.</h2>
+                <h2>Message failed to send. Please try again.</h2>
+                <a class='link' href='index.html'>Return home</a>
             </div>
 
             <?php
@@ -83,25 +84,35 @@ if(! empty($_POST)) {
 
     if (mail($to, $subject, $message, $headers)) {
         echo "
-        <div class='form-receipt-container'>
-                <div class='content'>
-                    <h3>Success! Your message has been sent</h3>
-                    <ul class='list-group'>
-                        <li class='list-group-item'>To: John Doe</li>
+               
+            <main>
+                <div class='container p-3'>
+                <h3 class='receipt-message p-3 mb-0'>Success! Your message has been sent.</h3>
+                <div class='form-receipt-container p-3'>
+                    <ul class='receipt-content list-group list-group-flush'>
                         <li class='list-group-item'>
-                             $name 
+                            Name: $name
                         </li>
-                        <li class='list-group-item message-box'>
-                            $message
+                        <li class='list-group-item'>
+                            Email: $email
+                        </li>
+                        <li class='list-group-item'>
+                            $message 
+                        </li>
+                        <li class='align-self-center'>
+                            <a class='link' href='index.html'>Return home</a>
                         </li>
                     </ul>
+            
                 </div>
-            </div>
+                </div>
+            </main>
         ";
     }
 } else {
     echo "<div class='content'>
-              <h2>Message failed to send.</h2>
+              <h2>Please fill out the form.</h2>
+              <a class='link' href='index.html'>Return home</a>
           </div>";
 }
 ?>
