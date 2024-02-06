@@ -1,8 +1,8 @@
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Receipt</title>
+    <title>Team Dragonfly - Sprint 2</title>
     <!-- Load theme from localstorage -->
     <script src="js/themescript.js"></script>
     <!-- Latest compiled and minified CSS -->
@@ -41,84 +41,76 @@
         </div>
     </div>
 </nav>
-
 <main>
     <div class="container p-3" id="main-container">
-<?php
-if(! empty($_POST)) {
-    // removing
-    foreach ($_POST as $value) {
-        $value = trim($value);
+        <?php
+        if(! empty($_POST)) {
 
-        if(empty($value)) {
-            echo "
-                <div class='form-error'>
-                    <h3>Message failed to send, please try again.</h3>
-                    <a class='link' href='contactForm.html'>Return to contact form</a>
-                </div>
-            ";
-            return;
-        }
-    }
+            // removing
+            foreach ($_POST as $value) {
+                $value = trim($value);
 
-    $fname = $_POST['firstName'];
-    $lname = $_POST['lastName'];
-    $email = $_POST['email'];
-    $message = $_POST['message'];
+                if (empty($value) && $value != $_POST['additional-text']) {
+                    ?>
+                    <div class="content">
+                        <h2>Failed to send.</h2>
+                    </div>
 
-    // sanitization
-    $fname = strip_tags(filter_var($fname, FILTER_SANITIZE_ADD_SLASHES));
-    $lname = strip_tags(filter_var($lname, FILTER_SANITIZE_ADD_SLASHES));
-    $email = filter_var($email, FILTER_SANITIZE_EMAIL);
-    $message = strip_tags(filter_var($message, FILTER_SANITIZE_ADD_SLASHES));
+                    <?php
+                    return;
+                }
+            }
 
-    // mailing
-    $name = ucfirst($fname) . " " . ucfirst($lname);
-    $to = "Yadira Cervantes<cervantes.yadira@student.greenriver.edu>";
-    $subject = "Message from " . $name;
-    $from = $name . '<' . $_POST['email'] . '>';
-    $headers = 'From: ' . $from . "\r\n" .
-        'Reply-To: ' . $from . "\r\n" .
-        'X-Mailer: PHP/' . phpversion();
+            $title = $_POST['announcement-title'];
+            $job = $_POST['job-or-intern'];
+            $location = $_POST['location'];
+            $employer = $_POST['employer'];
+            $addltext = $_POST['additional-text'];
+            $url = $_POST['url'];
+            $sentto = $_POST['sent-to'];
 
-    if (mail($to, $subject, $message, $headers)) {
-        echo "
-               
-            <main>
-                <div class='container p-3'>
-                <h3 class='receipt-message p-3 mb-0'>Success! Your message has been sent.</h3>
-                <div class='form-receipt-container p-3'>
-                    <ul class='receipt-content list-group list-group-flush'>
-                        <li class='list-group-item'>
-                            Name: $name
+            // sanitization
+            $title = strip_tags(filter_var($title, FILTER_SANITIZE_ADD_SLASHES));
+            $job = strip_tags(filter_var($job, FILTER_SANITIZE_ADD_SLASHES));
+            $location = strip_tags(filter_var($location, FILTER_SANITIZE_ADD_SLASHES));
+            $employer = strip_tags(filter_var($employer, FILTER_SANITIZE_ADD_SLASHES));
+            $url = strip_tags(filter_var($url, FILTER_SANITIZE_ADD_SLASHES));
+            $sentto = strip_tags(filter_var($sentto, FILTER_SANITIZE_ADD_SLASHES));
+
+            ?>
+            <div class="form-receipt-container">
+                <div class="content">
+                    <h3><?php echo 'Success! Your announcement has been sent.'; ?></h3>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <?php echo "Title: " . $title; ?>
                         </li>
-                        <li class='list-group-item'>
-                            Email: $email
+                        <li class="list-group-item">
+                            <?php echo "Job Type: " . $job; ?>
                         </li>
-                        <li class='list-group-item'>
-                            $message 
+                        <li class="list-group-item">
+                            <?php echo "Location: " . $location; ?>
                         </li>
-                        <li class='align-self-center'>
-                            <a class='link' href='index.html'>Return home</a>
+                        <li class="list-group-item">
+                            <?php echo "Employer: " . $employer; ?>
+                        </li>
+                        <li class="list-group-item">
+                            <?php echo "More Information: " . $addltext; ?>
+                        </li>
+                        <li class="list-group-item">
+                            <?php echo "URL: " . $url; ?>
+                        </li>
+                        <li class="list-group-item">
+                            <?php echo "Sent To: " . $sentto; ?>
                         </li>
                     </ul>
-            
                 </div>
-                </div>
-            </main>
-        ";
-    }
-} else {
-    echo "<div class='content'>
-              <h2>Please fill out the form.</h2>
-              <a class='link' href='index.html'>Return home</a>
-          </div>
-          ";
-}
-?>
+            </div>
+            <?php
+        }
+        ?>
     </div>
 </main>
-
 <footer>
     <div class="container footer-div p-3 ">
         <div class="row justify-content-start">
@@ -227,3 +219,4 @@ if(! empty($_POST)) {
 <script src="js/main.js"></script>
 </body>
 </html>
+
