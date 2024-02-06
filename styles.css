@@ -447,6 +447,7 @@ table td {
 .incomplete-app span{
     font-size: 1.2rem;
 }
+
 .welcome-info{
     margin-top: 40px;
     margin-bottom: 10px;
@@ -492,10 +493,6 @@ a {
 .resources-list>li{
     border: none;
     background-color: transparent;
-}
-
-#new-app-btn{
-    border: 2px solid var(--outline-color);
 }
 
 .dash-table{
