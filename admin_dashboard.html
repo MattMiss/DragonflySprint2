@@ -45,7 +45,7 @@
 <main>
     <div class="container p-3" id="main-container">
         <div class="row dashboard-top">
-            <div class="app-list col-8">
+            <div class="app-list col-9">
                 <h3>Recent Applications</h3>
                 <table class="dash-table">
                     <thead>
@@ -143,8 +143,8 @@
             </div>
         </div>
         <div class="row p-3">
-            <div class="col-8 d-flex" id="new-app-container">
-                <a href="#" id="new-app-btn" class="btn mx-auto p-2">Add NEW APP</a>
+            <div class="col-8 d-flex justify-content-center" id="new-app-container">
+                <button id="new-app-btn" class="submit-btn">New Application</button>
             </div>
             <div class="col-4 text-center" id="update-account-container">
                 <a href="#" class="" style="color:green">Update Account Setting</a>
@@ -208,9 +208,9 @@
             </div>
         </div>
         <div class="row welcome-info">
-            <div>
-                <p>Welcome to the Green River College Software Development Application Tracking Tool (ATT). The purpose of this tool is to provide a centralized place to track your job/internship applications that can be helpful in your application journey! </p>
-            </div>
+            <hr>
+            <p>Welcome to the Green River College Software Development Application Tracking Tool (ATT). The purpose of this tool is to provide a centralized place to track your job/internship applications that can be helpful in your application journey! </p>
+            <hr>
         </div>
 
         <div class="row text-wrap">
@@ -226,45 +226,108 @@
     </div>
 </main>
 <footer>
-    <div class="container p-3 ">
-        <h3>RESOURCES:</h3>
-        <ul class="list-unstyled justify-content-center resources-list list-group list-group-horizontal-sm list-group-flush">
-            <li class="list-group-item p-0 m-0">
-                <a href="https://www.linkedin.com/" target="_blank" class="btn
+    <div class="container footer-div p-3 ">
+        <div class="row justify-content-start">
+            <div class="footer-btn-div col-2 text-end px-4">
+                <p id="footer-jobs-btn" class="showing">FIND JOBS:</p>
+                <p id="footer-resources-btn">RESOURCES:</p>
+            </div>
+            <div class="col-1 footer-vert-line"></div>
+            <div class="col footer-jobs-div m-auto">
+                <div class="row footer-show" id="footer-jobs">
+                    <div class="col">
+                        <ul class="resources-list list-group list-group-horizontal-sm">
+                            <li class="list-group-item p-0 m-0">
+                                <a href="https://www.linkedin.com/" target="_blank" class="btn
                  text-dark btn-sm">
-                    <img src="images/In-Blue-Logo.png" alt="5" style="max-height: 25px">LinkedIn
-                </a>
-            </li>
-            <li class="list-group-item p-0 m-0">
-                <a href="https://www.indeed.com/" target="_blank" class="btn
+                                    <img src="images/In-Blue-Logo.png" alt="5" style="max-height: 25px; padding-right: 4px;">LinkedIn
+                                </a>
+                            </li>
+                            <li class="list-group-item p-0 m-0">
+                                <a href="https://www.indeed.com/" target="_blank" class="btn
                  text-dark btn-sm">
-                    <img src="images/Indeed_Logo_RGB.png" alt="5" style="max-height: 25px">
-                </a>
-            </li>
-            <li class="list-group-item p-0 m-0">
-                <a href="https://www.devs.greenrivertech.net/studentResources" target="_blank" class="btn
+                                    <img src="images/Indeed_Logo_RGB.png" alt="5" style="max-height: 25px">
+                                </a>
+                            </li>
+                            <li class="list-group-item p-0 m-0">
+                                <a href="https://www.glassdoor.com/index.htm" target="_blank" class="btn
                  text-dark btn-sm">
-                    <img src="images/sdev_logo.png" alt="5" style="max-height: 25px"> Green River Tech
-                </a>
-            </li>
-            <li class="list-group-item p-0 m-0">
-                <a href="https://www.glassdoor.com/index.htm" target="_blank" class="btn
+                                    <img src="images/glassdoor-icon.png" alt="5" style="max-height: 25px; padding-right: 4px;"> Glassdoor
+                                </a>
+                            </li>
+                            <li class="list-group-item p-0 m-0">
+                                <a href="https://www.levels.fyi/?compare=Amazon,Microsoft,Facebook&track=Software%20Engineer" target="_blank" class="btn
                  text-dark btn-sm">
-                    <img src="images/glassdoor-logo.png" alt="5" style="max-height: 25px"> Glassdoor
-                </a>
-            </li>
-            <li class="list-group-item p-0 m-0">
-                <a href="https://www.levels.fyi/?compare=Amazon,Microsoft,Facebook&track=Software%20Engineer" target="_blank" class="btn
-                 text-dark btn-sm">
-                    <img src="images/levelsfyi.png" alt="5" style="max-height: 25px">Levels FYI
-                </a>
-            </li>
-            <li class="list-group-item p-0 m-0">
-                <a href="https://www.google.com/search?q=software+development+jobs" target="_blank" class="btn text-dark btn-sm">
-                    More
-                </a>
-            </li>
-        </ul>
+                                    <img src="images/levelsfyi.png" alt="5" style="max-height: 25px; padding-right: 4px;">Levels FYI
+                                </a>
+                            </li>
+                            <li class="list-group-item p-0 m-0">
+                                <a href="https://www.google.com/search?q=software+development+jobs" target="_blank" class="btn text-dark btn-sm">
+                                    More
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="container footer-hide" id="footer-resources" >
+                    <div class="row" >
+                        <div class="col-6">
+                            <div class="row footer-title">
+                                CAREER RESOURCES
+                            </div>
+                            <div class="row" style="height:100px;">
+                                <ul>
+                                    <li><a href="https://www.devs.greenrivertech.net/studentResources" target="_blank">GRC Student Resources</a></li>
+                                    <li><a href="https://www.levels.fyi/?compare=Amazon,Microsoft,Facebook&track=Software%20Engineer" target="_blank">Compare Job Salaries</a></li>
+                                </ul>
+                            </div>
+
+                        </div>
+                        <div class="col-6">
+                            <div class="row footer-title">
+                                RESUME
+                            </div>
+                            <div class="row" style="height:100px;">
+                                <ul>
+                                    <li><a href="https://www.devs.greenrivertech.net/resources/Resume-FirstnameLastname.docx" target="_blank">Getting Started Resume Template</a></li>
+                                    <li><a href="https://www.devs.greenrivertech.net/resources/resume2.docx" target="_blank">Sample Technical Resume By April Curley</a></li>
+                                    <li><a href="https://www.glassdoor.com/blog/winning-resume/" target="_blank">How to Craft a Winning Software Resume</a></li>
+                                    <li><a href="https://www.jobscan.co/blog/resume-tips/" target="_blank">52 Resume Tips to Transform Your Job Search</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="row footer-title">
+                                INTERVIEWING
+                            </div>
+                            <div class="row" style="height:100px;">
+                                <ul>
+                                    <li><a href="https://interviewing.io/" target="_blank">Interviewing.io</a></li>
+                                    <li><a href="https://www.interviewcake.com/" target="_blank">Interview Cake</a></li>
+                                    <li><a href="https://www.dailycodingproblem.com/" target="_blank">Daily Coding Problem Dot Com</a></li>
+                                    <li><a href="https://medium.com/code-like-a-girl/acing-the-technical-interview-ea0c888feb9e#.vaums4td3" target="_blank">Acing the Technical Interview</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="row footer-title">
+                                COVER LETTER
+                            </div>
+                            <div class="row">
+                                <ul>
+                                    <li><a href="https://www.linkedin.com/pulse/use-cover-letters-ceos-read-brian-de-haaff?trk=hp-feed-article-title" target="_blank">Tips for Writing a Cover Email and Letter</a></li>
+                                    <li><a href="http://www.fastcompany.com/3036904/hit-the-ground-running/10-words-and-phrases-that-are-killing-your-cover-letter" target="_blank">10 Words and Phrases That Are Killing Your Cover Letter</a></li>
+                                    <li><a href="https://www.themuse.com/advice/the-cover-letter-formula-that-skyrocketed-my-interviews-from-0-to-55" target="_blank">The Cover Letter Formula That Skyrocketed My Interviews</a></li>
+                                    <li><a href="http://www.greenriver.edu/student-affairs/tutoring-and-resources/writing-center.htm" target="_blank">Visit the Writing Center at Green River</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </footer>
 <script src="js/main.js"></script>

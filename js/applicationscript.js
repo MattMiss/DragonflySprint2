@@ -16,7 +16,7 @@ function validateForm() {
     }
 }
 function setupListeners(){
-    setupMouseListeners();
+    //setupMouseListeners();
 }
 
 function setTodayDate() {
