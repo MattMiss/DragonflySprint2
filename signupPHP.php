@@ -15,7 +15,7 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg sticky-top py-1 ">
+<nav class="navbar navbar-expand-lg sticky-top py-1">
     <div class="container-fluid">
         <img src="images/GRC_Logo-Rich-Black.png" alt="GreenRiver College logo" id="grc-logo">
         <button type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" class="navbar-toggler"><span class="navbar-toggler-icon"></span></button>
@@ -50,9 +50,9 @@ if(! empty($_POST)) {
 
         if (empty($value)) {
             echo "
-                <div class='content'>
-                    <h2>Message failed to send. Please try again.</h2>
-                    <a class='link' href='index.html'>Return home</a>
+                <div class='form-error'>
+                    <h3>Sign-up failed, please try again.</h3>
+                    <a class='link' href='signup.html'>Return to sign-up form</a>
                 </div>
             ";
             return;

@@ -52,9 +52,9 @@ if(! empty($_POST)) {
 
         if(empty($value)) {
             echo "
-                <div class='content'>
-                    <h2>Message failed to send. Please try again.</h2>
-                    <a class='link' href='index.html'>Return home</a>
+                <div class='form-error'>
+                    <h3>Message failed to send, please try again.</h3>
+                    <a class='link' href='contactForm.html'>Return to contact form</a>
                 </div>
             ";
             return;

@@ -110,13 +110,13 @@ footer{
     text-align: justify;
 }
 
-.link {
+.link, & .link:visited {
     text-decoration: none;
     color: var(--header-color);
     font-weight: 600;
 }
 
-.link:hover {
+.link:hover, & .link:visited {
     text-decoration: underline var(--header-color);
 }
 
@@ -291,6 +291,11 @@ nav a:hover {
         list-style: none !important;
     }
 
+}
+
+.form-error {
+    width: 60%;
+    margin: auto auto 3rem auto;
 }
 
 .footer-jobs-div{
