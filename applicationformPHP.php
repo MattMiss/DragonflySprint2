@@ -1,16 +1,10 @@
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Receipt</title>
-    <!-- Load theme from localstorage -->
     <script src="js/themescript.js"></script>
-    <!-- Latest compiled and minified CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="styles.css"/>
-    <!-- Latest compiled JavaScript -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="styles.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
@@ -41,7 +35,6 @@
         </div>
     </div>
 </nav>
-
 <main>
     <div class="container p-3" id="main-container">
 <?php
@@ -50,10 +43,10 @@ if(! empty($_POST)) {
     foreach ($_POST as $value) {
         $value = trim($value);
 
-        if(empty($value)) {
+        if (empty($value)) {
             ?>
             <div class="content">
-                <h2>Message failed to send.</h2>
+                <h2>Failed to send.</h2>
             </div>
 
             <?php
@@ -61,53 +54,61 @@ if(! empty($_POST)) {
         }
     }
 
-    $fname = $_POST['firstName'];
-    $lname = $_POST['lastName'];
-    $email = $_POST['email'];
-    $message = $_POST['message'];
+    $jname = $_POST['job-name'];
+    $ename = $_POST['employer-name'];
+    $jurl = $_POST['job-url'];
+    $jdescription = $_POST['job-description'];
+    $adate = $_POST['app-date'];
+    $astatus = $_POST['application-status'];
+    $fupdates = $_POST['follow-updates'];
+    $followupdate = $_POST['followup-date'];
 
     // sanitization
-    $fname = strip_tags(filter_var($fname, FILTER_SANITIZE_ADD_SLASHES));
-    $lname = strip_tags(filter_var($lname, FILTER_SANITIZE_ADD_SLASHES));
-    $email = filter_var($email, FILTER_SANITIZE_EMAIL);
-    $message = strip_tags(filter_var($message, FILTER_SANITIZE_ADD_SLASHES));
+    $jname = strip_tags(filter_var($jname, FILTER_SANITIZE_ADD_SLASHES));
+    $ename = strip_tags(filter_var($ename, FILTER_SANITIZE_ADD_SLASHES));
+    $jurl = strip_tags(filter_var($jurl, FILTER_SANITIZE_ADD_SLASHES));
+    $adate = filter_var($adate, FILTER_SANITIZE_NUMBER_INT);
+    $astatus = strip_tags(filter_var($astatus, FILTER_SANITIZE_ADD_SLASHES));
+    $fupdates = strip_tags(filter_var($fupdates, FILTER_SANITIZE_ADD_SLASHES));
+    $followupdate = filter_var($followupdate, FILTER_SANITIZE_NUMBER_INT);
 
-    // mailing
-    $name = ucfirst($fname) . " " . ucfirst($lname);
-    $to = "Yadira Cervantes<cervantes.yadira@student.greenriver.edu>";
-    $subject = "Message from " . $name;
-    $from = $name . '<' . $_POST['email'] . '>';
-    $headers = 'From: ' . $from . "\r\n" .
-        'Reply-To: ' . $from . "\r\n" .
-        'X-Mailer: PHP/' . phpversion();
-
-    if (mail($to, $subject, $message, $headers)) {
-        echo "
-        <div class='form-receipt-container'>
-                <div class='content'>
-                    <h3>Success! Your message has been sent</h3>
-                    <ul class='list-group'>
-                        <li class='list-group-item'>To: John Doe</li>
-                        <li class='list-group-item'>
-                             $name 
-                        </li>
-                        <li class='list-group-item message-box'>
-                            $message
-                        </li>
-                    </ul>
-                </div>
+    ?>
+        <div class="form-receipt-container">
+            <div class="content">
+                <h3><?php echo 'Success! Your application has been created.'; ?></h3>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <?php echo "Name: " . $jname; ?>
+                    </li>
+                    <li class="list-group-item">
+                        <?php echo "Employer Name: " . $ename; ?>
+                    </li>
+                    <li class="list-group-item">
+                        <?php echo "Job Url: " . $jurl; ?>
+                    </li>
+                    <li class="list-group-item">
+                        <?php echo "Job Description: " . $jdescription; ?>
+                    </li>
+                    <li class="list-group-item">
+                        <?php echo "App Date: " . $adate; ?>
+                    </li>
+                    <li class="list-group-item">
+                        <?php echo "Application Status: " . $astatus; ?>
+                    </li>
+                    <li class="list-group-item">
+                        <?php echo "Followup Updates: " . $fupdates; ?>
+                    </li>
+                    <li class="list-group-item">
+                        <?php echo "Followup Date: " . $followupdate; ?>
+                    </li>
+                </ul>
             </div>
-        ";
-    }
-} else {
-    echo "<div class='content'>
-              <h2>Message failed to send.</h2>
-          </div>";
+        </div>
+    <?php
 }
 ?>
     </div>
 </main>
-
 <footer>
     <div class="container p-3 ">
         <h6>RESOURCES:</h6>
@@ -153,3 +154,4 @@ if(! empty($_POST)) {
 <script src="js/main.js"></script>
 </body>
 </html>
+
