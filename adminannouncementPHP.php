@@ -43,72 +43,101 @@
 </nav>
 <main>
     <div class="container p-3" id="main-container">
-        <?php
-        if(! empty($_POST)) {
+<?php
+if(! empty($_POST)) {
+    $finished = 0;
+    // removing
+    foreach ($_POST as $key => $value) {
+        $value = trim($value);
 
-            // removing
-            foreach ($_POST as $value) {
-                $value = trim($value);
-
-                if (empty($value) && $value != $_POST['additional-text']) {
-                    ?>
-                    <div class="content">
-                        <h2>Failed to send.</h2>
-                    </div>
-
-                    <?php
-                    return;
+        if (empty($value)){
+            if($key !== 'additional-text'){
+                $finished++;
+                if ($finished == 1) {
+                    echo "
+                <div class='content'>
+                    <h2>Failed to send.</h2>
+                    <h2>Please fill out ". str_replace('-', ' ', $key) .".</h2>
+                    ";
+                } else {
+                    echo "
+                    <h2>Please fill out ". str_replace('-', ' ', $key) .".</h2>
+                    ";
                 }
             }
-
-            $title = $_POST['announcement-title'];
-            $job = $_POST['job-or-intern'];
-            $location = $_POST['location'];
-            $employer = $_POST['employer'];
-            $addltext = $_POST['additional-text'];
-            $url = $_POST['announcement-url'];
-            $sentto = $_POST['sent-to'];
-
-            // sanitization
-            $title = strip_tags(filter_var($title, FILTER_SANITIZE_ADD_SLASHES));
-            $job = strip_tags(filter_var($job, FILTER_SANITIZE_ADD_SLASHES));
-            $location = strip_tags(filter_var($location, FILTER_SANITIZE_ADD_SLASHES));
-            $employer = strip_tags(filter_var($employer, FILTER_SANITIZE_ADD_SLASHES));
-            $url = strip_tags(filter_var($url, FILTER_SANITIZE_ADD_SLASHES));
-            $sentto = strip_tags(filter_var($sentto, FILTER_SANITIZE_ADD_SLASHES));
-
-            ?>
-            <div class="form-receipt-container">
-                <div class="content">
-                    <h3><?php echo 'Success! Your announcement has been sent.'; ?></h3>
-                    <ul class="list-group">
-                        <li class="list-group-item">
-                            <?php echo "Title: " . $title; ?>
-                        </li>
-                        <li class="list-group-item">
-                            <?php echo "Job Type: " . $job; ?>
-                        </li>
-                        <li class="list-group-item">
-                            <?php echo "Location: " . $location; ?>
-                        </li>
-                        <li class="list-group-item">
-                            <?php echo "Employer: " . $employer; ?>
-                        </li>
-                        <li class="list-group-item">
-                            <?php echo "More Information: " . $addltext; ?>
-                        </li>
-                        <li class="list-group-item">
-                            <?php echo "URL: " . $url; ?>
-                        </li>
-                        <li class="list-group-item">
-                            <?php echo "Sent To: " . $sentto; ?>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <?php
         }
-        ?>
+    }
+    if(!isset($_POST['job-or-intern'])) {
+        $finished++;
+        if ($finished == 1) {
+            echo "
+                <div class='content'>
+                    <h2>Failed to send.</h2>
+                    ";
+        }
+        echo"<h2>Please fill out job or intern button.</h2>";
+    }
+    if($finished > 0) {
+        echo "
+                <a class='link' href='applicationform.html'>Go back</a>
+            </div>
+            ";
+    } else {
+        $title = $_POST['announcement-title'];
+        $job = $_POST['job-or-intern'];
+        $location = $_POST['location'];
+        $employer = $_POST['employer'];
+        $addltext = $_POST['additional-text'];
+        $url = $_POST['announcement-url'];
+        $sentto = $_POST['sent-to'];
+
+        // sanitization
+        $title = strip_tags(filter_var($title, FILTER_SANITIZE_ADD_SLASHES));
+        $job = strip_tags(filter_var($job, FILTER_SANITIZE_ADD_SLASHES));
+        $location = strip_tags(filter_var($location, FILTER_SANITIZE_ADD_SLASHES));
+        $employer = strip_tags(filter_var($employer, FILTER_SANITIZE_ADD_SLASHES));
+        $url = strip_tags(filter_var($url, FILTER_SANITIZE_ADD_SLASHES));
+        $sentto = strip_tags(filter_var($sentto, FILTER_SANITIZE_ADD_SLASHES));
+
+        echo"
+        <div class='form-receipt-container'>
+            <div class='content'>
+                <h3>Success! Your announcement has been sent.</h3>
+                <ul class='list-group'>
+                    <li class='list-group-item'>
+                        Title: $title
+                    </li>
+                    <li class='list-group-item'>
+                        Job Type: $job
+                    </li>
+                    <li class='list-group-item'>
+                        Location: $location
+                    </li>
+                    <li class='list-group-item'>
+                        Employer: $employer
+                    </li>
+                    <li class='list-group-item'>
+                        More Information: $addltext
+                    </li>
+                    <li class='list-group-item'>
+                        URL: $url
+                    </li>
+                    <li class='list-group-item'>
+                        Sent To: $sentto
+                    </li>
+                </ul>
+            </div>
+        </div>
+        ";
+    }
+}else {
+    echo "<div class='content'>
+      <h2>Please fill out the form.</h2>
+      <a class='link' href='applicationform.html'>Go back</a>
+  </div>
+  ";
+}
+?>
     </div>
 </main>
 <footer>
