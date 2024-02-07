@@ -66,7 +66,7 @@
             $location = $_POST['location'];
             $employer = $_POST['employer'];
             $addltext = $_POST['additional-text'];
-            $url = $_POST['url'];
+            $url = $_POST['announcement-url'];
             $sentto = $_POST['sent-to'];
 
             // sanitization
