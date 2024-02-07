@@ -79,7 +79,7 @@ if(! empty($_POST)) {
     }
     if($finished > 0) {
         echo "
-                <a class='link' href='applicationform.html'>Go back</a>
+                <a class='link' href='admin_announcement.html'>Go back</a>
             </div>
             ";
     } else {
@@ -133,7 +133,7 @@ if(! empty($_POST)) {
 }else {
     echo "<div class='content'>
       <h2>Please fill out the form.</h2>
-      <a class='link' href='applicationform.html'>Go back</a>
+      <a class='link' href='admin_announcement.html'>Go back</a>
   </div>
   ";
 }

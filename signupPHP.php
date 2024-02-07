@@ -42,6 +42,8 @@
     </div>
 </nav>
 
+<main>
+    <div class="container p-3" id="main-container">
 <?php
 if(! empty($_POST)) {
     // removing
@@ -116,6 +118,8 @@ if(! empty($_POST)) {
           ";
 }
 ?>
+    </div>
+</main>
 <footer>
     <div class="container footer-div p-3 ">
         <div class="row justify-content-start">
