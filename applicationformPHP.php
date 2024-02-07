@@ -112,7 +112,7 @@ if(! empty($_POST)) {
                             App Date: $adate
                         </li>
                         <li class='list-group-item'>
-                            Application Status: $astatus
+                            Application Status: ". str_replace('-', ' ', $astatus) ."
                         </li>
                         <li class='list-group-item'>
                             Followup Updates: $fupdates
