@@ -25,12 +25,8 @@
                 <li><a href="signup.html" class="nav-link">Sign-up</a></li>
                 <li><a href="applicationform.html" class="nav-link">New Application</a></li>
                 <li><a href="contactForm.html" class="nav-link">Contact</a></li>
-                <li>
-                    <ul class="navbar-nav nav-underline">
-                        <li><a href="admin_dashboard.html" class="nav-link">Admin Dashboard</a></li>
-                        <li><a href="admin_announcement.html" class="nav-link">Admin Announcement</a></li>
-                    </ul>
-                </li>
+                <li><a href="admin_dashboard.html" class="nav-link">Admin Dashboard</a></li>
+                <li><a href="admin_announcement.html" class="nav-link">Admin Announcement</a></li>
                 <li class="d-flex justify-content-end" id=  "dark-mode-list-item">
                     <div class="form-check form-switch">
                         <label class="form-check-label" for="dark-mode-switch">Dark Mode</label>
