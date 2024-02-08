@@ -45,6 +45,16 @@
 <main>
     <div class="container p-3" id="main-container">
 <?php
+
+function echoError() {
+    echo "
+                <div class='form-error'>
+                    <h3>Message failed to send, please try again.</h3>
+                    <a class='link' href='contactForm.html'>Return to contact form</a>
+                </div>
+            ";
+}
+
 if(! empty($_POST)) {
     // removing
     foreach ($_POST as $value) {
@@ -61,6 +71,10 @@ if(! empty($_POST)) {
         }
     }
 
+    // constants
+    $MIN_MESSAGE = 25;
+    $MAX_MESSAGE = 100;
+
     $fname = $_POST['firstName'];
     $lname = $_POST['lastName'];
     $email = $_POST['email'];
@@ -71,6 +85,16 @@ if(! empty($_POST)) {
     $lname = strip_tags(filter_var($lname, FILTER_SANITIZE_ADD_SLASHES));
     $email = filter_var($email, FILTER_SANITIZE_EMAIL);
     $message = strip_tags(filter_var($message, FILTER_SANITIZE_ADD_SLASHES));
+
+    if(! preg_match("/[^\s@]+@[^\s@]+\.[^\s@]+/", $email) ) {
+        echoError();
+        return;
+    }
+
+    if(! strlen($message) > $MIN_MESSAGE && ! strlen($message) <= $MAX_MESSAGE) {
+        echoError();
+        return;
+    }
 
     // mailing
     $name = ucfirst($fname) . " " . ucfirst($lname);
