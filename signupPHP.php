@@ -43,22 +43,35 @@
 </nav>
 
 <?php
+
+function echoError() {
+    echo "
+                <div class='form-error'>
+                    <h3>Sign-up failed, please try again.</h3>
+                    <a class='link' href='signup.html'>Return to sign-up form</a>
+                </div>
+            ";
+}
+
 if(! empty($_POST)) {
     // removing
     foreach ($_POST as $value) {
         $value = trim($value);
 
         if (empty($value)) {
-            echo "
-                <div class='form-error'>
-                    <h3>Sign-up failed, please try again.</h3>
-                    <a class='link' href='signup.html'>Return to sign-up form</a>
-                </div>
-            ";
+            echoError();
             return;
         }
     }
 
+    // constants
+    $RADIO_VALUES = array("Seeking Internship", "Seeking Job", "Not Actively Searching");
+    $MIN_COHORT_NUM = 1;
+    $MAX_COHORT_NUM = 100;
+    $MIN_ROLES = 25;
+    $MAX_ROLES = 250;
+
+    // form values
     $fname = $_POST['firstName'];
     $lname = $_POST['lastName'];
     $email = $_POST['email'];
@@ -75,8 +88,26 @@ if(! empty($_POST)) {
 
     $name = ucfirst($fname) . " " . ucfirst($lname);
 
-    // TODO
-    // make sure php checks radio button values
+    // validation
+    if(! $cohortNum >= $MIN_COHORT_NUM && ! $cohortNum <= $MAX_COHORT_NUM) {
+        echoError();
+        return;
+    }
+
+    if(! strlen($roles) > $MIN_ROLES && ! strlen($roles) <= $MAX_ROLES) {
+        echoError();
+        return;
+    }
+
+    if(! preg_match("/[^\s@]+@[^\s@]+\.[^\s@]+/", $email) ) {
+        echoError();
+        return;
+    }
+
+    if(! in_array($status, $RADIO_VALUES)) {
+        echoError();
+        return;
+    }
 
     echo "
         <main>

@@ -1,22 +1,27 @@
 // contact form
-const name = document.getElementById("input-contact-name");
+const MIN_MESSAGE = 25;
+const MAX_MESSAGE = 1000;
+const firstName = document.getElementsByName("firstName");
+const lastName = document.getElementsByName("lastName");
 const email = document.getElementById("input-email");
-const submit = document.getElementById("submit-btn");
+const message = document.getElementById("input-message");
+// const submit = document.getElementById("submit-btn");
 
-window.addEventListener('load', function() {
-    setupListeners();
-});
-
-function setupListeners(){
-    //setupMouseListeners();
-}
+// window.addEventListener('load', function() {
+//     setupListeners();
+// });
+//
+// function setupListeners(){
+//     //setupMouseListeners();
+// }
 
 function validateForm(){
-    return validateEmail() && validateName();
+    return validateEmail() && validateName() && validateMessage();
 }
 
+// validates first and last name
 function validateName() {
-    return name.value.length !== 0;
+    return firstName.value.length !== 0 && lastName.value.length !== 0;
 }
 
 // validates email
@@ -26,17 +31,22 @@ function validateEmail() {
     return !!email.value.match(re);
 }
 
-function setupMouseListeners(){
-    submit.addEventListener("mouseover", () => {
-        submit.className += "-hover";
-
-    });
-
-    submit.addEventListener("mouseout", () => {
-        submit.className = "submit-btn";
-
-    });
+// validates message
+function validateMessage() {
+    return !(message.value.length < MIN_MESSAGE || message.value.length > MAX_MESSAGE);
 }
+
+// function setupMouseListeners(){
+//     submit.addEventListener("mouseover", () => {
+//         submit.className += "-hover";
+//
+//     });
+//
+//     submit.addEventListener("mouseout", () => {
+//         submit.className = "submit-btn";
+//
+//     });
+// }
 
 
 /*
@@ -49,19 +59,15 @@ email.addEventListener("input", (Event) => {
         invalidEmail.style.visibility = "hidden";
     }
 });
-
-// validates message
-function validateMessage() {
-    return !(message.value.length < MIN_MESSAGE || message.value.length > MAX_MESSAGE);
-}
-
-message.addEventListener("input", (Event) => {
-    let invalidMessage = document.getElementById("contact-message-invalid");
-
-    if(message.value.length < MIN_MESSAGE || message.value.length > MAX_MESSAGE) {
-        invalidMessage.style.visibility = "visible";
-    } else {
-        invalidMessage.style.visibility = "hidden";
-    }
-});
 */
+
+// message.addEventListener("input", (Event) => {
+//     let invalidMessage = document.getElementById("contact-message-invalid");
+//
+//     if(message.value.length < MIN_MESSAGE || message.value.length > MAX_MESSAGE) {
+//         invalidMessage.style.visibility = "visible";
+//     } else {
+//         invalidMessage.style.visibility = "hidden";
+//     }
+// });
+
