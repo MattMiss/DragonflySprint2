@@ -1,6 +1,6 @@
 <?php
     session_start();
-    $_SESSION['header-title'] = 'Contact Form';
+    $_SESSION['header-title'] = 'ATT - Contact Form';
     include 'header.php'?>
     <main>
         <div class="container p-3" id="main-container">
@@ -34,12 +34,6 @@
             </div>
         </div>
     </main>
-
-
-<!--<div class="form-error">-->
-<!--    <h3>Message failed to send. Please try again.</h3>-->
-<!--    <a class='link' href='contactForm.html'>Return to contact form</a>-->
-<!--</div>-->
 
 <?php include 'footer.php' ?>
 <script src="js/contactscript.js"></script>

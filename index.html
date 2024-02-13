@@ -24,17 +24,28 @@
                 <li><a href="index.html" class="nav-link">User Dashboard</a></li>
                 <li><a href="signup.html" class="nav-link">Sign-up</a></li>
                 <li><a href="applicationform.html" class="nav-link">New Application</a></li>
-                <li><a href="contactForm.html" class="nav-link">Contact</a></li>
+                <li><a href="contact_form.php" class="nav-link">Contact</a></li>
                 <li>
                     <ul class="navbar-nav nav-underline">
                         <li><a href="admin_dashboard.html" class="nav-link">Admin Dashboard</a></li>
                         <li><a href="admin_announcement.html" class="nav-link">Admin Announcement</a></li>
                     </ul>
                 </li>
+                <!--
                 <li class="d-flex justify-content-end" id=  "dark-mode-list-item">
                     <div class="form-check form-switch">
                         <label class="form-check-label" for="dark-mode-switch">Dark Mode</label>
                         <input class="form-check-input" type="checkbox" role="switch" id="dark-mode-switch">
+                    </div>
+                </li>
+                -->
+                <li class="d-flex justify-content-end" id="dark-mode-list-item">
+                    <div class="dark-switch-outer">
+                        <input type="checkbox" id="dark-mode-switch">
+                        <label for="dark-mode-switch">
+                            <i class="fas fa-sun"></i>
+                            <i class="fas fa-moon"></i>
+                        </label>
                     </div>
                 </li>
             </ul>
@@ -62,7 +73,7 @@
                             <td class="status status-applied"><i class="fa-solid fa-circle"></i><span>Applied</span></td>
                             <td class="app-button-outer">
                                 <button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>
-                                <button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i></button>
+                                <button class="app-button-inner btn btn-sm btn-delete" data-bs-toggle="modal" data-bs-target="#confirmModal"><i class="fa-solid fa-trash"></i></button>
                             </td>
                         </tr>
                         <tr class="app-list-item">
@@ -71,7 +82,7 @@
                             <td class="status status-accepted"><i class="fa-solid fa-circle"></i><span>Accepted</span></td>
                             <td class="app-button-outer">
                                 <button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>
-                                <button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i></button>
+                                <button class="app-button-inner btn btn-sm btn-delete" data-bs-toggle="modal" data-bs-target="#confirmModal"><i class="fa-solid fa-trash"></i></button>
                             </td>
                         </tr>
                         <tr class="app-list-item">
@@ -80,7 +91,7 @@
                             <td class="status status-interviewing"><i class="fa-solid fa-circle"></i><span>Interviewing</span></td>
                             <td class="app-button-outer">
                                 <button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>
-                                <button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i></button>
+                                <button class="app-button-inner btn btn-sm btn-delete" data-bs-toggle="modal" data-bs-target="#confirmModal"><i class="fa-solid fa-trash"></i></button>
                             </td>
                         </tr>
                         <tr class="app-list-item">
@@ -89,7 +100,7 @@
                             <td class="status status-rejected"><i class="fa-solid fa-circle"></i><span>Rejected</span></td>
                             <td class="app-button-outer">
                                 <button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>
-                                <button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i></button>
+                                <button class="app-button-inner btn btn-sm btn-delete" data-bs-toggle="modal" data-bs-target="#confirmModal"><i class="fa-solid fa-trash"></i></button>
                             </td>
                         </tr>
                         <tr class="app-list-item">
@@ -98,7 +109,7 @@
                             <td class="status status-need-apply"><i class="fa-solid fa-circle"></i><span>Need to Apply</span></td>
                             <td class="app-button-outer">
                                 <button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>
-                                <button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i></button>
+                                <button class="app-button-inner btn btn-sm btn-delete" data-bs-toggle="modal" data-bs-target="#confirmModal"><i class="fa-solid fa-trash"></i></button>
                             </td>
                         </tr>
                         <tr class="app-list-item">
@@ -107,7 +118,7 @@
                             <td class="status status-inactive"><i class="fa-solid fa-circle"></i><span>Inactive</span></td>
                             <td class="app-button-outer">
                                 <button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>
-                                <button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i></button>
+                                <button class="app-button-inner btn btn-sm btn-delete" onclick="deleteAppBtnClicked()" data-bs-toggle="modal" data-bs-target="#confirmModal"><i class="fa-solid fa-trash"></i></button>
                             </td>
                         </tr>
                         </tbody>
@@ -162,6 +173,19 @@
                 <div class="about-program col-9">
                     <h5>About Our Program</h5>
                     <p>Prepare for an exciting career in tech with a Bachelor of Applied Science in Software Development. Affordable tuition, instructors who care, access to tech industry mentors, and project-based learning make our applied bachelor’s program a popular destination for computing majors throughout the Seattle-Tacoma region. This degree prepares graduates for high-demand jobs such as software developer, web developer, software developer in test, and quality assurance (QA) analyst. Learn more at <a class="link" href="https://www.greenriver.edu/students/academics/degrees-programs/bachelor-of-applied-science/bachelors-in-software-development/">GreenRiver.edu</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="confirmModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body text-center">
+                        Are you sure you want to delete?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-success">Yes</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -272,5 +296,6 @@
         </div>
     </footer>
     <script src="js/main.js"></script>
+    <script src="js/dashboard.js"></script>
 </body>
 </html>
