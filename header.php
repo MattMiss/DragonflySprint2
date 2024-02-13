@@ -23,20 +23,23 @@
         <button type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" class="navbar-toggler"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse mx-1" id="navbar-menu">
             <ul class="navbar-nav nav-underline">
-                <li><a href="index.html" class="nav-link">User Dashboard</a></li>
-                <li><a href="signup.html" class="nav-link">Sign-up</a></li>
-                <li><a href="applicationform.html" class="nav-link">New Application</a></li>
-                <li><a href="contactForm.html" class="nav-link">Contact</a></li>
+                <li><a href="index.php" class="nav-link">User Dashboard</a></li>
+                <li><a href="signup_form.php" class="nav-link">Sign-up</a></li>
+                <li><a href="application_form.php" class="nav-link">New Application</a></li>
+                <li><a href="contact_form.php" class="nav-link">Contact</a></li>
                 <li>
                     <ul class="navbar-nav nav-underline">
-                        <li><a href="admin_dashboard.html" class="nav-link">Admin Dashboard</a></li>
-                        <li><a href="admin_announcement.html" class="nav-link">Admin Announcement</a></li>
+                        <li><a href="admin_dashboard.php" class="nav-link">Admin Dashboard</a></li>
+                        <li><a href="admin_announcement.php" class="nav-link">Admin Announcement</a></li>
                     </ul>
                 </li>
-                <li class="d-flex justify-content-end" id=  "dark-mode-list-item">
-                    <div class="form-check form-switch">
-                        <label class="form-check-label" for="dark-mode-switch">Dark Mode</label>
-                        <input class="form-check-input" type="checkbox" role="switch" id="dark-mode-switch">
+                <li class="d-flex justify-content-end" id="dark-mode-list-item">
+                    <div class="dark-switch-outer">
+                        <input type="checkbox" id="dark-mode-switch">
+                        <label for="dark-mode-switch">
+                            <i class="fas fa-sun"></i>
+                            <i class="fas fa-moon"></i>
+                        </label>
                     </div>
                 </li>
             </ul>
