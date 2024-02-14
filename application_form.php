@@ -10,20 +10,20 @@ include 'header.php'?>
             <form method="post" action="application_submit.php" class="form-body my-3">
                 <div class="mb-4">
                     <label for="job-name" class="form-label">Job Name*</label>
-                    <input type="text" class="form-control" id="job-name" name="job-name" required>
+                    <input type="text" class="form-control" id="job-name" name="job-name" maxlength="60" required>
                 </div>
                 <div class="mb-4">
                     <label for="employer-name" class="form-label">Employer Name*</label>
-                    <input type="text" class="form-control" id="employer-name" name="employer-name" required>
+                    <input type="text" class="form-control" id="employer-name" name="employer-name" maxlength="60" required>
                 </div>
                 <div class="mb-4">
                     <label for="job-url" class="form-label">Job Description URL*</label>
-                    <input type="text" class="form-control" id="job-url" name="job-url" required>
+                    <input type="text" class="form-control" id="job-url" name="job-url" maxlength="500" required>
                 </div>
                 <div class="mb-4">
                     <label for="job-description" class="form-label">Job Description</label>
                     <textarea class="form-control" id="job-description" name="job-description"
-                              placeholder="Little summary of the role of the job..." rows="3"></textarea>
+                              placeholder="Little summary of the role of the job..." maxlength="500" rows="3"></textarea>
                 </div>
                 <div class="mb-4">
                     <label for="today" class="form-label">Date of Application*</label>
@@ -71,7 +71,7 @@ include 'header.php'?>
                 <div class="mb-4">
                     <label for="follow-updates" class="form-label">Updates</label>
                     <textarea class="form-control" id="follow-updates" name="follow-updates"
-                              placeholder="Who have you spoken with or interviewed with?" rows="3"></textarea>
+                              placeholder="Who have you spoken with or interviewed with?" maxlength="500" rows="3"></textarea>
                 </div>
 
                 <div class="mb-4">
@@ -87,6 +87,7 @@ include 'header.php'?>
 
 
 <?php include 'footer.php' ?>
-<script src="js/contactscript.js"></script>
+<!-- Special Javascript to allow special application things work -->
+<script src="js/applicationscript.js"></script>
 </body>
 </html>
