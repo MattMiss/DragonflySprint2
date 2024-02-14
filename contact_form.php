@@ -36,6 +36,7 @@
     </main>
 
 <?php include 'footer.php' ?>
+<!-- Special Javascript to allow special contact things work -->
 <script src="js/contactscript.js"></script>
 </body>
 </html>

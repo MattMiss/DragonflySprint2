@@ -12,17 +12,20 @@ include 'header.php'?>
                         <label for="name" class="form-label">Name*</label>
                         <div id="name" class="row mb-4">
                             <div class="col-sm">
-                                <input type="text" class="form-control" name="firstName" placeholder="First name" aria-label="First name" required>
+                                <input type="text" class="form-control" name="firstName" placeholder="First name"
+                                       aria-label="First name" maxlength="30" required>
                             </div>
                             <div class="col-sm pt-sm-0 pt-2">
-                                <input type="text" class="form-control" name="lastName" placeholder="Last name" aria-label="Last name" required>
+                                <input type="text" class="form-control" name="lastName" placeholder="Last name"
+                                       aria-label="Last name" maxlength="30" required>
                             </div>
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label for="input-email" class="form-label">Email*</label>
-                        <input type="email" class="form-control" id="input-email" name="email" placeholder="e.g. example@email.com" required>
+                        <input type="email" class="form-control" id="input-email" name="email"
+                               placeholder="e.g. example@email.com" maxlength="60" required>
                         <small id="email-message">Note: an @greenriver.edu email is preferred</small>
                     </div>
 
@@ -49,7 +52,8 @@ include 'header.php'?>
 
                     <div class="mb-3">
                         <label for="input-roles" class="form-label">What roles are you looking for?*</label>
-                        <textarea class="form-control" id="input-roles" name="roles" minlength="50" maxlength="500" placeholder="Type here..." required></textarea>
+                        <textarea class="form-control" id="input-roles" name="roles"
+                                  minlength="50" maxlength="500" placeholder="Type here..." required></textarea>
                     </div>
 
                     <button type="submit" class="submit-btn">Submit</button>
@@ -61,6 +65,7 @@ include 'header.php'?>
 
 
 <?php include 'footer.php' ?>
-<script src="js/contactscript.js"></script>
+<!-- Special Javascript to allow special signup things work -->
+<script src="js/signupscript.js"></script>
 </body>
 </html>
