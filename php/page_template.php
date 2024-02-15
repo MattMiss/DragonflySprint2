@@ -1,7 +1,7 @@
 <?php
 session_start();
 $_SESSION['header-title'] = 'Change Title Here';
-include 'header.php'?>
+include '../php/nav_bar.php' ?>
 <main>
     <div class="container p-3" id="main-container">
 
@@ -10,7 +10,8 @@ include 'header.php'?>
 </main>
 
 
-<?php include 'footer.php' ?>
-<script src="js/contactscript.js"></script>
+<?php include '../php/footer.php' ?>
+<script src="../js/contactscript.js"></script>
+<script src="../js/main.js"></script>
 </body>
 </html>
