@@ -260,8 +260,10 @@ nav a:hover {
     display: flex;
     justify-content: center;
     margin: 0 auto 3rem auto;
+}
 
-    & input, & textarea {
+.form-container, .app-list{
+    & input, & textarea, .input-group-text, .input-group, .form-select{
         background-color: var(--form-input-color) !important;
         border-color: var(--form-outline-color);
         color: var(--font-color) !important;
@@ -277,13 +279,17 @@ nav a:hover {
     }
 
     ::placeholder, select, input[type='date']  {
-        color: var(--placeholder-font-color);
+        color: var(--placeholder-font-color) !important;
     }
 
     input:checked {
         background-color: #D14900 !important;
         border-color: #D14900;
         box-shadow: 0 0 0 3px rgba(209, 73, 0, 0.43);
+    }
+
+    i {
+        color: var(--font-color);
     }
 
 }
@@ -506,6 +512,7 @@ a {
 
 .dash-table{
     width: 100%;
+    font-size: .9rem;
 }
 
 .dash-table th{
@@ -577,7 +584,7 @@ a {
 }
 
 .w-btn{
-    width: 110px;
+    width: 90px;
 }
 
 
