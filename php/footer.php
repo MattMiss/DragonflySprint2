@@ -13,32 +13,32 @@
                     <li><a href="https://leetcode.com/" target="_blank">LeetCode</a></li>
                 </ul>
             </div>
-            <div class="col-md-6 footer-section">
-                <div class="row ">
-                    <h5 class="pb-3">FIND JOBS</h5>
-                </div>
-                <div class="d-flex job-icon-container">
-                    <a class="icon-linkedin" href="https://www.linkedin.com/" target="_blank" data-bs-toggle="tooltip" title="LinkedIn">
-                        <img class="img-fluid " src="<?php echo $location?>images/icons/LinkedInIcon256.png" alt="LinkedIn">
-                    </a>
-                    <a class="icon-glassdoor" href="https://www.glassdoor.com/" target="_blank" data-bs-toggle="tooltip" title="Glassdoor">
-                        <img class="img-fluid" src="<?php echo $location?>images/icons/GlassdoorIcon256.png" alt="Glassdoor">
-                    </a>
-                    <a class="icon-indeed" href="https://www.indeed.com/" target="_blank" data-bs-toggle="tooltip" title="Indeed">
-                        <img class="img-fluid" src="<?php echo $location?>images/icons/IndeedIcon256.png" alt="Indeed">
-                    </a>
-                    <a class="icon-ziprecruiter" href="https://www.ziprecruiter.com/" target="_blank" data-bs-toggle="tooltip" title="Zip Recruiter">
-                        <img class="img-fluid" src="<?php echo $location?>images/icons/ZipRecruiterIcon256.png" alt="Zip Recruiter">
-                    </a>
-                    <a class="icon-monster" href="https://monster.com/" target="_blank" data-bs-toggle="tooltip" title="Monster">
-                        <img class="img-fluid" src="<?php echo $location?>images/icons/MonsterIcon256.png" alt="Monster">
-                    </a>
-                    <a class="icon-handshake" href="https://joinhandshake.com/" target="_blank" data-bs-toggle="tooltip" title="Handshake">
-                        <img class="img-fluid" src="<?php echo $location?>images/icons/HandshakeIcon256.png" alt="Handshake">
-                    </a>
-                    <a class="icon-careerbuilder" href="https://www.careerbuilder.com/" target="_blank" data-bs-toggle="tooltip" title="Career Builder">
-                        <img class="img-fluid" src="<?php echo $location?>images/icons/CareerBuilderIcon256.png" alt="Career Builder">
-                    </a>
+            <div class="col-md-6 footer-section py-4">
+                <h5 class="pb-3">FIND JOBS</h5>
+                <div class="row">
+                    <div class="d-flex job-icon-container">
+                        <a class="icon-linkedin" href="https://www.linkedin.com/" target="_blank" data-bs-toggle="tooltip" title="LinkedIn">
+                            <img class="img-fluid " src="<?php echo $location?>images/icons/LinkedInIcon256.png" alt="LinkedIn">
+                        </a>
+                        <a class="icon-glassdoor" href="https://www.glassdoor.com/" target="_blank" data-bs-toggle="tooltip" title="Glassdoor">
+                            <img class="img-fluid" src="<?php echo $location?>images/icons/GlassdoorIcon256.png" alt="Glassdoor">
+                        </a>
+                        <a class="icon-indeed" href="https://www.indeed.com/" target="_blank" data-bs-toggle="tooltip" title="Indeed">
+                            <img class="img-fluid" src="<?php echo $location?>images/icons/IndeedIcon256.png" alt="Indeed">
+                        </a>
+                        <a class="icon-ziprecruiter" href="https://www.ziprecruiter.com/" target="_blank" data-bs-toggle="tooltip" title="Zip Recruiter">
+                            <img class="img-fluid" src="<?php echo $location?>images/icons/ZipRecruiterIcon256.png" alt="Zip Recruiter">
+                        </a>
+                        <a class="icon-monster" href="https://monster.com/" target="_blank" data-bs-toggle="tooltip" title="Monster">
+                            <img class="img-fluid" src="<?php echo $location?>images/icons/MonsterIcon256.png" alt="Monster">
+                        </a>
+                        <a class="icon-handshake" href="https://joinhandshake.com/" target="_blank" data-bs-toggle="tooltip" title="Handshake">
+                            <img class="img-fluid" src="<?php echo $location?>images/icons/HandshakeIcon256.png" alt="Handshake">
+                        </a>
+                        <a class="icon-careerbuilder" href="https://www.careerbuilder.com/" target="_blank" data-bs-toggle="tooltip" title="Career Builder">
+                            <img class="img-fluid" src="<?php echo $location?>images/icons/CareerBuilderIcon256.png" alt="Career Builder">
+                        </a>
+                    </div>
                 </div>
             </div>
             <div class="col-md-6 footer-section resources-last">

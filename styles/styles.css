@@ -105,7 +105,8 @@ main{
 }
 
 /* footer styles */
-footer{
+footer {
+
     background-color: var(--footer-color);
     border-top: solid 1px var(--form-outline-color);
     height: auto;
@@ -677,6 +678,7 @@ a {
 .footer-section{
     width: 400px;
     padding-top: 20px;
+
 }
 
 .footer-section:last-child{
