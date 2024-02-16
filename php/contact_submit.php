@@ -26,7 +26,7 @@ function echoError() {
     echo "
                 <div class='form-error'>
                     <h3>Message failed to send, please try again.</h3>
-                    <a class='link' href='../contactForm.html'>Return to contact form</a>
+                    <a class='link' href='../contact_form.php'>Go to contact form</a>
                 </div>
             ";
 }
@@ -86,24 +86,23 @@ if(! empty($_POST)) {
                
             <main>
                 <div class='container p-3'>
-                <h3 class='receipt-message p-3 mb-0'>Success! Your message has been sent.</h3>
-                <div class='form-receipt-container p-3'>
-                    <ul class='receipt-content list-group list-group-flush'>
-                        <li class='list-group-item'>
-                            Name: $name
-                        </li>
-                        <li class='list-group-item'>
-                            Email: $email
-                        </li>
-                        <li class='list-group-item'>
-                            $message 
-                        </li>
-                        <li class='align-self-center'>
-                            <a class='link' href='../index.html'>Return home</a>
-                        </li>
-                    </ul>
-            
-                </div>
+                    <h3 class='receipt-message p-3 mb-0'>Success! Your message has been sent.</h3>
+                    <div class='form-receipt-container p-3'>
+                        <ul class='receipt-content list-group list-group-flush'>
+                            <li class='list-group-item'>
+                                Name: $name
+                            </li>
+                            <li class='list-group-item'>
+                                Email: $email
+                            </li>
+                            <li class='list-group-item'>
+                                $message 
+                            </li>
+                            <li class='align-self-center'>
+                                <a class='link' href='../index.php'>Return home</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </main>
         ";
@@ -111,7 +110,7 @@ if(! empty($_POST)) {
 } else {
     echo "<div class='content'>
               <h2>Please fill out the form.</h2>
-              <a class='link' href='../index.html'>Return home</a>
+              <a class='link' href='../contact_form.php'>Go back</a>
           </div>
           ";
 }

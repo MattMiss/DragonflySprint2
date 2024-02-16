@@ -50,7 +50,7 @@ if(! empty($_POST)) {
     }
     if($finished > 0) {
         echo "
-                <a class='link' href='../applicationform.html'>Go back</a>
+                <a class='link' href='../application_form.php'>Go to application form</a>
             </div>
             ";
     } else {
@@ -81,37 +81,42 @@ if(! empty($_POST)) {
         echo $sql;
 
         echo "
-            <div class='form-receipt-container'>
-                <div class='content'>
-                    <h3>Success! Your application has been created.</h3>
-                    <ul class='list-group'>
-                        <li class='list-group-item'>
-                            Name: $jname
-                        </li>
-                        <li class='list-group-item'>
-                            Employer Name: $ename
-                        </li>
-                        <li class='list-group-item'>
-                            Job Url: $jurl
-                        </li>
-                        <li class='list-group-item'>
-                            Job Description: $jdescription
-                        </li>
-                        <li class='list-group-item'>
-                            App Date: $adate
-                        </li>
-                        <li class='list-group-item'>
-                            Application Status: ". str_replace('-', ' ', $astatus) ."
-                        </li>
-                        <li class='list-group-item'>
-                            Followup Updates: $fupdates
-                        </li>
-                        <li class='list-group-item'>
-                            Followup Date: $followupdate
-                        </li>
-                    </ul>
+            <main>
+                <div class='container p-3'>
+                    <h3 class='receipt-message p-3 mb-0'>Success! Your application has been created.</h3>
+                    <div class='form-receipt-container p-3'>
+                        <ul class='receipt-content list-group list-group-flush'>
+                            <li class='list-group-item'>
+                                Name: $jname
+                            </li>
+                            <li class='list-group-item'>
+                                Employer Name: $ename
+                            </li>
+                            <li class='list-group-item'>
+                                Job Url: $jurl
+                            </li>
+                            <li class='list-group-item'>
+                                Job Description: $jdescription
+                            </li>
+                            <li class='list-group-item'>
+                                App Date: $adate
+                            </li>
+                            <li class='list-group-item'>
+                                Application Status: ". str_replace('-', ' ', $astatus) ."
+                            </li>
+                            <li class='list-group-item'>
+                                Followup Updates: $fupdates
+                            </li>
+                            <li class='list-group-item'>
+                                Followup Date: $followupdate
+                            </li>
+                            <li class='align-self-center'>
+                                <a class='link' href='../index.php'>Return home</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
+            </main>
         ";
 
         $result = @mysqli_query($cnxn, $sql);
@@ -119,7 +124,7 @@ if(! empty($_POST)) {
 }else {
     echo "<div class='content'>
               <h2>Please fill out the form.</h2>
-              <a class='link' href='../applicationform.html'>Go back</a>
+              <a class='link' href='../application_form.php'>Go back</a>
           </div>
           ";
 }
