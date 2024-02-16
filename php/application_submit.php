@@ -78,7 +78,9 @@ if(! empty($_POST)) {
                 `followupdate`) VALUES ('$jname', '$ename', '$jurl', '$jdescription', '$adate', '$astatus', '$fupdates',
                                         '$followupdate')";
 
-        echo $sql;
+//        echo $sql;
+
+        $result = @mysqli_query($cnxn, $sql);
 
         echo "
             <main>
@@ -119,7 +121,7 @@ if(! empty($_POST)) {
             </main>
         ";
 
-        $result = @mysqli_query($cnxn, $sql);
+
     }
 }else {
     echo "<div class='content'>

@@ -71,7 +71,7 @@ include 'php/nav_bar.php' ?>
                     <div class="mb-3">
                         <label for="input-roles" class="form-label">What roles are you looking for?*</label>
                         <textarea class="form-control" id="input-roles" name="roles"
-                                  minlength="50" maxlength="500" placeholder="Type here..." required></textarea>
+                                  minlength="5" maxlength="500" placeholder="Type here..." required></textarea>
                     </div>
 
                     <button type="submit" class="submit-btn">Submit</button>
