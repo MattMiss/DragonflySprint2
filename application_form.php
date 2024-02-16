@@ -18,14 +18,14 @@
 
 <?php
 session_start();
-$_SESSION['header-title'] = 'ATT - Application Form';
+$_SESSION['location'] = '';
 include 'php/nav_bar.php' ?>
 <main>
     <div class="container p-3" id="main-container">
         <h3 class="form-header">Application Form</h3>
         <!--        <h2 class="pt-3">Application Form</h2>-->
         <div class="form-container">
-            <form method="post" action="php/application_submit.php" class="form-body my-3">
+            <form method="post" action="php/application_submit.php" onsubmit="return validateForm()" class="form-body my-3">
                 <div class="mb-4">
                     <label for="job-name" class="form-label">Job Name*</label>
                     <input type="text" class="form-control" id="job-name" name="job-name" maxlength="60" required>
@@ -49,32 +49,6 @@ include 'php/nav_bar.php' ?>
                 </div>
                 <div class="mb-4">
                     <label for="application-status" class="form-label mb-3">Application Status*</label><br>
-                    <!--<div class="form-check">
-                        <input class="form-check-input" type="radio" name="application-status" id="need-to-apply" value="need-to-apply" required>
-                        <label class="form-check-label" for="need-to-apply">Need to Apply</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="application-status" id="applied" value="applied">
-                        <label class="form-check-label" for="applied">Applied</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="application-status" id="interviewing" value="interviewing">
-                        <label class="form-check-label" for="interviewing">Interviewing</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="application-status" id="rejected" value="rejected">
-                        <label class="form-check-label" for="rejected">Rejected</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="application-status" id="accepted" value="accepted">
-                        <label class="form-check-label" for="accepted">Accepted</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="application-status" id="inactive" value="inactive">
-                        <label class="form-check-label" for="inactive">Inactive/Expired</label>
-                    </div>
-                    -->
-
                     <select name="application-status" id="application-status">
                         <option value="select">Select an option</option>
                         <option value="need-to-apply">Need to apply</option>
@@ -84,7 +58,7 @@ include 'php/nav_bar.php' ?>
                         <option value="accepted">Accepted</option>
                         <option value="inactive">Inactive/Expired</option>
                     </select>
-                    <div id="application-wrong"></div>
+                    <div id="application-wrong" style="color:red"></div>
                 </div>
                 <div class="mb-4">
                     <label for="follow-updates" class="form-label">Updates</label>

@@ -18,7 +18,7 @@
 
 <?php
 session_start();
-$_SESSION['header-title'] = 'Change Title Here';
+$_SESSION['location'] = '';
 
 include 'php/nav_bar.php';
 include "/home/dragonfl/db.php";

@@ -16,7 +16,7 @@
 <body>
 <?php
 session_start();
-$_SESSION['header-title'] = 'ATT - Application Form';
+$_SESSION['location'] = '../';
 include '../php/nav_bar.php' ?>
 <main>
     <div class="container p-3" id="main-container">
