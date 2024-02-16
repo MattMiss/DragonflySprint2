@@ -29,7 +29,7 @@ $result = @mysqli_query($cnxn, $sql);
 echo "
 
 <main style='position: relative'>
-    <div id='alertPlaceholder' style='position: absolute; left: 50%; transform: translate(-50%, 0)'></div>
+<!--    <div id='alertPlaceholder' style='position: absolute; left: 50%; transform: translate(-50%, 0)'></div> -->
     <div class='container p-3' id='main-container'>
         <div class='row dashboard-top'>
             <div class='app-list col-md-9'>

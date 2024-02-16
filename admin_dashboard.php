@@ -19,11 +19,19 @@
 <?php
 session_start();
 $_SESSION['location'] = '';
-include 'php/nav_bar.php' ?>
+
+include 'php/nav_bar.php';
+// to view recent announcements
+//include "/home/dragonfl/db.php";
+//
+//$sql = "SELECT * FROM announcements";
+//$result = @mysqli_query($cnxn, $sql);
+?>
+
 <main>
     <div class="container p-3" id="main-container">
         <div class="row dashboard-top">
-            <div class="app-list col-9">
+            <div class="app-list col-8">
                 <h3>Recent Applications</h3>
                 <table class="dash-table">
                     <thead>
@@ -92,34 +100,108 @@ include 'php/nav_bar.php' ?>
                     </tbody>
                 </table>
                 <p class="title mx-auto" style="display: block; width:100px; color: green">More</p>
-
             </div>
-            <div class="reminders col ">
-                <h3>Reminders</h3>
+            <div class="reminders col">
+                <h3>Recent Announcements</h3>
                 <div>
-                    <h6>Follow Up</h6>
                     <hr>
                     <div class="reminder">
-                        <i class="fa-regular fa-comment"></i>
-                        <a href="#">Follow up with <span>Costco</span></a>
-                        <p>Applied on: <span>1/22/24</span></p>
+                        <i class="fa-solid fa-bullhorn me-2"></i>
+                        <button class="announcement-modal-btn" type="button" data-bs-toggle="modal" data-bs-target="#announcement-modal-1">DevOps Engineer position at <span>Costco</span></button>
+                        <p>Created on: <span>1/22/24</span></p>
                     </div>
+
+                    <div class="modal fade" id="announcement-modal-1" tabindex="-1" role="dialog" aria-labelledby="job-title" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="job-title">DevOps Engineer</h5>
+                                    <button type="button" class="modal-close-primary close" data-bs-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <ul class="list-group-item">
+                                        <li class="list-group-item pb-1">
+                                            <span class="form-label">Company:</span> Costco
+                                        </li>
+                                        <li class="list-group-item pb-1">
+                                            <span class="form-label">Address:</span> 2219 S 37th St, Tacoma, WA 98409-7473
+                                        </li>
+                                        <li class="list-group-item pb-1">
+                                            <span class="form-label">URL:</span>
+                                            <a href="https://www.costco.com/career-opportunities.html">https://www.costco.com/career-opportunities.html</a>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="form-label">More Information:</span>
+                                            <p>
+                                                A DevOps engineer is responsible for the smooth operation of a company's IT infrastructure. They work with developers to deploy and manage code changes, and with operations staff to ensure that systems are up and running smoothly. To be successful in this role, a DevOps engineer must have a deep understanding of both development and operations processes, as well as a strong technical background.
+                                            </p>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="modal-close-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="modal-edit">Edit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="reminder">
-                        <i class="fa-regular fa-comment"></i>
-                        <a href="#">Follow up with <span>Meta</span></a>
-                        <p>Applied on: <span>12/22/23</span></p>
+                        <i class="fa-solid fa-bullhorn me-2"></i>
+                        <button class="announcement-modal-btn" type="button" data-bs-toggle="modal" data-bs-target="#announcement-modal-2">System Architect position at <span>Meta</span></button>
+                        <p>Created on: <span>12/22/23</span></p>
+                    </div>
+
+                    <div class="modal fade" id="announcement-modal-2" tabindex="-1" role="dialog" aria-labelledby="job-title" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="job-title">System Architect</h5>
+                                    <button type="button" class="modal-close-primary close" data-bs-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <ul class="list-group-item">
+                                        <li class="list-group-item pb-1">
+                                            <span class="form-label">Company:</span> Meta
+                                        </li>
+                                        <li class="list-group-item pb-1">
+                                            <span class="form-label">Address:</span> 1101 Dexter Ave N, Seattle, WA 98109
+                                        </li>
+                                        <li class="list-group-item pb-1">
+                                            <span class="form-label">URL:</span>
+                                            <a href="https://www.metacareers.com">https://www.metacareers.com</a>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="form-label">More Information:</span>
+                                            <p>
+                                                A system architect is in charge of devising, configuring, operating, and maintaining both computer and networking systems. They objectively analyze desired processes and outcomes and advise on the right combination of IT systems and components to achieve specific business, department, team, or functional goals.
+                                            </p>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="modal-close-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="modal-edit">Edit</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div style="padding-top: 20px;">
-                    <h6>Incomplete Apps</h6>
                     <hr>
                     <div class="incomplete-app">
-                        <i class="fa-solid fa-pen"></i>
-                        <a href="#">Incomplete applications <span>(3)</span></a>
+                        <a class="" href="admin_announcement.php">Add Announcement</a>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="row py-3">
             <div class="col-9 d-flex justify-content-center" id="new-app-container">
                 <button class="submit-btn">New Application</button>

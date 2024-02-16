@@ -13,7 +13,7 @@
     --outline-color: black;
 
     /* form theme */
-    --form-outline-color: rgba(0,0,0,.125);
+    --form-outline-color: #0000001F;
     --form-header-color: rgba(0,0,0,.03);
     --form-input-color: white;
     --placeholder-font-color: #696969;
@@ -25,6 +25,12 @@
     --submit-border-hover-color: #6CB443;
     --submit-text-color: #006225;
     --submit-text-hover-color: black;
+
+    /* modal button themes */
+    --secondary-close-bg-color: #0000001F;
+    --secondary-close-hover-color: #0000004A;
+    --modal-edit-bg-color: #6CB443;
+    --modal-edit-hover-color: #568f35;
 
     /* table theme */
     --table-header-color: #ddd;
@@ -58,6 +64,8 @@
     --form-outline-color: rgba(220, 220, 220,.125);
     --form-input-color: #454545;
     --placeholder-font-color: #ddd;
+
+    /* submit button theme */
     --submit-color: #6CB443;
     --submit-hover-color: white;
     --submit-border-color: #6CB443;
@@ -67,6 +75,11 @@
     --table-header-color: #aaa;
     --table-hd-font-color: black;
     --form-header-color: #454545;
+
+    /* modal button themes */
+    --secondary-close-bg-color: #454545;
+    --modal-edit-bg-color: #006225;
+    --modal-edit-hover-color: #00461b;
 
     /* footer icons */
     --footer-icon-invert: 88%;
@@ -313,7 +326,7 @@ nav a:hover {
     background-color: var(--submit-color);
     border: 1px solid var(--submit-border-color);
     border-radius: 2px;
-    color: var(--submit-text-color) !important;
+    color: var(--submit-text-color);
     font-weight: 600;
     padding: 7px 10px 7px 10px;
 }
@@ -427,9 +440,8 @@ table td {
 }
 
 .dashboard-top{
-    gap: 10px;
+    gap: 30px;
     margin-bottom: 20px;
-
 }
 
 .reminders{
@@ -458,6 +470,74 @@ table td {
     font-size: .9rem;
     font-weight: bold;
     color: #8c8c8c;
+}
+
+/* recent announcements modal*/
+.modal-content {
+    background: var(--bg-color-primary) !important;
+}
+
+.modal-header {
+    border-bottom: solid 1px var(--form-outline-color);
+}
+
+.modal-footer {
+    border-top: solid 1px var(--form-outline-color);
+}
+
+/* recent announcement modal buttons */
+
+/*
+    TODO
+    create hover styles for visual feedback
+*/
+.modal-close-primary {
+    color: var(--font-color);
+    background: var(--bg-color-primary);
+    border: none;
+    width: 25px;
+    height: 25px;
+}
+
+.modal-close-primary:hover {
+    background: var(--secondary-close-bg-color);
+    border-radius: 70%;
+}
+
+.modal-close-secondary{
+    background: var(--secondary-close-bg-color);
+    border: none;
+    border-radius: 2px;
+    color: var(--font-color);
+    font-weight: 600;
+    padding: 7px 10px 7px 10px;
+}
+
+.modal-close-secondary:hover {
+    background: var(--secondary-close-hover-color);
+}
+
+.modal-edit {
+    background: var(--modal-edit-bg-color);
+    border: none;
+    border-radius: 2px;
+    color: var(--font-color);
+    font-weight: 600;
+    padding: 7px 10px 7px 10px;
+}
+
+.modal-edit:hover {
+    background: var(--modal-edit-hover-color);
+}
+
+.announcement-modal-btn {
+    border: none;
+    background-color: unset;
+    color: var(--header-color);
+}
+
+.announcement-modal-btn:hover {
+    text-decoration: underline ;
 }
 
 .incomplete-app span{
