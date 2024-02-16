@@ -239,7 +239,7 @@ function createApp($info) {
         $jurl = $row["jurl"];
         $jdescription = $row["jdescription"];
         $adate = $row["adate"];
-        $astatus = ucfirst($row["astatus"]);
+        $astatus = $row["astatus"];
         $fupdates = $row["fupdates"];
         $followupdate = $row["followupdate"];
         $app_info = json_encode($row);
@@ -249,7 +249,7 @@ function createApp($info) {
                 <td>$adate</td>
                 <td>$jname</td>
                 <td>$ename</td>
-                <td class='status status-$astatus'><i class='fa-solid fa-circle'></i><span>$astatus</span></td>
+                <td class='status status-$astatus'><i class='fa-solid fa-circle'></i><span style='text-transform: capitalize'>$astatus</span></td>
                 <td class='app-button-outer'>
                     <button class='app-button-inner btn btn-sm btn-update'><i class='fa-solid fa-pen'></i></button>
                     <button class='app-button-inner btn btn-sm btn-delete' data-bs-toggle='modal' data-bs-target='#confirmModal' onclick='deleteAppBtnClicked($app_info)'><i class='fa-solid fa-trash'></i></button>
