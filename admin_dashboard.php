@@ -49,7 +49,7 @@ include 'php/nav_bar.php';
                         <td class="status status-applied"><i class="fa-solid fa-circle"></i><span>Applied</span></td>
                         <td class="app-button-outer">
                             <button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>
-                            <button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i></button>
+                            <button class="app-button-inner btn btn-sm btn-delete" type="button" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                     <tr class="app-list-item">
@@ -100,6 +100,23 @@ include 'php/nav_bar.php';
                     </tbody>
                 </table>
                 <p class="title mx-auto" style="display: block; width:100px; color: green">More</p>
+
+                <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="delete-app-message" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="delete-warning">Are you sure you want to delete this application?</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>Deleted applications can be recovered later.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="modal-close-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="modal-delete">Delete Application</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="reminders col">
                 <h3>Recent Announcements</h3>

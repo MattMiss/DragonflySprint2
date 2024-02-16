@@ -431,12 +431,21 @@ table td {
     background-color: #006225;
 }
 
-.btn-delete{
+.btn-delete, .modal-delete {
     background-color: #d24747;
 }
 
-.app-list-item .btn-delete:hover, .user-list-item .btn-delete:hover{
+.app-list-item .btn-delete:hover, .user-list-item .btn-delete:hover, .modal-delete:hover{
     background-color: #b42c2c;
+}
+
+/* delete apps modal */
+.modal-delete {
+    border: none;
+    border-radius: 2px;
+    color: white;
+    font-weight: 600;
+    padding: 7px 10px 7px 10px;
 }
 
 .dashboard-top{
@@ -486,11 +495,6 @@ table td {
 }
 
 /* recent announcement modal buttons */
-
-/*
-    TODO
-    create hover styles for visual feedback
-*/
 .modal-close-primary {
     color: var(--font-color);
     background: var(--bg-color-primary);
