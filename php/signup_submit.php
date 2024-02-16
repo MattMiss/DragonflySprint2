@@ -44,11 +44,13 @@ if(! empty($_POST)) {
         }
     }
 
+    require '/home/dragonfl/db.php';
+
     // constants
     $RADIO_VALUES = array("Seeking Internship", "Seeking Job", "Not Actively Searching");
     $MIN_COHORT_NUM = 1;
     $MAX_COHORT_NUM = 100;
-    $MIN_ROLES = 25;
+    $MIN_ROLES = 5;
     $MAX_ROLES = 250;
 
     // form values
@@ -88,6 +90,13 @@ if(! empty($_POST)) {
         echoError();
         return;
     }
+
+    $sql = "INSERT INTO `users` (`fname`, `lname`, `email`, `cohortNum`, `status`, `roles`) VALUES ('$fname', 
+            '$lname', '$email', '$cohortNum', '$status', '$roles')";
+
+    echo $sql;
+
+    $result = @mysqli_query($cnxn, $sql);
 
     echo "
         <main>
