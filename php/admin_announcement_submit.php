@@ -62,8 +62,8 @@ if(! empty($_POST)) {
             </div>
             ";
     } else {
-        require '/home/dragonfl/db.php';  //cpanel
-        //require '../db_local.php';  //Local
+        //require '/home/dragonfl/db.php';  //cpanel
+        require '../db_local.php';  //Local
 
         $title = $_POST['announcement-title'];
         $jobType = $_POST['job-or-intern'];
@@ -78,44 +78,98 @@ if(! empty($_POST)) {
         $jobType = strip_tags(filter_var($jobType, FILTER_SANITIZE_ADD_SLASHES));
         $location = strip_tags(filter_var($location, FILTER_SANITIZE_ADD_SLASHES));
         $employer = strip_tags(filter_var($employer, FILTER_SANITIZE_ADD_SLASHES));
+        $addltext = strip_tags(filter_var($addltext, FILTER_SANITIZE_ADD_SLASHES));
         $url = strip_tags(filter_var($url, FILTER_SANITIZE_ADD_SLASHES));
-        $sentto = strip_tags(filter_var($sentto, FILTER_SANITIZE_ADD_SLASHES));
+        $sentto = filter_var($sentto, FILTER_SANITIZE_ADD_SLASHES);
 
-        $sql = "INSERT INTO `announcements` (`title`, `job_type`, `location`, `ename`, `additional_info`, `jurl`, `sent_to`, 
-                             `is_deleted`) VALUES ('$title', '$jobType', '$location', '$employer', '$addltext', '$url', '$sentto', 0)";
+        $today = date("Y-m-d");
+
+
+        $sql = "INSERT INTO `announcements` (`title`, `job_type`, `location`, `ename`, `additional_info`, `jurl`, `sent_to`, `date_created`, 
+                             `is_deleted`) VALUES ('$title', '$jobType', '$location', '$employer', '$addltext', '$url', '$sentto', '$today', 0)";
 
         $result = @mysqli_query($cnxn, $sql);
 
-        echo"
-        <div class='form-receipt-container'>
-            <div class='content'>
-                <h3>Success! Your announcement has been sent.</h3>
-                <ul class='list-group'>
-                    <li class='list-group-item'>
+
+        echo "
+            <h3 class='receipt-message p-3 mb-0'>Success! Your announcement has been sent.</h3>
+            <div class='form-receipt-container p-3'>
+                <ul class='receipt-content list-group list-group-flush'>
+                    <li class='list-group-item text-break'>
                         Title: $title
                     </li>
-                    <li class='list-group-item'>
+                    <li class='list-group-item text-break'>
                         Job Type: $jobType
                     </li>
-                    <li class='list-group-item'>
+                    <li class='list-group-item text-break'>
                         Location: $location
                     </li>
-                    <li class='list-group-item'>
+                    <li class='list-group-item text-break'>
                         Employer: $employer
                     </li>
-                    <li class='list-group-item'>
+                    <li class='list-group-item text-break'>
                         More Information: $addltext
                     </li>
-                    <li class='list-group-item'>
+                    <li class='list-group-item text-break'>
                         URL: $url
                     </li>
-                    <li class='list-group-item'>
+                    <li class='list-group-item text-break'>
                         Sent To: $sentto
                     </li>
                 </ul>
             </div>
-        </div>
-        ";
+            ";
+
+        /*
+        if(! preg_match("/[^\s@]+@[^\s@]+\.[^\s@]+/", $sentto) ) {
+            echoError();
+            return;
+        }
+
+        // mailing
+        $name = ucfirst($fname) . " contact_submit.php" . ucfirst($lname);
+        //$to = "Yadira Cervantes<cervantes.yadira@student.greenriver.edu>";
+        $to = "Matt Miss<miss.matthew@student.greenriver.edu>";
+        $subject = "Message from " . $name;
+        $from = $name . '<' . $_POST['email'] . '>';
+        $headers = 'From: ' . $from . "\r\n" .
+            'Reply-To: ' . $from . "\r\n" .
+            'X-Mailer: PHP/' . phpversion();
+
+        if (mail($to, $subject, $message, $headers)) {
+            echo "
+            <div class='form-receipt-container'>
+                <div class='content'>
+                    <h3>Success! Your announcement has been sent.</h3>
+                    <ul class='list-group'>
+                        <li class='list-group-item text-break'>
+                            Title: $title
+                        </li>
+                        <li class='list-group-item text-break'>
+                            Job Type: $jobType
+                        </li>
+                        <li class='list-group-item text-break'>
+                            Location: $location
+                        </li>
+                        <li class='list-group-item text-break'>
+                            Employer: $employer
+                        </li>
+                        <li class='list-group-item text-break'>
+                            More Information: $addltext
+                        </li>
+                        <li class='list-group-item text-break'>
+                            URL: $url
+                        </li>
+                        <li class='list-group-item text-break'>
+                            Sent To: $sentto
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            ";
+
+        }
+        */
     }
 }else {
     echo "<div class='content'>
