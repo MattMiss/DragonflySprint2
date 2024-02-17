@@ -58,12 +58,15 @@ if(! empty($_POST)) {
     }
     if($finished > 0) {
         echo "
-                <a class='link' href='../admin_announcement.html'>Go back</a>
+                <a class='link' href='../admin_announcement.php'>Go back</a>
             </div>
             ";
     } else {
+        require '/home/dragonfl/db.php';  //cpanel
+        //require '../db_local.php';  //Local
+
         $title = $_POST['announcement-title'];
-        $job = $_POST['job-or-intern'];
+        $jobType = $_POST['job-or-intern'];
         $location = $_POST['location'];
         $employer = $_POST['employer'];
         $addltext = $_POST['additional-text'];
@@ -72,11 +75,16 @@ if(! empty($_POST)) {
 
         // sanitization
         $title = strip_tags(filter_var($title, FILTER_SANITIZE_ADD_SLASHES));
-        $job = strip_tags(filter_var($job, FILTER_SANITIZE_ADD_SLASHES));
+        $jobType = strip_tags(filter_var($jobType, FILTER_SANITIZE_ADD_SLASHES));
         $location = strip_tags(filter_var($location, FILTER_SANITIZE_ADD_SLASHES));
         $employer = strip_tags(filter_var($employer, FILTER_SANITIZE_ADD_SLASHES));
         $url = strip_tags(filter_var($url, FILTER_SANITIZE_ADD_SLASHES));
         $sentto = strip_tags(filter_var($sentto, FILTER_SANITIZE_ADD_SLASHES));
+
+        $sql = "INSERT INTO `announcements` (`title`, `job_type`, `location`, `ename`, `additional_info`, `jurl`, `sent_to`, 
+                             `is_deleted`) VALUES ('$title', '$jobType', '$location', '$employer', '$addltext', '$url', '$sentto', 0)";
+
+        $result = @mysqli_query($cnxn, $sql);
 
         echo"
         <div class='form-receipt-container'>
@@ -87,7 +95,7 @@ if(! empty($_POST)) {
                         Title: $title
                     </li>
                     <li class='list-group-item'>
-                        Job Type: $job
+                        Job Type: $jobType
                     </li>
                     <li class='list-group-item'>
                         Location: $location
@@ -112,7 +120,7 @@ if(! empty($_POST)) {
 }else {
     echo "<div class='content'>
       <h2>Please fill out the form.</h2>
-      <a class='link' href='../admin_announcement.html'>Go back</a>
+      <a class='link' href='../admin_announcement.php'>Go back</a>
   </div>
   ";
 }
