@@ -54,7 +54,9 @@ include '../php/nav_bar.php' ?>
             </div>
             ";
             } else {
-                require '/home/dragonfl/db.php';
+                $db_location = '';
+                include 'db_picker.php';
+                include $db_location;
 
                 $jname = trim($_POST['job-name']);
                 $ename = trim($_POST['employer-name']);
