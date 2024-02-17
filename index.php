@@ -251,7 +251,10 @@ function createApp($info) {
                 <td>$ename</td>
                 <td class='status status-$astatus'><i class='fa-solid fa-circle'></i><span style='text-transform: capitalize'>$astatus</span></td>
                 <td class='app-button-outer'>
-                    <button class='app-button-inner btn btn-sm btn-update'><i class='fa-solid fa-pen'></i></button>
+                    <form method='post' action='application_edit.php'>
+                        <input type='hidden' name='application-id' value='$id'/>
+                        <button type='submit' class='app-button-inner btn btn-sm btn-update'><i class='fa-solid fa-pen'></i></button>
+                     </form>
                     <button class='app-button-inner btn btn-sm btn-delete' data-bs-toggle='modal' data-bs-target='#confirmModal' onclick='deleteAppBtnClicked($app_info)'><i class='fa-solid fa-trash'></i></button>
                 </td>
             </tr>
