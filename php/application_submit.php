@@ -54,7 +54,9 @@ if(! empty($_POST)) {
             </div>
             ";
     } else {
-        require '/home/dragonfl/db.php';
+        $db_location = '';
+        include 'db_picker.php';
+        include $db_location;
 
         $jname = trim($_POST['job-name']);
         $ename = trim($_POST['employer-name']);
@@ -83,42 +85,39 @@ if(! empty($_POST)) {
         $result = @mysqli_query($cnxn, $sql);
 
         echo "
-            <main>
-                <div class='container p-3'>
-                    <h3 class='receipt-message p-3 mb-0'>Success! Your application has been created.</h3>
-                    <div class='form-receipt-container p-3'>
-                        <ul class='receipt-content list-group list-group-flush'>
-                            <li class='list-group-item'>
-                                Name: $jname
-                            </li>
-                            <li class='list-group-item'>
-                                Employer Name: $ename
-                            </li>
-                            <li class='list-group-item'>
-                                Job Url: $jurl
-                            </li>
-                            <li class='list-group-item'>
-                                Job Description: $jdescription
-                            </li>
-                            <li class='list-group-item'>
-                                App Date: $adate
-                            </li>
-                            <li class='list-group-item'>
-                                Application Status: ". str_replace('-', ' ', $astatus) ."
-                            </li>
-                            <li class='list-group-item'>
-                                Followup Updates: $fupdates
-                            </li>
-                            <li class='list-group-item'>
-                                Followup Date: $followupdate
-                            </li>
-                            <li class='align-self-center'>
-                                <a class='link' href='../index.php'>Return home</a>
-                            </li>
-                        </ul>
-                    </div>
+                <h3 class='receipt-message p-3 mb-0'>Success! Your application has been created.</h3>
+                <div class='form-receipt-container p-3'>
+                    <ul class='receipt-content list-group list-group-flush'>
+                        <li class='list-group-item'>
+                            Name: $jname
+                        </li>
+                        <li class='list-group-item'>
+                            Employer Name: $ename
+                        </li>
+                        <li class='list-group-item'>
+                            Job Url: $jurl
+                        </li>
+                        <li class='list-group-item'>
+                            Job Description: $jdescription
+                        </li>
+                        <li class='list-group-item'>
+                            App Date: $adate
+                        </li>
+                        <li class='list-group-item'>
+                            Application Status: ". str_replace('-', ' ', $astatus) ."
+                        </li>
+                        <li class='list-group-item'>
+                            Followup Updates: $fupdates
+                        </li>
+                        <li class='list-group-item'>
+                            Followup Date: $followupdate
+                        </li>
+                        <li class='align-self-center'>
+                            <a class='link' href='../index.php'>Return home</a>
+                        </li>
+                    </ul>
                 </div>
-            </main>
+         
         ";
 
 

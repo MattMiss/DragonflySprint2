@@ -62,8 +62,9 @@ if(! empty($_POST)) {
             </div>
             ";
     } else {
-        //require '/home/dragonfl/db.php';  //cpanel
-        require '../db_local.php';  //Local
+        $db_location = '';
+        include 'db_picker.php';
+        include $db_location;
 
         $title = $_POST['announcement-title'];
         $jobType = $_POST['job-or-intern'];
@@ -72,6 +73,8 @@ if(! empty($_POST)) {
         $addltext = $_POST['additional-text'];
         $url = $_POST['announcement-url'];
         $sentto = $_POST['sent-to'];
+        $fname = $_POST['first-name'] == 'default' ? '' : $_POST['first-name'];
+        $lname = $_POST['last-name'] == 'default' ? '' : $_POST['last-name'];
 
         // sanitization
         $title = strip_tags(filter_var($title, FILTER_SANITIZE_ADD_SLASHES));
@@ -91,7 +94,58 @@ if(! empty($_POST)) {
         $result = @mysqli_query($cnxn, $sql);
 
 
-        echo "
+        if(! preg_match("/[^\s@]+@[^\s@]+\.[^\s@]+/", $sentto) ) {
+            echoError();
+            return;
+        }
+
+        // mailing
+        $name = ucfirst($fname) . " " . ucfirst($lname);
+        $to = "$name<$sentto>";
+        $subject = "Admin Announcement - New Position";
+        $from = 'Admin' . '<' . 'Admin@Dragonfly.GreenRiverDev.com' . '>';
+        $headers = "MIME-Version: 1.0" . "\r\n" .
+            "Content-type:text/html;charset=UTF-8" . "\r\n" .
+            'From: ' . $from . "\r\n" .
+            'Reply-To: ' . $from . "\r\n" .
+            'X-Mailer: PHP/' . phpversion();
+
+        $message = "
+            <html>
+            <head>
+                <title>New Opportunity</title>
+            </head>
+            <body>
+                <div class='form-receipt-container p-3'>
+                <h3>Check out the following position:</h3>
+                <ul class='receipt-content list-group list-group-flush'>
+                    <li class='list-group-item text-break'>
+                        Title: $title
+                    </li>
+                    <li class='list-group-item text-break'>
+                        Job Type: $jobType
+                    </li>
+                    <li class='list-group-item text-break'>
+                        Location: $location
+                    </li>
+                    <li class='list-group-item text-break'>
+                        Employer: $employer
+                    </li>
+                    <li class='list-group-item text-break'>
+                        More Information: $addltext
+                    </li>
+                    <li class='list-group-item text-break'>
+                        URL: $url
+                    </li>
+                </ul>
+            </div>
+            </body>
+            </html>
+        ";
+
+
+        if (mail($to, $subject, $message, $headers)) {
+            echo "
             <h3 class='receipt-message p-3 mb-0'>Success! Your announcement has been sent.</h3>
             <div class='form-receipt-container p-3'>
                 <ul class='receipt-content list-group list-group-flush'>
@@ -120,56 +174,8 @@ if(! empty($_POST)) {
             </div>
             ";
 
-        /*
-        if(! preg_match("/[^\s@]+@[^\s@]+\.[^\s@]+/", $sentto) ) {
-            echoError();
-            return;
         }
 
-        // mailing
-        $name = ucfirst($fname) . " contact_submit.php" . ucfirst($lname);
-        //$to = "Yadira Cervantes<cervantes.yadira@student.greenriver.edu>";
-        $to = "Matt Miss<miss.matthew@student.greenriver.edu>";
-        $subject = "Message from " . $name;
-        $from = $name . '<' . $_POST['email'] . '>';
-        $headers = 'From: ' . $from . "\r\n" .
-            'Reply-To: ' . $from . "\r\n" .
-            'X-Mailer: PHP/' . phpversion();
-
-        if (mail($to, $subject, $message, $headers)) {
-            echo "
-            <div class='form-receipt-container'>
-                <div class='content'>
-                    <h3>Success! Your announcement has been sent.</h3>
-                    <ul class='list-group'>
-                        <li class='list-group-item text-break'>
-                            Title: $title
-                        </li>
-                        <li class='list-group-item text-break'>
-                            Job Type: $jobType
-                        </li>
-                        <li class='list-group-item text-break'>
-                            Location: $location
-                        </li>
-                        <li class='list-group-item text-break'>
-                            Employer: $employer
-                        </li>
-                        <li class='list-group-item text-break'>
-                            More Information: $addltext
-                        </li>
-                        <li class='list-group-item text-break'>
-                            URL: $url
-                        </li>
-                        <li class='list-group-item text-break'>
-                            Sent To: $sentto
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            ";
-
-        }
-        */
     }
 }else {
     echo "<div class='content'>

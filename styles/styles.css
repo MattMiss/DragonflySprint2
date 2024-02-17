@@ -408,6 +408,10 @@ table td {
     padding: 15px;
 }
 
+.app-list a:link, .app-list a:visited{
+    color: var(--submit-text-color) !important;
+}
+
 .user-list{
     gap: 10px;
     padding: 15px;
@@ -838,6 +842,20 @@ a {
 .modal-custom{
     background-color: var(--bg-color-primary);
 }
+
+#selectUserModal{
+    width: 100%;
+    font-size: .9rem;
+}
+
+#selectUserModal th{
+    width: 15%;
+}
+
+#selectUserModal tr{
+    cursor: pointer;
+}
+
 
 
 /************* mobile ****************/

@@ -19,7 +19,10 @@
 session_start();
 $_SESSION['location'] = '';
 
-include '/home/dragonfl/db.php';
+$db_location = '';
+include 'db_picker.php';
+include $db_location;
+
 $id = $_POST['application-id'];
 $sql = "SELECT * FROM `applications` WHERE `application_id` = $id;";
 
