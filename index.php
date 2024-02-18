@@ -20,9 +20,10 @@
 session_start();
 $_SESSION['location'] = '';
 
+$db_location = '';
 include 'php/nav_bar.php';
-include 'db_local.php';
-//include "/home/dragonfl/db.php";
+include 'db_picker.php';
+include $db_location;
 
 $sql = "SELECT * FROM applications";
 $result = @mysqli_query($cnxn, $sql);
@@ -150,12 +151,16 @@ createApp($result);
 echo "
                     </tbody>
                 </table>
-                <div class='table-page-btns'>
+                <div class='table-page-btns text-end'>
                     <button type='button' class='btn'><i class='fa-solid fa-angle-left'></i></button>
                     <button type='button' class='btn'>1</button>
                     <button type='button' class='btn'><i class='fa-solid fa-angle-right'></i></button>
                 </div>
+                <div class='col d-flex justify-content-center' id='new-app-container'>
+                    <a class='submit-btn' href='application_form.php'>New Application</a>
+                </div>
             </div>
+            
             <div class='reminders col '>
                 <h3>Reminders</h3>
                 <div>
@@ -180,14 +185,9 @@ echo "
                         <a href='#'>Incomplete applications <span>(3)</span></a>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class='row py-3'>
-            <div class='col-9 d-flex justify-content-center' id='new-app-container'>
-                <a class='submit-btn' href='application_form.php'>New Application</a>
-            </div>
-            <div class='col-3 d-flex justify-content-center' id='update-account-container'>
-                <button id='update-acc-btn' class='submit-btn'><i class='fa-solid fa-gear px-1'></i>Update Account</button>
+                <div class='col pt-5 d-flex justify-content-center' id='update-account-container'>
+                    <button id='update-acc-btn' class='submit-btn'><i class='fa-solid fa-gear px-1'></i>Update Account</button>
+                </div>
             </div>
         </div>
         <div class='row welcome-info'>
@@ -225,8 +225,8 @@ echo "
 include 'php/footer.php'?>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="js/contactscript.js"></script>
-<script src="js/main.js?time=<?php echo mktime(); ?>"></script>
-<script src="js/dashboard.js?time=<?php echo mktime(); ?>"></script>
+<script src="js/main.js"></script>
+<script src="js/dashboard.js"></script>
 </body>
 </html>
 
