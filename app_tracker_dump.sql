@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `applications` (
     `astatus` varchar(30) NOT NULL,
     `fupdates` varchar(500) DEFAULT NULL,
     `followupdate` date NOT NULL,
-    `is_deleted` boolean NOT NULL DEFAULT false,
+    `is_deleted` bool NOT NULL DEFAULT false,
     PRIMARY KEY (`application_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=450215449;
 
@@ -53,6 +53,7 @@ CREATE TABLE IF NOT EXISTS `users` (
     `cohortNum` int(3) NOT NULL,
     `status` varchar(30) NOT NULL,
     `roles` varchar(500) DEFAULT NULL,
+    `is_deleted` bool NOT NULL DEFAULT false,
     PRIMARY KEY (`user_id`)
     ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=450215449 ;
 
@@ -64,3 +65,26 @@ INSERT INTO `users` (`fname`, `lname`, `email`, `cohortNum`, `status`, `roles`) 
                                                        ('Grayson', 'Choi', 'graysonc@yahoo.com', '19', 'Seeking Internship', 'Software Support'),
                                                        ('Dana', 'Felder','danafelder@gmail.com', '15', 'Not Actively Searching'),
                                                        ('Kris', 'Bartkowski', 'kbartkowski@student.greenriver.edu', '19', 'Not Actively Searching');
+
+----------------------------------------------------------
+-- Table structure for table `announcements`
+
+CREATE TABLE IF NOT EXISTS `announcements` (
+    `id` int(6) NOT NULL AUTO_INCREMENT,
+    `title` varchar(60) NOT NULL,
+    `job_type` varchar(30) NOT NULL,
+    `location` varchar(100) NOT NULL,
+    `ename` varchar(60) DEFAULT NULL,
+    `additional_info` varchar(2000) DEFAULT NULL,
+    `jurl` varchar(500) NOT NULL,
+    `sent_to` varchar(60) NOT NULL,
+    `date_created` date NOT NULL,
+    `is_deleted` bool NOT NULL DEFAULT false,
+    PRIMARY KEY (`application_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=450215449;
+
+-- Dumping data for table `announcements`
+
+INSERT INTO `announcements` (`title`, `job_type`, `location`, `ename`, `additional_info`, `jurl`, `sent_to`, `date_created`) VALUES
+                                                                                                                          ('Partner Engineer, Android', 'job', 'Bellevue, WA', 'Meta', 'Partner Engineering is a highly technical team that works with our strategic partners to integrate Meta products into their mobile platforms, apps, devices as well as our VR/AR platforms. Partner Engineers bring deep technical knowledge of Android platforms to lead highly visible initiatives and launch impactful products with our strategic mobile partners.', 'https://www.metacareers.com/jobs/917060759860304', 'matt.w.miss@gmail.com', '2024-02-17'),
+                                                                                                                          ('Software Engineer 2', 'job', 'Redmond, WA', 'Microsoft', 'Design, implement, validate, and release software features to critical production components. Maintain scalable services with health monitoring to enable self-healing systems. Engage with teammates and partner teams to understand business needs to maximize impact. Provide technical, end-to-end ownership for projects on which you work. Innovate and Implement system to enable growth of scalable, critical, and global services. Drive our collaborative, inclusive and passionate team culture.', 'https://jobs.careers.microsoft.com/global/en/job/1672687', 'matt.w.miss@gmail.com', '2024-02-15')
