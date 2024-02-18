@@ -21,17 +21,18 @@ session_start();
 $_SESSION['location'] = '';
 
 include 'php/nav_bar.php';
-// to view recent announcements
-//include "/home/dragonfl/db.php";
-//
-//$sql = "SELECT * FROM announcements";
-//$result = @mysqli_query($cnxn, $sql);
+include  'db_local.php'; // locally connect to cpanel db
+
+$sql = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC LIMIT 5"; // 5 most recent announcements
+$sql2 = "SELECT * FROM announcements ORDER BY id DESC LIMIT 2"; // 2 most recent announcements
+$result = @mysqli_query($cnxn, $sql);
+$result2 = @mysqli_query($cnxn, $sql2);
 ?>
 
 <main>
     <div class="container p-3" id="main-container">
         <div class="row dashboard-top">
-            <div class="app-list col-8">
+            <div class="app-list col col-8">
                 <h3>Recent Applications</h3>
                 <table class="dash-table">
                     <thead>
@@ -43,181 +44,50 @@ include 'php/nav_bar.php';
                     </tr>
                     </thead>
                     <tbody>
-                    <tr class="app-list-item">
-                        <td>01/22/2024</td>
-                        <td>Costco</td>
-                        <td class="status status-applied"><i class="fa-solid fa-circle"></i><span>Applied</span></td>
-                        <td class="app-button-outer">
-                            <button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>
-                            <button class="app-button-inner btn btn-sm btn-delete" type="button" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
-                    <tr class="app-list-item">
-                        <td>01/19/2024</td>
-                        <td>REI</td>
-                        <td class="status status-accepted"><i class="fa-solid fa-circle"></i><span>Accepted</span></td>
-                        <td class="app-button-outer">
-                            <button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>
-                            <button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
-                    <tr class="app-list-item">
-                        <td>01/15/2024</td>
-                        <td>Starbucks</td>
-                        <td class="status status-interviewing"><i class="fa-solid fa-circle"></i><span>Interviewing</span></td>
-                        <td class="app-button-outer">
-                            <button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>
-                            <button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
-                    <tr class="app-list-item">
-                        <td>01/10/2024</td>
-                        <td>Microsoft</td>
-                        <td class="status status-rejected"><i class="fa-solid fa-circle"></i><span>Rejected</span></td>
-                        <td class="app-button-outer">
-                            <button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>
-                            <button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
-                    <tr class="app-list-item">
-                        <td >01/02/2024</td>
-                        <td>T-Mobile</td>
-                        <td class="status status-need-apply"><i class="fa-solid fa-circle"></i><span>Need to Apply</span></td>
-                        <td class="app-button-outer">
-                            <button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>
-                            <button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
-                    <tr class="app-list-item">
-                        <td >12/01/2023</td>
-                        <td>Netflix</td>
-                        <td class="status status-inactive"><i class="fa-solid fa-circle"></i><span>Inactive</span></td>
-                        <td class="app-button-outer">
-                            <button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>
-                            <button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
+                    <?php
+                    createTable($result);
+                    ?>
                     </tbody>
                 </table>
                 <p class="title mx-auto" style="display: block; width:100px; color: green">More</p>
-
-                <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="delete-app-message" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title" id="delete-warning">Are you sure you want to delete this application?</h4>
-                            </div>
-                            <div class="modal-body">
-                                <p>Deleted applications can be recovered later.</p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="modal-close-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="modal-delete">Delete Application</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
+
             <div class="reminders col">
                 <h3>Recent Announcements</h3>
                 <div>
                     <hr>
-                    <div class="reminder">
-                        <i class="fa-solid fa-bullhorn me-2"></i>
-                        <button class="announcement-modal-btn" type="button" data-bs-toggle="modal" data-bs-target="#announcement-modal-1">DevOps Engineer position at <span>Costco</span></button>
-                        <p>Created on: <span>1/22/24</span></p>
-                    </div>
+                    <?php
+                    createReminders($result2);
+                    ?>
 
-                    <div class="modal fade" id="announcement-modal-1" tabindex="-1" role="dialog" aria-labelledby="job-title" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="job-title">DevOps Engineer</h5>
-                                    <button type="button" class="modal-close-primary close" data-bs-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <ul class="list-group-item">
-                                        <li class="list-group-item pb-1">
-                                            <span class="form-label">Company:</span> Costco
-                                        </li>
-                                        <li class="list-group-item pb-1">
-                                            <span class="form-label">Address:</span> 2219 S 37th St, Tacoma, WA 98409-7473
-                                        </li>
-                                        <li class="list-group-item pb-1">
-                                            <span class="form-label">URL:</span>
-                                            <a href="https://www.costco.com/career-opportunities.html">https://www.costco.com/career-opportunities.html</a>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <span class="form-label">More Information:</span>
-                                            <p>
-                                                A DevOps engineer is responsible for the smooth operation of a company's IT infrastructure. They work with developers to deploy and manage code changes, and with operations staff to ensure that systems are up and running smoothly. To be successful in this role, a DevOps engineer must have a deep understanding of both development and operations processes, as well as a strong technical background.
-                                            </p>
-                                        </li>
-                                    </ul>
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="modal-close-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="modal-edit">Edit</button>
-                                </div>
-                            </div>
+                    <div style="padding-top: 20px;">
+                        <hr>
+                        <div class="incomplete-app">
+                            <a class="" href="admin_announcement.php">Add Announcement</a>
                         </div>
-                    </div>
-
-                    <div class="reminder">
-                        <i class="fa-solid fa-bullhorn me-2"></i>
-                        <button class="announcement-modal-btn" type="button" data-bs-toggle="modal" data-bs-target="#announcement-modal-2">System Architect position at <span>Meta</span></button>
-                        <p>Created on: <span>12/22/23</span></p>
-                    </div>
-
-                    <div class="modal fade" id="announcement-modal-2" tabindex="-1" role="dialog" aria-labelledby="job-title" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="job-title">System Architect</h5>
-                                    <button type="button" class="modal-close-primary close" data-bs-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <ul class="list-group-item">
-                                        <li class="list-group-item pb-1">
-                                            <span class="form-label">Company:</span> Meta
-                                        </li>
-                                        <li class="list-group-item pb-1">
-                                            <span class="form-label">Address:</span> 1101 Dexter Ave N, Seattle, WA 98109
-                                        </li>
-                                        <li class="list-group-item pb-1">
-                                            <span class="form-label">URL:</span>
-                                            <a href="https://www.metacareers.com">https://www.metacareers.com</a>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <span class="form-label">More Information:</span>
-                                            <p>
-                                                A system architect is in charge of devising, configuring, operating, and maintaining both computer and networking systems. They objectively analyze desired processes and outcomes and advise on the right combination of IT systems and components to achieve specific business, department, team, or functional goals.
-                                            </p>
-                                        </li>
-                                    </ul>
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="modal-close-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="modal-edit">Edit</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div style="padding-top: 20px;">
-                    <hr>
-                    <div class="incomplete-app">
-                        <a class="" href="admin_announcement.php">Add Announcement</a>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class='modal fade' id='delete-modal' tabindex='-1' role='dialog' aria-labelledby='delete-app-message' aria-hidden='true'>
+            <div class='modal-dialog modal-dialog-centered' role='document'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        <h4 class='modal-title' id='delete-warning'>Are you sure you want to delete this application?</h4>
+                    </div>
+                    <div class='modal-body'>
+                        <p>Deleted applications can be recovered later.</p>
+                    </div>
+                    <div class='modal-footer'>
+                        <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Cancel</button>
+                        <button type='submit' class='modal-delete'>Delete Application</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
 
         <div class="row py-3">
             <div class="col-9 d-flex justify-content-center" id="new-app-container">
@@ -301,7 +171,6 @@ include 'php/nav_bar.php';
             </div>
         </div>
 
-    </div>
 </main>
 
 
@@ -309,3 +178,95 @@ include 'php/nav_bar.php';
 <script src="js/main.js"></script>
 </body>
 </html>
+
+<?php
+
+
+function createTable($info) {
+    while ($row = mysqli_fetch_assoc($info)) {
+        $id = $row["application_id"];
+        $jname = $row["jname"];
+        $ename = $row["ename"];
+        $jurl = $row["jurl"];
+        $jdescription = $row["jdescription"];
+        $adate = $row["adate"];
+        $astatus = $row["astatus"];
+        $fupdates = $row["fupdates"];
+        $followupdate = $row["followupdate"];
+//            $app_info = json_encode($row);
+
+        echo "
+                <tr class='app-list-item' id='$id'>
+                    <td>$adate</td>
+                    <td>$ename</td>
+                    <td class='status status-$astatus'><i class='fa-solid fa-circle'></i><span>$astatus</span></td>
+                    <td class='app-button-outer'>
+                            <button class='app-button-inner btn btn-sm btn-update'><i class='fa-solid fa-pen'></i></button>
+                            <button class='app-button-inner btn btn-sm btn-delete' type='submit' data-bs-toggle='modal' data-bs-target='#delete-modal'><i class='fa-solid fa-trash'></i></button>
+
+                    </td>
+                </tr>
+                
+            ";
+    }
+}
+
+function createReminders($info) {
+    while ($row = mysqli_fetch_assoc($info)) {
+        $id = $row["id"];
+        $title = $row["title"];
+        $jtype = $row["job_type"];
+        $location = $row["location"];
+        $ename = $row["ename"];
+        $jobInfo = $row["additional_info"];
+        $jurl = $row["jurl"];
+        $recipient = $row["sent_to"];
+        $date = $row["date_created"];
+//            $app_info = json_encode($row);
+
+        echo "
+                <div class='reminder'>
+                    <i class='fa-solid fa-bullhorn me-2'></i>
+                    <button class='announcement-modal-btn' type='button' data-bs-toggle='modal' data-bs-target='#announcement-modal-$id'>$title $jtype at <span>$ename</span></button>
+                    <p>Created on: <span>$date</span></p>
+                </div>
+
+                <div class='modal fade' id='announcement-modal-$id' tabindex='-1' role='dialog' aria-labelledby='job-title' aria-hidden='true'>
+                    <div class='modal-dialog' role='document'>
+                        <div class='modal-content'>
+                            <div class='modal-header'>
+                                <h5 class='modal-title' id='job-title'>$title</h5>
+                                <button type='button' class='modal-close-primary close' data-bs-dismiss='modal' aria-label='Close'>
+                                    <span aria-hidden='true'>&times;</span>
+                                </button>
+                            </div>
+                            <div class='modal-body'>
+                                <ul class='list-group-item'>
+                                    <li class='list-group-item pb-1'>
+                                        <span class='form-label'>Company:</span> $ename
+                                    </li>
+                                    <li class='list-group-item pb-1'>
+                                        <span class='form-label'>Address:</span> $location
+                                    </li>
+                                    <li class='list-group-item pb-1'>
+                                        <span class='form-label'>URL:</span>
+                                        <a href='$jurl'>$jurl</a>
+                                    </li>
+                                    <li class='list-group-item'>
+                                        <span class='form-label'>More Information:</span>
+                                        <p>$jobInfo</p>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class='modal-footer'>
+                                <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Close</button>
+                                <button type='button' class='modal-edit'>Edit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            ";
+    }
+}
+?>
