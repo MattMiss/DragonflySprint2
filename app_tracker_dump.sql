@@ -17,7 +17,7 @@ DROP TABLE IF EXISTS applications;
 DROP TABLE IF EXISTS  users;
 
 
-----------------------------------------------------------
+-----------------------------------------------------------
 -- Table structure for table `applications`
 
 CREATE TABLE IF NOT EXISTS `applications` (
@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS `applications` (
     `astatus` varchar(30) NOT NULL,
     `fupdates` varchar(500) DEFAULT NULL,
     `followupdate` date NOT NULL,
+    `is_deleted` boolean NOT NULL DEFAULT false,
     PRIMARY KEY (`application_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=450215449;
 

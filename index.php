@@ -21,7 +21,8 @@ session_start();
 $_SESSION['location'] = '';
 
 include 'php/nav_bar.php';
-include "/home/dragonfl/db.php";
+include 'db_local.php';
+//include "/home/dragonfl/db.php";
 
 $sql = "SELECT * FROM applications";
 $result = @mysqli_query($cnxn, $sql);

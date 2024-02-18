@@ -1,4 +1,4 @@
-function deleteAppBtnClicked(appInfo){
+function deleteAppBtnClicked(appInfo) {
     //console.log("asking to delete app from " + appInfo['ename']);
     //console.log(appInfo['application_id']);
 
@@ -10,7 +10,7 @@ function deleteAppBtnClicked(appInfo){
     const dltHandler = () => {
         console.log("Deleting App: " + 'app-' + appInfo['application_id']);
         const app = $('#app-' + appInfo['application_id']);
-        if (app){
+        if (app) {
             app.remove();
             modal.textContent = "";
             showAlert('Application deleted!', 'danger');
@@ -20,7 +20,7 @@ function deleteAppBtnClicked(appInfo){
     dltBtn.addEventListener('click', dltHandler, false)
 }
 
-function showAlert(message, type){
+function showAlert(message, type) {
     const alertPlaceholder = $('#alertPlaceholder');
     const wrapper = document.createElement('div');
     wrapper.innerHTML = [
