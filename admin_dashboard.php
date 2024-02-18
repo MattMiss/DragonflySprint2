@@ -23,10 +23,27 @@ $_SESSION['location'] = '';
 include 'php/nav_bar.php';
 include  'db_local.php'; // locally connect to cpanel db
 
+// soft deletes a database entry
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    if($_POST["submit-from"] == 1) {
+        $id = $_POST["id"];
+        $sql4 = "UPDATE applications SET is_deleted = 1 WHERE application_id = $id";
+        $result4 = @mysqli_query($cnxn, $sql4);
+    } elseif ($_POST["submit-from"] == 2) {
+        $id = $_POST["id"];
+        $sql4 = "UPDATE users SET is_deleted = 1 WHERE user_id = $id";
+        $result4 = @mysqli_query($cnxn, $sql4);
+    }
+}
+
+// fetches specific data from database tables
 $sql = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC LIMIT 5"; // 5 most recent announcements
-$sql2 = "SELECT * FROM announcements ORDER BY id DESC LIMIT 2"; // 2 most recent announcements
+$sql2 = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY id DESC LIMIT 2"; // 2 most recent announcements
+$sql3 = "SELECT * FROM users WHERE is_deleted = 0 LIMIT 7";
 $result = @mysqli_query($cnxn, $sql);
 $result2 = @mysqli_query($cnxn, $sql2);
+$result3 = @mysqli_query($cnxn, $sql3);
 ?>
 
 <main>
@@ -70,25 +87,6 @@ $result2 = @mysqli_query($cnxn, $sql2);
             </div>
         </div>
 
-        <div class='modal fade' id='delete-modal' tabindex='-1' role='dialog' aria-labelledby='delete-app-message' aria-hidden='true'>
-            <div class='modal-dialog modal-dialog-centered' role='document'>
-                <div class='modal-content'>
-                    <div class='modal-header'>
-                        <h4 class='modal-title' id='delete-warning'>Are you sure you want to delete this application?</h4>
-                    </div>
-                    <div class='modal-body'>
-                        <p>Deleted applications can be recovered later.</p>
-                    </div>
-                    <div class='modal-footer'>
-                        <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Cancel</button>
-                        <button type='submit' class='modal-delete'>Delete Application</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
         <div class="row py-3">
             <div class="col-9 d-flex justify-content-center" id="new-app-container">
                 <button class="submit-btn">New Application</button>
@@ -97,6 +95,7 @@ $result2 = @mysqli_query($cnxn, $sql2);
                 <button id="update-acc-btn" class="submit-btn"><i class="fa-solid fa-gear px-1"></i>Update Account</button>
             </div>
         </div>
+
         <div class="row dashboard-top">
             <div class="user-list">
                 <h3>Users</h3>
@@ -109,51 +108,15 @@ $result2 = @mysqli_query($cnxn, $sql2);
                     </tr>
                     </thead>
                     <tbody>
-                    <tr class="user-list-item">
-                        <td>Theo Red</td>
-                        <td>red.ted@student.greenriver.edu</td>
-                        <td class="app-button-outer">
-                            <button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>
-                            <button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
-                    <tr class="user-list-item">
-                        <td>Susan Blue</td>
-                        <td>blue.sue@student.greenriver.edu</td>
-                        <td class="app-button-outer">
-                            <button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>
-                            <button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
-                    <tr class="user-list-item">
-                        <td>Samwise Green</td>
-                        <td>green.sam@student.greenriver.edu</td>
-                        <td class="app-button-outer">
-                            <button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>
-                            <button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
-                    <tr class="user-list-item">
-                        <td>Penelope Purple</td>
-                        <td>purple.penny@student.greenriver.edu</td>
-                        <td class="app-button-outer">
-                            <button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>
-                            <button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
-                    <tr class="user-list-item">
-                        <td>August Orange</td>
-                        <td>orange.august@student.greenriver.edu</td>
-                        <td class="app-button-outer">
-                            <button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>
-                            <button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
+                        <?php
+                            createUserTable($result3);
+                        ?>
                     </tbody>
                 </table>
                 <p class="title mx-auto" style="display: block; width:100px; color: green">More</p>
             </div>
         </div>
+
         <div class="row welcome-info">
             <hr>
             <p>Welcome to the Green River College Software Development Application Tracking Tool (ATT). The purpose of this tool is to provide a centralized place to track your job/internship applications that can be helpful in your application journey! </p>
@@ -202,11 +165,31 @@ function createTable($info) {
                     <td class='status status-$astatus'><i class='fa-solid fa-circle'></i><span>$astatus</span></td>
                     <td class='app-button-outer'>
                             <button class='app-button-inner btn btn-sm btn-update'><i class='fa-solid fa-pen'></i></button>
-                            <button class='app-button-inner btn btn-sm btn-delete' type='submit' data-bs-toggle='modal' data-bs-target='#delete-modal'><i class='fa-solid fa-trash'></i></button>
+                            <button class='app-button-inner btn btn-sm btn-delete' type='button' data-bs-toggle='modal' data-bs-target='#delete-modal-$id'><i class='fa-solid fa-trash'></i></button>
 
                     </td>
                 </tr>
                 
+                <div class='modal fade' id='delete-modal-$id' tabindex='-1' role='dialog' aria-labelledby='delete-app-message' aria-hidden='true'>
+                    <div class='modal-dialog modal-dialog-centered' role='document'>
+                        <div class='modal-content'>
+                            <div class='modal-header'>
+                                <h4 class='modal-title' id='delete-warning'>Are you sure you want to delete this application?</h4>
+                            </div>
+                            <div class='modal-body'>
+                                <p>Deleted applications can be recovered later.</p>
+                            </div>
+                            <div class='modal-footer'>
+                                <form method='POST' action='#'>
+                                    <input type='hidden' value='1' name='submit-from'>
+                                    <input type='hidden' value='$id' name='id'>
+                                    <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Cancel</button>
+                                    <button type='submit' class='modal-delete'>Delete Application</button>
+                                </form>   
+                            </div>
+                        </div>
+                    </div>
+                </div>
             ";
     }
 }
@@ -267,6 +250,50 @@ function createReminders($info) {
                 </div>
                 
             ";
+    }
+
+    function createUserTable($info) {
+        while ($row = mysqli_fetch_assoc($info)) {
+            $id = $row["user_id"];
+            $fname = $row["fname"];
+            $lname = $row["lname"];
+            $email = $row["email"];
+//            $cohortNum = $row["cohortNum"];
+//            $status = $row["status"];
+//            $roles = $row["roles"];
+
+            echo "
+                    <tr id='user-$id' class='user-list-item'>
+                        <td>$fname $lname</td>
+                        <td>$email</td>
+                        <td class='app-button-outer'>
+                            <button class='app-button-inner btn btn-sm btn-update'><i class='fa-solid fa-pen'></i></button>
+                            <button class='app-button-inner btn btn-sm btn-delete' type='button' data-bs-toggle='modal' data-bs-target='#user-delete-modal-$id'><i class='fa-solid fa-trash'></i></button>
+                        </td>
+                    </tr>
+                    
+                    <div class='modal fade' id='user-delete-modal-$id' tabindex='-1' role='dialog' aria-labelledby='delete-app-message' aria-hidden='true'>
+                        <div class='modal-dialog modal-dialog-centered' role='document'>
+                            <div class='modal-content'>
+                                <div class='modal-header'>
+                                    <h4 class='modal-title' id='delete-warning'>Are you sure you want to delete this user?</h4>
+                                </div>
+                                <div class='modal-body'>
+                                    <p>Deleted users can be recovered later.</p>
+                                </div>
+                                <div class='modal-footer'>
+                                    <form method='POST' action='#'>
+                                        <input type='hidden' value='2' name='submit-from'>
+                                        <input type='hidden' value='$id' name='id'> 
+                                        <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Cancel</button>
+                                        <button type='submit' class='modal-delete'>Delete User</button>
+                                    </form>   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            ";
+        }
     }
 }
 ?>
