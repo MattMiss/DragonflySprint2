@@ -25,6 +25,17 @@ include 'php/nav_bar.php';
 include 'db_picker.php';
 include $db_location;
 
+// soft deletes a database entry
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    if($_POST["submit-from"] == 1) {
+        echo "ID is: " . $_POST["id"];
+        $id = $_POST["id"];
+        $sql4 = "UPDATE applications SET is_deleted = 1 WHERE application_id = $id";
+        $result4 = @mysqli_query($cnxn, $sql4);
+    }
+}
+
 $sql = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC";
 $result = @mysqli_query($cnxn, $sql);
 $apps[] = [];
@@ -200,20 +211,7 @@ while ($row = mysqli_fetch_assoc($result)) {
             </div>
         </div>
     </div>
-    <div class="modal fade" id="confirmModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-body text-center">
-                    <span id="modalText">Are you sure you want to delete?</span>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
-                    <button type="button" class="btn btn-success" data-bs-dismiss="modal" id="deleteAppBtn">Yes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class='modal fade' id='delete-modal-$id' tabindex='-1' role='dialog' aria-labelledby='delete-app-message' aria-hidden='true'>
+    <div class='modal fade' id='delete-modal' tabindex='-1' role='dialog' aria-labelledby='delete-app-message' aria-hidden='true'>
         <div class='modal-dialog modal-dialog-centered' role='document'>
             <div class='modal-content'>
                 <div class='modal-header'>
@@ -225,7 +223,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <div class='modal-footer'>
                     <form method='POST' action='#'>
                         <input type='hidden' value='1' name='submit-from'>
-                        <input type='hidden' value='$id' name='id'>
+                        <input id='delete-id' type='hidden' value='' name='id'>
                         <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Cancel</button>
                         <button type='submit' class='modal-delete'>Delete Application</button>
                     </form>
