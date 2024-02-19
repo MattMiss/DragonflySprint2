@@ -23,23 +23,9 @@ $(window).on('load', () => {
 });
 
 function deleteAppBtnClicked(appID, appEmployer){
-    //console.log("AppID: " + appID + " , Employer: " + appEmployer);
-    const modalText = $('#modalText')[0];
-    modalText.innerHTML = ('Delete application from ' + appEmployer + '?');
-
-    const dltBtn = document.getElementById('deleteAppBtn');
-
-    const dltHandler = () => {
-        console.log("Deleting App: " + 'app-' + appID);
-        const app = $('#app-' + appID);
-        if (app){
-            app.remove();
-            modalText.innerHTML = "";
-            showAlert('Application deleted!', 'danger');
-            dltBtn.removeEventListener('click', dltHandler, false);
-        }
-    }
-    dltBtn.addEventListener('click', dltHandler, false)
+    // Set the modal hidden input to the appID so POST can grab the ID from index.php on submit
+    const deleteID = $('#delete-id');
+    deleteID.val(appID);
 }
 
 function showAlert(message, type) {
@@ -180,7 +166,7 @@ function populateAppList(){
         const deleteBtn = $(document.createElement('button'));
         deleteBtn.addClass('app-button-inner btn btn-sm btn-delete');
         deleteBtn.attr('data-bs-toggle', 'modal');
-        deleteBtn.attr('data-bs-target', '#confirmModal');
+        deleteBtn.attr('data-bs-target', '#delete-modal');
         deleteBtn.click(() => deleteAppBtnClicked(sortedApps[i].application_id, sortedApps[i].ename));
         deleteBtn.append('<i class=\'fa-solid fa-trash\'></i>');
 
