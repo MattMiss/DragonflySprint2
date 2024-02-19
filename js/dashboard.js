@@ -10,16 +10,16 @@ let employerOrder = 0;
 let statusOrder = 0;
 let lastFieldClicked = ['', ''];
 let appShowingCnt = 0;
-let appCntToLoad = 0;
 const APP_MAX_LOAD_CNT = 10;
+let appCntToLoad = APP_MAX_LOAD_CNT;
 const appListDiv = $('#dash-apps-list');
 
 $(window).on('load', () => {
     setSearchEventListeners();
     setOrderBtnListeners();
     appCntToLoad = APP_MAX_LOAD_CNT;
-    sortAppsByUserFilters();
-    populateAppList();
+    //sortAppsByUserFilters();
+    //populateAppList();
 });
 
 function deleteAppBtnClicked(appID, appEmployer){
@@ -89,6 +89,7 @@ function setSearchEventListeners(){
         sortAppsByUserFilters();
         populateAppList();
     });
+
 }
 
 // Onclick Events for OrderBy buttons on each field
@@ -117,6 +118,7 @@ function setOrderBtnListeners(){
 
 // Loop through each application in sortedApps and create a <tr> with all the fields filled in
 function populateAppList(){
+    //console.log("POPULATING LIST");
     //console.log("App Cnt to Load: " + appCntToLoad);
     if (sortedApps.length === 0){
         appListDiv.append("<tr class='app-list-item' id='app-$id'>\n" +
@@ -126,15 +128,17 @@ function populateAppList(){
             '                <td></td>\n' +
             '                <td></td>\n' +
             "            </tr>");
+    }else{
+        $('#more-apps').show();
     }
 
     for(let i = 0; i < sortedApps.length; i++){
-        //console.log("AppShowingCnt: " + appShowingCnt);
-        //console.log("AppCntToLoad: " + appCntToLoad);
-        if (sortedApps[i].length === 0){continue} // don't show item if it's empty. for some reason the array has an empty item in it
+        //if (sortedApps[i].length === 0){continue} // don't show item if it's empty. for some reason the array has an empty item in it
 
-        if (i+1 === sortedApps.length) $('#more-apps').hide();
+        // Hide the "More" button if all apps are loaded
+        if (i === (sortedApps.length-1)) $('#more-apps').hide();
 
+        // Stop creating app items if max app count has been reached
         if (appShowingCnt === appCntToLoad) return;
 
         // Create Table Row
@@ -213,7 +217,7 @@ function emptyAppList(){
 // Searches through all apps and adds apps that pass the filters into sortedApps
 // sortedApps will be ordered by how the apps are ordered in the database
 function sortAppsByUserFilters(){
-    //startingAppIndex = 0;
+    console.log(apps);
     tempApps = [];
     apps.forEach(singleApp => {
         // Return if app has no data
@@ -246,11 +250,13 @@ function sortAppsByUserFilters(){
         }
     })
     sortedApps = tempApps;
+    console.log(sortedApps);
 }
 
 // Cycle through buttons depending on the field clicked Each field has 3 states.
 // [0 = no order, shows up and down arrows][1 = asc order, shows up arrow][2 = dsc order, shows down arrow]
 function toggleFieldOrder(fieldBtnUp, fieldBtnDown, field){
+    console.log("Toggling Field order: " + field);
     // If field is different from last field, reset last field (show both up and down arrows)
     console.log("Last Field Click: " + lastFieldClicked[0]);
     if (lastFieldClicked[0] !== '' && lastFieldClicked[0] !== fieldBtnUp){
@@ -336,6 +342,7 @@ function sortByField(direction, field){
 
 // Load more apps by increasing the app count to load by APP_MAX_LOAD_CNT and then refresh the list
 function loadMoreApps(){
+    console.log("Loading more Apps");
     appCntToLoad += APP_MAX_LOAD_CNT;
     emptyAppList();
     populateAppList();

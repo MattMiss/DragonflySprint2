@@ -25,7 +25,7 @@ include 'php/nav_bar.php';
 include 'db_picker.php';
 include $db_location;
 
-$sql = "SELECT * FROM applications";
+$sql = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC";
 $result = @mysqli_query($cnxn, $sql);
 $apps[] = [];
 
@@ -140,15 +140,17 @@ while ($row = mysqli_fetch_assoc($result)) {
                     <tbody class="table-body" id="dash-apps-list">
                     </tbody>
                 </table>
-                <div class="col text-center" id="more-apps">
+                <div class="col text-center pt-2 pb-2" id="more-apps">
                     <button type="button" class="submit-btn" id="more-apps-btn" onclick="loadMoreApps()">More</button>
                 </div>
+                <!--
                 <div class="table-page-btns text-end">
                     <button type="button" class="btn"><i class="fa-solid fa-angle-left"></i></button>
                     <button type="button" class="btn">1</button>
                     <button type="button" class="btn"><i class="fa-solid fa-angle-right"></i></button>
                 </div>
-                <div class="col d-flex justify-content-center" id="new-app-container">
+                -->
+                <div class="col d-flex justify-content-center pt-2" id="new-app-container">
                     <a class="submit-btn" href="application_form.php">New Application</a>
                 </div>
             </div>
@@ -207,6 +209,26 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
                     <button type="button" class="btn btn-success" data-bs-dismiss="modal" id="deleteAppBtn">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='modal fade' id='delete-modal-$id' tabindex='-1' role='dialog' aria-labelledby='delete-app-message' aria-hidden='true'>
+        <div class='modal-dialog modal-dialog-centered' role='document'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <h4 class='modal-title' id='delete-warning'>Are you sure you want to delete this application?</h4>
+                </div>
+                <div class='modal-body'>
+                    <p>Deleted applications can be recovered later.</p>
+                </div>
+                <div class='modal-footer'>
+                    <form method='POST' action='#'>
+                        <input type='hidden' value='1' name='submit-from'>
+                        <input type='hidden' value='$id' name='id'>
+                        <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Cancel</button>
+                        <button type='submit' class='modal-delete'>Delete Application</button>
+                    </form>
                 </div>
             </div>
         </div>
