@@ -46,7 +46,7 @@ if(! empty($_POST)) {
 
     $db_location = '';
     include 'db_picker.php';
-    include $db_location;
+    include '../' . $db_location;
 
     // constants
     $RADIO_VALUES = array("Seeking Internship", "Seeking Job", "Not Actively Searching");
