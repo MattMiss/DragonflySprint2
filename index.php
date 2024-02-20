@@ -152,8 +152,10 @@ while ($row = mysqli_fetch_assoc($result)) {
                     </tbody>
                 </table>
                 <div class="col text-center pt-2 pb-2" id="more-apps">
-                    <button type="button" class="submit-btn" id="more-apps-btn" onclick="loadMoreApps()">More</button>
+                    <button type="button" class="submit-btn"  onclick="loadMoreApps()">More</button>
                 </div>
+
+<!--                id="more-apps-btn"-->
                 <!--
                 <div class="table-page-btns text-end">
                     <button type="button" class="btn"><i class="fa-solid fa-angle-left"></i></button>

@@ -64,7 +64,7 @@ if(! empty($_POST)) {
     } else {
         $db_location = '';
         include '../db_picker.php';
-        include '../' . $db_location;
+        include $db_location;
 
         $title = $_POST['announcement-title'];
         $jobType = $_POST['job-or-intern'];

@@ -56,7 +56,7 @@ if(! empty($_POST)) {
     } else {
         $db_location = '';
         include '../db_picker.php';
-        include '../' . $db_location;
+        include $db_location;
 
         $jname = trim($_POST['job-name']);
         $ename = trim($_POST['employer-name']);

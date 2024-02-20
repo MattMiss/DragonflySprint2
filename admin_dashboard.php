@@ -51,6 +51,44 @@ $result3 = @mysqli_query($cnxn, $sql3);
         <div class="row dashboard-top">
             <div class="app-list col col-8">
                 <h3>Recent Applications</h3>
+                <div class="row">
+                    <div class="col-md-4 pt-2">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Start Date</span>
+                            <input type="date" class="form-control" id="app-start-date" name="search-start-date">
+                        </div>
+                    </div>
+                    <div class="col-md-4 pt-2">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">End Date</span>
+                            <input type="date" class="form-control" id="app-end-date" name="search-end-date">
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-end pt-2">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Status</span>
+                            <select class="form-select" id="app-status-select">
+                                <option selected value="any">Any</option>
+                                <option value="accepted">Accepted</option>
+                                <option value="applied">Applied</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="interviewing">Interviewing</option>
+                                <option value="need-to-apply">Need-to-apply</option>
+                                <option value="rejected">Rejected</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col pt-2">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </span>
+                            <input id="app-search-bar" type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                </div>
                 <table class="dash-table">
                     <thead>
                     <tr>
