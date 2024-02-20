@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `applications` (
     `astatus` varchar(30) NOT NULL,
     `fupdates` varchar(500) DEFAULT NULL,
     `followupdate` date NOT NULL,
-    `is_deleted` bool NOT NULL DEFAULT false,
+    `is_deleted` boolean NOT NULL DEFAULT false,
     PRIMARY KEY (`application_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=450215449;
 
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `users` (
     `cohortNum` int(3) NOT NULL,
     `status` varchar(30) NOT NULL,
     `roles` varchar(500) DEFAULT NULL,
-    `is_deleted` bool NOT NULL DEFAULT false,
+    `is_deleted` boolean NOT NULL DEFAULT false,
     PRIMARY KEY (`user_id`)
     ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=450215449 ;
 
@@ -63,8 +63,8 @@ INSERT INTO `users` (`fname`, `lname`, `email`, `cohortNum`, `status`, `roles`) 
                                                        ('John', 'Brown', 'jbrown@student.greenriver.edu', '18', 'Seeking Internship', 'Anything'),
                                                        ('Ximena', 'Lopez', 'menalopez1999@gmail.com', '16', 'Seeking Job', 'QA Tester'),
                                                        ('Grayson', 'Choi', 'graysonc@yahoo.com', '19', 'Seeking Internship', 'Software Support'),
-                                                       ('Dana', 'Felder','danafelder@gmail.com', '15', 'Not Actively Searching'),
-                                                       ('Kris', 'Bartkowski', 'kbartkowski@student.greenriver.edu', '19', 'Not Actively Searching');
+                                                       ('Dana', 'Felder','danafelder@gmail.com', '15', 'Not Actively Searching', 'Nothing'),
+                                                       ('Kris', 'Bartkowski', 'kbartkowski@student.greenriver.edu', '19', 'Not Actively Searching', 'Nothing');
 
 ----------------------------------------------------------
 -- Table structure for table `announcements`
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `announcements` (
     `jurl` varchar(500) NOT NULL,
     `sent_to` varchar(60) NOT NULL,
     `date_created` date NOT NULL,
-    `is_deleted` bool NOT NULL DEFAULT false,
+    `is_deleted` boolean NOT NULL DEFAULT false,
     PRIMARY KEY (`application_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=450215449;
 
