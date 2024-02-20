@@ -258,40 +258,37 @@ function createReminders($info) {
             $fname = $row["fname"];
             $lname = $row["lname"];
             $email = $row["email"];
-//            $cohortNum = $row["cohortNum"];
-//            $status = $row["status"];
-//            $roles = $row["roles"];
 
             echo "
-                    <tr id='user-$id' class='user-list-item'>
-                        <td>$fname $lname</td>
-                        <td>$email</td>
-                        <td class='app-button-outer'>
-                            <button class='app-button-inner btn btn-sm btn-update'><i class='fa-solid fa-pen'></i></button>
-                            <button class='app-button-inner btn btn-sm btn-delete' type='button' data-bs-toggle='modal' data-bs-target='#user-delete-modal-$id'><i class='fa-solid fa-trash'></i></button>
-                        </td>
-                    </tr>
-                    
-                    <div class='modal fade' id='user-delete-modal-$id' tabindex='-1' role='dialog' aria-labelledby='delete-app-message' aria-hidden='true'>
-                        <div class='modal-dialog modal-dialog-centered' role='document'>
-                            <div class='modal-content'>
-                                <div class='modal-header'>
-                                    <h4 class='modal-title' id='delete-warning'>Are you sure you want to delete this user?</h4>
-                                </div>
-                                <div class='modal-body'>
-                                    <p>Deleted users can be recovered later.</p>
-                                </div>
-                                <div class='modal-footer'>
-                                    <form method='POST' action='#'>
-                                        <input type='hidden' value='2' name='submit-from'>
-                                        <input type='hidden' value='$id' name='id'> 
-                                        <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Cancel</button>
-                                        <button type='submit' class='modal-delete'>Delete User</button>
-                                    </form>   
-                                </div>
+                <tr id='user-$id' class='user-list-item'>
+                    <td>$fname $lname</td>
+                    <td>$email</td>
+                    <td class='app-button-outer'>
+                        <button class='app-button-inner btn btn-sm btn-update'><i class='fa-solid fa-pen'></i></button>
+                        <button class='app-button-inner btn btn-sm btn-delete' type='button' data-bs-toggle='modal' data-bs-target='#user-delete-modal-$id'><i class='fa-solid fa-trash'></i></button>
+                    </td>
+                </tr>
+                
+                <div class='modal fade' id='user-delete-modal-$id' tabindex='-1' role='dialog' aria-labelledby='delete-app-message' aria-hidden='true'>
+                    <div class='modal-dialog modal-dialog-centered' role='document'>
+                        <div class='modal-content'>
+                            <div class='modal-header'>
+                                <h4 class='modal-title' id='delete-warning'>Are you sure you want to delete this user?</h4>
+                            </div>
+                            <div class='modal-body'>
+                                <p>Deleted users can be recovered later.</p>
+                            </div>
+                            <div class='modal-footer'>
+                                <form method='POST' action='#'>
+                                    <input type='hidden' value='2' name='submit-from'>
+                                    <input type='hidden' value='$id' name='id'> 
+                                    <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Cancel</button>
+                                    <button type='submit' class='modal-delete'>Delete User</button>
+                                </form>   
                             </div>
                         </div>
                     </div>
+                </div>
             ";
         }
     }
