@@ -316,10 +316,10 @@ function toggleFieldOrder(fieldBtnUp, fieldBtnDown, field){
 function sortByField(direction, field){
     //console.log("Direction: " + direction + ", Field: " + field);
     sortedApps.sort((a,b) => {
-        if (a[field] < b[field] ){
+        if (a[field].toLowerCase() < b[field].toLowerCase() ){
             return direction === 'asc' ? -1 : 1;
         }
-        if (a[field]  > b[field] ){
+        if (a[field].toLowerCase()  > b[field].toLowerCase() ){
             return direction === 'dsc' ? -1 : 1;
         }
         return 0;
