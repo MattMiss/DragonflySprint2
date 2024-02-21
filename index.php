@@ -25,6 +25,7 @@ include 'php/nav_bar.php';
 include 'db_picker.php';
 include $db_location;
 
+
 // soft deletes a database entry
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -149,20 +150,12 @@ while ($row = mysqli_fetch_assoc($result)) {
                     </tr>
                     </thead>
                     <tbody class="table-body" id="dash-apps-list">
+                        <!-- List gets populated with applications from the database here-->
                     </tbody>
                 </table>
                 <div class="col text-center pt-2 pb-2" id="more-apps">
                     <button type="button" class="submit-btn"  onclick="loadMoreApps()">More</button>
                 </div>
-
-<!--                id="more-apps-btn"-->
-                <!--
-                <div class="table-page-btns text-end">
-                    <button type="button" class="btn"><i class="fa-solid fa-angle-left"></i></button>
-                    <button type="button" class="btn">1</button>
-                    <button type="button" class="btn"><i class="fa-solid fa-angle-right"></i></button>
-                </div>
-                -->
                 <div class="col d-flex justify-content-center pt-2" id="new-app-container">
                     <a class="submit-btn" href="application_form.php">New Application</a>
                 </div>
@@ -243,40 +236,3 @@ while ($row = mysqli_fetch_assoc($result)) {
 <script src="js/dashboard.js"></script>
 </body>
 </html>
-
-
-<?php
-/*
-function createApp($info) {
-    foreach($info as $row){
-        $id = $row["application_id"];
-        $jname = $row["jname"];
-        $ename = $row["ename"];
-        $jurl = $row["jurl"];
-        $jdescription = $row["jdescription"];
-        $adate = $row["adate"];
-        $astatus = $row["astatus"];
-        $fupdates = $row["fupdates"];
-        $followupdate = $row["followupdate"];
-        $app_info = json_encode($row);
-
-        $apps[] = $row;
-        echo "
-            <tr class='app-list-item' id='app-$id'>
-                <td>$adate</td>
-                <td>$jname</td>
-                <td>$ename</td>
-                <td class='status status-$astatus'><i class='fa-solid fa-circle'></i><span style='text-transform: capitalize'>$astatus</span></td>
-                <td class='app-button-outer'>
-                    <form method='post' action='application_edit.php'>
-                        <input type='hidden' name='application-id' value='$id'/>
-                        <button type='submit' class='app-button-inner btn btn-sm btn-update'><i class='fa-solid fa-pen'></i></button>
-                     </form>
-                    <button class='app-button-inner btn btn-sm btn-delete' data-bs-toggle='modal' data-bs-target='#confirmModal' onclick='deleteAppBtnClicked($app_info)'><i class='fa-solid fa-trash'></i></button>
-                </td>
-            </tr>
-        ";
-    }
-}
-*/
-?>
