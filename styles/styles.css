@@ -12,6 +12,9 @@
     --footer-color: rgba(0,0,0,.03);
     --outline-color: black;
 
+    /* dropdown colors */
+    --dropdown-item-hover: #eaeaea;
+
     /* form theme */
     --form-outline-color: #0000001F;
     --form-header-color: rgba(0,0,0,.03);
@@ -65,6 +68,9 @@
     --form-input-color: #454545;
     --placeholder-font-color: #ddd;
 
+    /* dropdown theme */
+    --dropdown-item-hover: #3f3f3f;
+
     /* submit button theme */
     --submit-color: #6CB443;
     --submit-hover-color: white;
@@ -88,6 +94,9 @@
     --dark-mode-toggle-bg: #3b3b3b;
 }
 
+
+/*********************** general **************************/ /*********************** general **************************/
+/*********************** general **************************/ /*********************** general **************************/
 
 body {
     color: var(--font-color) !important;
@@ -132,7 +141,6 @@ footer {
     }
 }
 
-
 #bio-container p {
     text-align: justify;
 }
@@ -147,7 +155,9 @@ footer {
     text-decoration: underline var(--header-color);
 }
 
-/* nav styles */
+
+/*********************** nav **************************/ /*********************** nav **************************/
+/*********************** nav **************************/ /*********************** nav **************************/
 
 #grc-logo {
     height: 70px;
@@ -169,6 +179,44 @@ nav a:hover {
 
 .navbar-nav {
     width: 100%;
+}
+
+#navbarDropdown {
+    background: var(--nav-color);
+    border: none;
+    font-family: BigNoodle, serif;
+    font-size: 1.7rem;
+    border-radius: unset;
+}
+
+#navbarDropdown:hover {
+    background-color: var(--nav-hover-color);
+    border-bottom: solid 4px  #D14900 !important;
+}
+
+#navbarDropdown[aria-expanded='true'] {
+    background-color: var(--nav-hover-color);
+    border-bottom: solid 4px  #D14900 !important;
+}
+
+.dropdown-menu {
+    background: var(--bg-color-primary) !important;
+    border-radius: unset !important;
+}
+
+.dropdown-item {
+    color: var(--font-color) !important;
+    border-bottom: none !important;
+}
+
+.dropdown-item:hover {
+    background: var(--dropdown-item-hover);
+    color: var(--header-color) !important;
+    text-decoration: underline var(--header-color);
+}
+
+.dropdown-item:hover {
+    border-bottom: none !important;
 }
 
 .dark-switch-outer{
@@ -239,22 +287,22 @@ nav a:hover {
     transform:translateX(-30px);
 }
 
-@media screen and (max-width: 1200px) {
-    nav {
-        a {
-            font-size: 1.45rem !important;
-        }
-    }
-}
-@media screen and (max-width: 1100px) {
-    nav {
-        a {
-            font-size: 1.22rem !important;
-        }
-    }
-}
+/* date input */
 
-/* form styles */
+/* works for edge not firefox */
+/*input[type="date"]::-webkit-calendar-picker-indicator {*/
+/*    display: none;*/
+/*    -webkit-appearance: none;*/
+/*    width: 15px;*/
+/*    padding: 0px;*/
+/*    margin: 0px;*/
+/*    margin-top: 10px;*/
+/*}*/
+
+
+
+/*********************** forms **************************/ /*********************** forms **************************/
+/*********************** forms **************************/ /*********************** forms **************************/
 .form-body {
     width: 80%;
 }
@@ -861,7 +909,36 @@ a {
     height: 50px;
 }
 
-/************* mobile ****************/
+/*********************** mobile **************************/ /*********************** mobile **************************/
+/*********************** mobile **************************/ /*********************** mobile **************************/
+
+@media screen and (min-width: 768px) and (max-width: 909px) {
+    nav {
+        a, #navbarDropdown {
+            font-size: 1.18rem !important;
+        }
+    }
+}
+
+@media screen and (min-width: 300px) and (max-width: 767px) {
+    .dropdown-item {
+        background: var(--nav-color) !important;
+    }
+
+    nav a {
+        width: 11rem !important;
+        padding-left: 1rem !important;
+    }
+
+    .form-body {
+        width: 90%;
+    }
+
+    .form-header, .form-container {
+        width: 100%;
+    }
+
+}
 
 @media screen and (max-width: 993px) {
     #main-container {
@@ -885,11 +962,11 @@ a {
 
     /* nav mobile 993px */
 
-    nav {
-        a {
-            font-size: 1.7rem !important;
-        }
-    }
+    /*nav {*/
+    /*    a, .dropdown-item {*/
+    /*        font-size: 1.7rem !important;*/
+    /*    }*/
+    /*}*/
 
     #dark-mode-list-item > div {
         padding-top: 0;

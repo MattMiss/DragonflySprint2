@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 // fetches specific data from database tables
 $sql = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC LIMIT 5"; // 5 most recent announcements
-$sql2 = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY id DESC LIMIT 2"; // 2 most recent announcements
+$sql2 = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY id DESC LIMIT 3"; // 3 most recent announcements
 $sql3 = "SELECT * FROM users WHERE is_deleted = 0 LIMIT 7";
 $result = @mysqli_query($cnxn, $sql);
 $result2 = @mysqli_query($cnxn, $sql2);
@@ -56,6 +56,7 @@ $result3 = @mysqli_query($cnxn, $sql3);
                         <div class="input-group input-group-sm">
                             <span class="input-group-text">Start Date</span>
                             <input type="date" class="form-control" id="app-start-date" name="search-start-date">
+<!--                            <i class="fa-regular fa-calendar"></i>-->
                         </div>
                     </div>
                     <div class="col-md-4 pt-2">
@@ -115,7 +116,7 @@ $result3 = @mysqli_query($cnxn, $sql3);
                     createReminders($result2);
                     ?>
 
-                    <div style="padding-top: 20px;">
+                    <div>
                         <hr>
                         <div class="incomplete-app">
                             <a class="" href="admin_announcement.php">Add Announcement</a>
@@ -246,7 +247,7 @@ function createReminders($info) {
 //            $app_info = json_encode($row);
 
         echo "
-                <div class='reminder'>
+                <div class='reminder py-2'>
                     <i class='fa-solid fa-bullhorn me-2'></i>
                     <button class='announcement-modal-btn' type='button' data-bs-toggle='modal' data-bs-target='#announcement-modal-$id'>$title $jtype at <span>$ename</span></button>
                     <p>Created on: <span>$date</span></p>

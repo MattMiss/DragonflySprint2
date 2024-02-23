@@ -19,7 +19,9 @@
 <?php
 session_start();
 $_SESSION['location'] = '';
-include 'php/nav_bar.php' ?>
+include 'php/nav_bar.php'
+?>
+
 <main>
     <div class="container p-3" id="main-container">
         <h3 class="form-header">Admin Announcement Form</h3>
@@ -54,7 +56,7 @@ include 'php/nav_bar.php' ?>
                 <div class="mb-4">
                     <label for="additional-text" class="form-label">More Information</label>
                     <textarea class="form-control" id="additional-text" name="additional-text"
-                              placeholder="Type here..." rows="3"></textarea>
+                              placeholder="Type here..." rows="5"></textarea>
                 </div>
                 <div class="mb-4">
                     <label for="announcement-url" class="form-label">URL*</label>
