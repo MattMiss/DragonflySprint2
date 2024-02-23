@@ -107,91 +107,52 @@ function populateAppList(){
     //console.log("POPULATING LIST");
     //console.log("App Cnt to Load: " + appCntToLoad);
     if (sortedApps.length === 0){
-        appListDiv.append("<tr class='app-list-item' id='app-$id'>\n" +
-            '                <td></td>\n' +
-            '                <td></td>\n' +
-            '                <td>No Results</td>\n' +
-            '                <td></td>\n' +
-            '                <td></td>\n' +
-            "            </tr>");
+        const noResults = '<tr class="app-list-item">\n' +
+                                      '<td></td>\n' +
+                                      '<td></td>\n' +
+                                      '<td>No Results</td>\n' +
+                                      '<td></td>\n' +
+                                      '<td></td>\n' +
+                                  '</tr>';
+        appListDiv.append(noResults);
     }else{
         $('#more-apps').show();
     }
 
     for(let i = 0; i < sortedApps.length; i++){
-        //if (sortedApps[i].length === 0){continue} // don't show item if it's empty. for some reason the array has an empty item in it
+        //if (appData.length === 0){continue} // don't show item if it's empty. for some reason the array has an empty item in it
 
-        // Hide the "More" button if all apps are loaded
-        if (i === (sortedApps.length-1)) $('#more-apps').hide();
+        if (i === (sortedApps.length-1)) $('#more-apps').hide();    // Hide the "More" button if all apps are loaded
+        if (appShowingCnt === appCntToLoad) return; // Stop creating app items if max app count has been reached
 
-        // Stop creating app items if max app count has been reached
-        if (appShowingCnt === appCntToLoad) return;
-
-        // Create Table Row
-        const tRow = $(document.createElement('tr'));
-        tRow.addClass('app-list-item');
-        tRow.attr('id', 'app-' + sortedApps[i].application_id);
-        appListDiv.append(tRow);
-        // Create Table Data for App Date, Job Title, and Employer Name
-        tRow.append('<td>' + sortedApps[i].adate + '</td>');
-        tRow.append('<td>' + sortedApps[i].jname + '</td>');
-        tRow.append('<td>' + sortedApps[i].ename + '</td>');
-        // Create Table Data for the Status
-        const statusOuter = $(document.createElement('td'));
-        statusOuter.addClass('status status-'+sortedApps[i].astatus);
-        statusOuter.append('<i class=\'fa-solid fa-circle\'></i>');
-        statusOuter.append('<span style=\'text-transform: capitalize\'>'+sortedApps[i].astatus+'</span>');
-        tRow.append((statusOuter));
-        // Create Table Data for the App Button Outer
-        const appBtnOuter = $(document.createElement('td'));
-        appBtnOuter.addClass('app-button-outer');
-        // Create a form to POST on submit (update button submits)
-        const form = $(document.createElement('form'));
-        form.attr('method', 'post');
-        form.attr('action', 'application_edit.php');
-        // Create hidden input
-        const input = $(document.createElement('input'));
-        input.attr('type', 'hidden');
-        input.attr('name', 'application-id');
-        input.val(sortedApps[i].application_id);
-        form.append(input);
-        // Create Edit Button (submits to POST onclick)
-        const editBtn = $(document.createElement('button'));
-        editBtn.attr('type', 'submit');
-        editBtn.addClass('app-button-inner btn btn-sm btn-update');
-        editBtn.append('<i class=\'fa-solid fa-pen\'></i>');
-        form.append((editBtn));
-        appBtnOuter.append((form));
-        // Create Delete Button
-        const deleteBtn = $(document.createElement('button'));
-        deleteBtn.addClass('app-button-inner btn btn-sm btn-delete');
-        deleteBtn.attr('data-bs-toggle', 'modal');
-        deleteBtn.attr('data-bs-target', '#delete-modal');
-        deleteBtn.click(() => deleteAppBtnClicked(sortedApps[i].application_id, sortedApps[i].ename));
-        deleteBtn.append('<i class=\'fa-solid fa-trash\'></i>');
-
-        appBtnOuter.append((deleteBtn));
-        tRow.append(appBtnOuter);
-
-        appShowingCnt++;
+        createAppFromData(sortedApps[i]);
     }
+}
 
-    /*
-    appListDiv.append("<tr class='app-list-item' id="+ app.application_id +">\n" +
-        '                <td>' + app.adate + '</td>\n' +
-        '                <td>' + app.jname + '</td>\n' +
-        '                <td>' + app.ename + '</td>\n' +
-        '                <td class=\'status status-'+app.astatus+'\'><i class=\'fa-solid fa-circle\'></i><span style=\'text-transform: capitalize\'>'+app.astatus+'</span></td>\n' +
-        '                <td class=\'app-button-outer\'>\n' +
-        '                    <form method=\'post\' action=\'application_edit.php\'>\n' +
-        '                        <input type=\'hidden\' name=\'application-id\' value='+app.application_id+'>\n' +
-        '                        <button type=\'submit\' class=\'app-button-inner btn btn-sm btn-update\'><i class=\'fa-solid fa-pen\'></i></button>\n' +
-        '                     </form>\n' +
-        '                    <button class=\'app-button-inner btn btn-sm btn-delete\' data-bs-toggle=\'modal\' data-bs-target=\'#confirmModal\' onclick=\'deleteAppBtnClicked('+app.application_id+')\'><i class=\'fa-solid fa-trash\'></i></button>\n' +
-        '                </td>\n' +
-        "            </tr>")
-
-     */
+function createAppFromData(appData){
+    // Create a list item with the application data filled in
+    const app =  `<tr class="app-list-item" id="app-${appData.application_id}">\n` +
+                            `<td>${appData.adate}</td>\n` +
+                            `<td>${appData.jname}</td>\n` +
+                            `<td>${appData.ename}</td>\n` +
+                            `<td class="status status-${appData.astatus}">\n` +
+                                `<i class="fa-solid fa-circle"></i>\n` +
+                                `<span style="text-transform: capitalize">${appData.astatus}</span>\n` +
+                            `</td>\n` +
+                            `<td class="app-button-outer">\n` +
+                                `<form method="post" action="application_edit.php"> ` +
+                                    `<input type="hidden" name="application-id" value="${appData.application_id}">` +
+                                    `<button type="submit" class="app-button-inner btn btn-sm btn-update">\n` +
+                                        `<i class="fa-solid fa-pen"></i>\n` +
+                                `</form>\n` +
+                                `<button class="app-button-inner btn btn-sm btn-delete" data-bs-toggle="modal" data-bs-target="#delete-modal" +
+                                                onclick="() => deleteAppBtnClicked(${appData.application_id}, ${appData.ename})">\n` +
+                                    `<i class="fa-solid fa-trash"></i>\n` +
+                                `</button>\n` +
+                            `</td>\n` +
+                        `</tr>`;
+    appListDiv.append(app);
+    appShowingCnt++;
 }
 
 // Remove children from application list
