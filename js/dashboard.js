@@ -130,27 +130,90 @@ function populateAppList(){
 }
 
 function createAppFromData(appData){
+    // Fix need-to-apply status by removing dashes and replacing them
+    let statusReplace = `${appData.astatus}`;
+    statusReplace = statusReplace.replace(/-/g, " ");
+
     // Create a list item with the application data filled in
-    const app =  `<tr class="app-list-item" id="app-${appData.application_id}">\n` +
-                            `<td>${appData.adate}</td>\n` +
-                            `<td>${appData.jname}</td>\n` +
-                            `<td>${appData.ename}</td>\n` +
-                            `<td class="status status-${appData.astatus}">\n` +
-                                `<i class="fa-solid fa-circle"></i>\n` +
-                                `<span style="text-transform: capitalize">${appData.astatus}</span>\n` +
-                            `</td>\n` +
-                            `<td class="app-button-outer">\n` +
-                                `<form method="post" action="application_edit.php"> ` +
+    const app =
+        `<tr class="app-list-item" id="app-${appData.application_id}">\n` +
+            `<td>${appData.adate}</td>\n` +
+            `<td>${appData.jname}</td>\n` +
+            `<td>${appData.ename}</td>\n` +
+            `<td class="status status-${appData.astatus}">\n` +
+                `<i class="fa-solid fa-circle"></i>\n` +
+                `<span style="text-transform: capitalize">` + statusReplace + `</span>\n` +
+            `</td>\n` +
+            `<td class="app-button-outer">\n` +
+                `<button class="app-button-inner btn btn-sm btn-update" data-bs-toggle="modal" +
+                        data-bs-target="#edit-modal-${appData.application_id}">\n` +
+                    `<i class="fa-solid fa-pen"></i>\n` +
+                `</button>\n` +
+                `<div class='modal fade' id='edit-modal-${appData.application_id}' tabIndex='-1' role='dialog' aria-labelledby='job-title' +
+                        aria-hidden='true'>\n`+
+                    `<div class='modal-dialog' role='document'>\n`+
+                        `<div class='modal-content'>\n`+
+                            `<div class='modal-header'>\n`+
+                                `<h5 class='modal-title' id='job-title'>Application Details</h5>\n`+
+                                    `<button type='button' class='modal-close-primary close' data-bs-dismiss='modal' +
+                                         aria-label='Close'>\n`+
+                                        `<span aria-hidden='true'>&times;</span>\n`+
+                            `</div>\n`+
+                            `<div class='modal-body'>\n`+
+                                `<ul class='list-group-item'>\n`+
+                                    `<li class='list-group-item pb-1'>\n`+
+                                        `<span class='form-label'>Job Name: </span> 
+                                        <span>${appData.jname}</span>\n`+
+                                    `</li>\n`+
+                                    `<li class='list-group-item pb-1'>\n`+
+                                        `<span class='form-label'>Employer Name: </span> 
+                                        <span>${appData.ename}</span>\n`+
+                                    `</li>\n`+
+                                    `<li class='list-group-item pb-1'>\n`+
+                                        `<span class='form-label'>URL:</span>\n`+
+                                        `<a href='//${appData.jurl}' target="_blank" rel="noopener noreferrer">${appData.jurl}</a>\n`+
+                                    `</li>\n`+
+                                    `<li class='list-group-item'>\n`+
+                                        `<span class='form-label'>Job Description: </span>\n`+
+                                        `<p style="margin: 0">\n${appData.jdescription}</p>\n`+
+                                    `</li>\n`+
+                                    `<li class='list-group-item pb-1'>\n`+
+                                        `<span class='form-label'>Application date: </span>
+                                        <span>${appData.adate}</span>\n`+
+                                    `</li>\n`+
+                                    `<li class='list-group-item pb-1'>\n`+
+                                        `<span class='form-label'>Status: </span>\n`+
+                                        `<span class="status status-${appData.astatus}">\n` +
+                                            `<i class='fa-solid fa-circle'></i>\n` +
+                                        `</span>\n` +
+                                        `<span style="text-transform: capitalize">` + statusReplace + `</span>\n`+
+                                    `</li>\n`+
+                                    `<li class='list-group-item'>\n`+
+                                        `<span class='form-label'>Followup date: </span>
+                                        <span>${appData.followupdate}</span>\n`+
+                                    `</li>\n`+
+                                    `<li class='list-group-item pb-1'>\n`+
+                                        `<span class='form-label'>Followup updates: </span>\n`+
+                                        `<p style="margin: 0">\n${appData.fupdates}</p>\n`+
+                                    `</li>\n`+
+                                `</ul>\n`+
+                            `</div>\n`+
+                            `<div class='modal-footer'>\n`+
+                                `<button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Close</button>\n`+
+                                `<form method="post" action="application_edit.php" target="_blank"> ` +
                                     `<input type="hidden" name="application-id" value="${appData.application_id}">` +
-                                    `<button type="submit" class="app-button-inner btn btn-sm btn-update">\n` +
-                                        `<i class="fa-solid fa-pen"></i>\n` +
+                                    `<button type="submit" class="modal-edit">Edit</button>\n` +
                                 `</form>\n` +
-                                `<button class="app-button-inner btn btn-sm btn-delete" data-bs-toggle="modal" data-bs-target="#delete-modal" +
-                                                onclick="() => deleteAppBtnClicked(${appData.application_id}, ${appData.ename})">\n` +
-                                    `<i class="fa-solid fa-trash"></i>\n` +
-                                `</button>\n` +
-                            `</td>\n` +
-                        `</tr>`;
+                            `</div>\n`+
+                        `</div>\n`+
+                    `</div>\n`+
+                `</div>\n`+
+                `<button class="app-button-inner btn btn-sm btn-delete" data-bs-toggle="modal" data-bs-target="#delete-modal" +
+                        onclick="() => deleteAppBtnClicked(${appData.application_id}, ${appData.ename})">\n` +
+                    `<i class="fa-solid fa-trash"></i>\n` +
+                `</button>\n` +
+            `</td>\n` +
+        `</tr>`;
     appListDiv.append(app);
     appShowingCnt++;
 }
