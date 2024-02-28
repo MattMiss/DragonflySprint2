@@ -41,7 +41,7 @@
     --table-hover-color: rgba(108, 180, 67, 0.15);
 
     /* status colors*/
-    --status-need-apply: #d08205;
+    --status-need-to-apply: #d08205;
     --status-applied: #3b5df8;
     --status-interviewing: #d9d908;
     --status-rejected: #e54a4a;
@@ -702,8 +702,8 @@ a {
 .status-interviewing i{
     color: var(--status-interviewing) !important;
 }
-.status-need-apply i{
-    color: var(--status-need-apply) !important;
+.status-need-to-apply i{
+    color: var(--status-need-to-apply) !important;
 }
 .status-rejected i{
     color: var(--status-rejected) !important;

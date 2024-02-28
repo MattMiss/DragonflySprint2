@@ -21,7 +21,8 @@ session_start();
 $_SESSION['location'] = '';
 
 include 'php/nav_bar.php';
-include  'db_local.php'; // locally connect to cpanel db
+include 'db_picker.php';
+include $db_location;
 
 // soft deletes a database entry
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
