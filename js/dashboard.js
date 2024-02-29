@@ -161,10 +161,10 @@ function createAppFromData(appData){
                 `</button>\n` +
                 `<div class='modal fade' id='edit-modal-${appData.application_id}' tabIndex='-1' role='dialog' aria-labelledby='job-title' +
                         aria-hidden='true'>\n`+
-                    `<div class='modal-dialog' role='document'>\n`+
+                    `<div class='modal-dialog modal-dialog-centered' role='document'>\n`+
                         `<div class='modal-content'>\n`+
                             `<div class='modal-header'>\n`+
-                                `<h5 class='modal-title' id='job-title'>Application Details</h5>\n`+
+                                `<h3 class='modal-title' id='job-title'>Application Details</h3>\n`+
                                     `<button type='button' class='modal-close-primary close' data-bs-dismiss='modal' +
                                          aria-label='Close'>\n`+
                                         `<span aria-hidden='true'>&times;</span>\n`+
