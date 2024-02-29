@@ -134,6 +134,16 @@ function createAppFromData(appData){
     let statusReplace = `${appData.astatus}`;
     statusReplace = statusReplace.replace(/-/g, " ");
 
+    // Fix the URL to make it clickable
+    let clickableUrl = `${appData.jurl}`;
+    if (!clickableUrl.startsWith("http")) {
+        if (!clickableUrl.startsWith("www.")) {
+            clickableUrl = `https://www.${appData.jurl}`;
+        } else {
+            clickableUrl = `https://${appData.jurl}`;
+        }
+    }
+
     // Create a list item with the application data filled in
     const app =
         `<tr class="app-list-item" id="app-${appData.application_id}">\n` +
@@ -171,7 +181,8 @@ function createAppFromData(appData){
                                     `</li>\n`+
                                     `<li class='list-group-item pb-1'>\n`+
                                         `<span class='form-label'>URL:</span>\n`+
-                                        `<a href='//${appData.jurl}' target="_blank" rel="noopener noreferrer">${appData.jurl}</a>\n`+
+                                        `<a href='` + clickableUrl + `' target="_blank" rel="noopener noreferrer"
+                                        >${appData.jurl}</a>\n`+
                                     `</li>\n`+
                                     `<li class='list-group-item'>\n`+
                                         `<span class='form-label'>Job Description: </span>\n`+
