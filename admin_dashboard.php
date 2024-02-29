@@ -40,17 +40,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 // fetches specific data from database tables
 $sql = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC LIMIT 5"; // 5 most recent announcements
-$sql2 = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY id DESC LIMIT 3"; // 3 most recent announcements
-$sql3 = "SELECT * FROM users WHERE is_deleted = 0 LIMIT 7";
+$sql2 = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY id DESC LIMIT 5"; // 5 most recent announcements
+$sql3 = "SELECT * FROM users WHERE is_deleted = 0 LIMIT 5"; // 5 users
 $result = @mysqli_query($cnxn, $sql);
 $result2 = @mysqli_query($cnxn, $sql2);
 $result3 = @mysqli_query($cnxn, $sql3);
 ?>
 
+<!--
+TODO
+- Create similar format table for announcements
+- Optimize soft delete
+-->
+
+
 <main>
     <div class="container p-3" id="main-container">
-        <div class="row dashboard-top">
-            <div class="app-list col col-8">
+        <div class="dashboard-top">
+            <div class="app-list">
                 <h3>Recent Applications</h3>
                 <div class="row">
                     <div class="col-md-4 pt-2">
@@ -106,35 +113,41 @@ $result3 = @mysqli_query($cnxn, $sql3);
                     ?>
                     </tbody>
                 </table>
-                <p class="title mx-auto" style="display: block; width:100px; color: green">More</p>
+<!--                <p class="title mx-auto" style="display: block; width:100px; color: green">More</p>-->
             </div>
 
-            <div class="reminders col">
-                <h3>Recent Announcements</h3>
-                <div>
-                    <hr>
-                    <?php
-                    createReminders($result2);
-                    ?>
-
-                    <div>
-                        <hr>
-                        <div class="incomplete-app">
-                            <a class="" href="admin_announcement.php">Add Announcement</a>
-                        </div>
-                    </div>
+            <div class="row py-3">
+                <div class="col-9 d-flex justify-content-center" id="new-app-container">
+                    <button class="submit-btn">New Application</button>
+                </div>
+                <div class="col-3 d-flex justify-content-center" id="update-account-container">
+                    <button id="update-acc-btn" class="submit-btn"><i class="fa-solid fa-gear px-1"></i>Update Account</button>
                 </div>
             </div>
         </div>
 
-        <div class="row py-3">
-            <div class="col-9 d-flex justify-content-center" id="new-app-container">
-                <button class="submit-btn">New Application</button>
-            </div>
-            <div class="col-3 d-flex justify-content-center" id="update-account-container">
-                <button id="update-acc-btn" class="submit-btn"><i class="fa-solid fa-gear px-1"></i>Update Account</button>
+        <div class="row dashboard-top">
+            <div class="reminders-list">
+                <h3>Announcements</h3>
+                <table class="dash-table">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="w-20">Date</th>
+                            <th scope="col" class="w-30">Position</th>
+                            <th scope="col" class="w-20">Employer</th>
+                            <th scope="col" class="w-20">URL</th>
+                            <th scope="col" class="w-btn"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        createReminders($result2);
+                        ?>
+                    </tbody>
+                </table>
             </div>
         </div>
+
 
         <div class="row dashboard-top">
             <div class="user-list">
@@ -153,7 +166,7 @@ $result3 = @mysqli_query($cnxn, $sql3);
                         ?>
                     </tbody>
                 </table>
-                <p class="title mx-auto" style="display: block; width:100px; color: green">More</p>
+<!--                <p class="title mx-auto" style="display: block; width:100px; color: green">More</p>-->
             </div>
         </div>
 
@@ -196,7 +209,6 @@ function createTable($info) {
         $astatus = $row["astatus"];
         $fupdates = $row["fupdates"];
         $followupdate = $row["followupdate"];
-//            $app_info = json_encode($row);
 
         echo "
                 <tr class='app-list-item' id='$id'>
@@ -245,14 +257,18 @@ function createReminders($info) {
         $jurl = $row["jurl"];
         $recipient = $row["sent_to"];
         $date = $row["date_created"];
-//            $app_info = json_encode($row);
 
         echo "
-                <div class='reminder py-2'>
-                    <i class='fa-solid fa-bullhorn me-2'></i>
-                    <button class='announcement-modal-btn' type='button' data-bs-toggle='modal' data-bs-target='#announcement-modal-$id'>$title $jtype at <span>$ename</span></button>
-                    <p>Created on: <span>$date</span></p>
-                </div>
+            <tr id='$id'>
+                <td>$date</td>
+                <td>$title jtype</td>
+                <td>$ename</td>
+                <td class='job-url'>$jurl</td>
+                <td class='app-button-outer'>
+                        <button class='app-button-inner btn btn-sm btn-update'><i class='fa-solid fa-pen'></i></button>
+                        <button class='app-button-inner btn btn-sm btn-delete' type='button' data-bs-toggle='modal' data-bs-target='#announcement-modal-$id'><i class='fa-solid fa-trash'></i></button>
+                </td>
+            </tr>
 
                 <div class='modal fade' id='announcement-modal-$id' tabindex='-1' role='dialog' aria-labelledby='job-title' aria-hidden='true'>
                     <div class='modal-dialog' role='document'>

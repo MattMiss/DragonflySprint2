@@ -724,6 +724,15 @@ a {
     width: 100px;
 }
 
+/* announcements table*/
+.job-url {
+    overflow: hidden;
+    max-width: 20px;
+    text-overflow: ellipsis;
+    width: fit-content;
+    white-space: nowrap;
+}
+
 
 .footer-div{
     font-size: .8rem;
