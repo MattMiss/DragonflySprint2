@@ -37,8 +37,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
+$date = date('Y-m-d', time());
+$start = date('Y-m-d', strtotime($date.'-5days'));
+$finish = date('Y-m-d', strtotime($date.'+5days'));
+
 $sql = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC";
+$sql2 = "SELECT * FROM announcements WHERE is_deleted = 0 AND (date_created BETWEEN '$start' AND '$date') 
+            ORDER BY id DESC LIMIT 5"; // announcements from last 5 days
+$sql3 = "SELECT * FROM applications WHERE is_deleted = 0 AND (date_created BETWEEN '$start' AND '$finish')
+            ORDER BY application_id DESC";
 $result = @mysqli_query($cnxn, $sql);
+$result2 = @mysqli_query($cnxn, $sql2);
+$result3 = @mysqli_query($cnxn, $sql3);
+
 $apps[] = [];
 
 while ($row = mysqli_fetch_assoc($result)) {
@@ -166,16 +177,19 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <div>
                     <h6>Follow Up</h6>
                     <hr>
-                    <div class="reminder">
-                        <i class="fa-regular fa-comment"></i>
-                        <a href="#">Follow up with <span>Costco</span></a>
-                        <p>Applied on: <span>1/22/24</span></p>
-                    </div>
-                    <div class="reminder">
-                        <i class="fa-regular fa-comment"></i>
-                        <a href="#">Follow up with <span>Meta</span></a>
-                        <p>Applied on: <span>12/22/23</span></p>
-                    </div>
+<!--                    <div class="reminder">-->
+<!--                        <i class="fa-regular fa-comment"></i>-->
+<!--                        <a href="#">Follow up with <span>Costco</span></a>-->
+<!--                        <p>Applied on: <span>1/22/24</span></p>-->
+<!--                    </div>-->
+<!--                    <div class="reminder">-->
+<!--                        <i class="fa-regular fa-comment"></i>-->
+<!--                        <a href="#">Follow up with <span>Meta</span></a>-->
+<!--                        <p>Applied on: <span>12/22/23</span></p>-->
+<!--                    </div>-->
+                    <?php
+                    createAppReminders($result2);
+                    ?>
                 </div>
                 <div style="padding-top: 20px;">
                     <h6>Incomplete Apps</h6>
@@ -236,3 +250,64 @@ while ($row = mysqli_fetch_assoc($result)) {
 <script src="js/dashboard.js"></script>
 </body>
 </html>
+
+<?php
+function createAppReminders($info) {
+    while ($row = mysqli_fetch_assoc($info)) {
+        $id = $row["id"];
+        $title = $row["title"];
+        $jtype = $row["job_type"];
+        $location = $row["location"];
+        $ename = $row["ename"];
+        $jobInfo = $row["additional_info"];
+        $jurl = $row["jurl"];
+        $recipient = $row["sent_to"];
+        $date = $row["date_created"];
+        //            $app_info = json_encode($row);
+
+        echo "
+            <div class='reminder'>
+                <i class='fa-regular fa-comment'></i>
+                <button class='announcement-modal-btn' type='button' data-bs-toggle='modal' data-bs-target='#announcement-modal-$id'>$title $jtype at <span>$ename</span></button>
+                <p>Follow-up Date: <span>$date</span></p>
+            </div>
+            
+            <div class='modal fade' id='announcement-modal-$id' tabindex='-1' role='dialog' aria-labelledby='job-title' aria-hidden='true'>
+                <div class='modal-dialog' role='document'>
+                    <div class='modal-content'>
+                        <div class='modal-header'>
+                            <h5 class='modal-title' id='job-title'>$title</h5>
+                            <button type='button' class='modal-close-primary close' data-bs-dismiss='modal' aria-label='Close'>
+                                <span aria-hidden='true'>&times;</span>
+                            </button>
+                        </div>
+                        <div class='modal-body'>
+                            <ul class='list-group-item'>
+                                <li class='list-group-item pb-1'>
+                                    <span class='form-label'>Company:</span> $ename
+                                </li>
+                                <li class='list-group-item pb-1'>
+                                    <span class='form-label'>Address:</span> $location
+                                </li>
+                                <li class='list-group-item pb-1'>
+                                    <span class='form-label'>URL:</span>
+                                    <a href='$jurl'>$jurl</a>
+                                </li>
+                                <li class='list-group-item'>
+                                    <span class='form-label'>More Information:</span>
+                                    <p>$jobInfo</p>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class='modal-footer'>
+                            <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Close</button>
+                            <button type='button' class='modal-edit'>Edit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            ";
+    }
+}
+?>
