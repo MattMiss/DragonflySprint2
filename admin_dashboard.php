@@ -20,6 +20,9 @@
 session_start();
 $_SESSION['location'] = '';
 
+global $db_location;
+global $cnxn;
+
 include 'php/nav_bar.php';
 include 'db_picker.php';
 include $db_location;
@@ -39,12 +42,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 // fetches specific data from database tables
-$sql = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC LIMIT 5"; // 5 most recent announcements
-$sql2 = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY id DESC LIMIT 5"; // 5 most recent announcements
-$sql3 = "SELECT * FROM users WHERE is_deleted = 0 LIMIT 5"; // 5 users
-$result = @mysqli_query($cnxn, $sql);
-$result2 = @mysqli_query($cnxn, $sql2);
-$result3 = @mysqli_query($cnxn, $sql3);
+$sqlApps = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC";
+$sqlAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY id DESC LIMIT 5"; // 5 most recent announcements
+$sqlUsers = "SELECT * FROM users WHERE is_deleted = 0 LIMIT 5"; // 5 users
+$appsResult = @mysqli_query($cnxn, $sqlApps);
+$announceResult = @mysqli_query($cnxn, $sqlAnnounce);
+$usersResult = @mysqli_query($cnxn, $sqlUsers);
+
+// Fill in apps array
+$apps[] = [];
+while ($row = mysqli_fetch_assoc($appsResult)) {
+    $apps[] = $row;
+}
 ?>
 
 <!--
@@ -56,7 +65,7 @@ TODO
 
 <main>
     <div class="container p-3" id="main-container">
-        <div class="dashboard-top">
+        <div class="row dashboard-top">
             <div class="app-list">
                 <h3>Recent Applications</h3>
                 <div class="row">
@@ -64,7 +73,6 @@ TODO
                         <div class="input-group input-group-sm">
                             <span class="input-group-text">Start Date</span>
                             <input type="date" class="form-control" id="app-start-date" name="search-start-date">
-<!--                            <i class="fa-regular fa-calendar"></i>-->
                         </div>
                     </div>
                     <div class="col-md-4 pt-2">
@@ -101,29 +109,79 @@ TODO
                 <table class="dash-table">
                     <thead>
                     <tr>
-                        <th scope="col" class="w-20">Date</th>
-                        <th scope="col">Title</th>
-                        <th scope="col" class="w-20">Status</th>
+                        <th scope="col" class="w-20">
+                            <div class="row">
+                                <div class="col-auto pe-0 m-auto">
+                                    Date
+                                </div>
+                                <div class="col ps-2 m-auto">
+                                    <div class="order-icons" id="date-order-btn">
+                                        <i class="fa-solid fa-caret-up" id="date-up-btn"></i>
+                                        <i class="fa-solid fa-caret-down" id="date-down-btn"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="row">
+                                <div class="col-auto pe-0 m-auto">
+                                    Job Title
+                                </div>
+                                <div class="col ps-2 m-auto">
+                                    <div class="order-icons" id="job-order-btn">
+                                        <i class="fa-solid fa-caret-up" id="job-up-btn"></i>
+                                        <i class="fa-solid fa-caret-down" id="job-down-btn"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="row">
+                                <div class="col pe-0 m-auto">
+                                    Employer
+                                </div>
+                                <div class="col ps-2 m-auto">
+                                    <div class="order-icons" id="employer-order-btn">
+                                        <i class="fa-solid fa-caret-up" id="employer-up-btn"></i>
+                                        <i class="fa-solid fa-caret-down" id="employer-down-btn"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </th>
+                        <th scope="col" class="w-20">
+                            <div class="row">
+                                <div class="col-auto pe-0 m-auto">
+                                    Status
+                                </div>
+                                <div class="col ps-2 m-auto">
+                                    <div class="order-icons" id="status-order-btn">
+                                        <i class="fa-solid fa-caret-up" id="status-up-btn"></i>
+                                        <i class="fa-solid fa-caret-down" id="status-down-btn"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </th>
                         <th scope="col" class="w-btn"></th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <?php
-                    createTable($result);
-                    ?>
+                    <tbody class="table-body" id="dash-apps-list">
+                    <!-- List gets populated with applications from the database here-->
                     </tbody>
                 </table>
-<!--                <p class="title mx-auto" style="display: block; width:100px; color: green">More</p>-->
-            </div>
-
-            <div class="row py-3">
-                <div class="col-9 d-flex justify-content-center" id="new-app-container">
-                    <button class="submit-btn">New Application</button>
+                <div class="col text-center pt-2 pb-2" id="more-apps">
+                    <button type="button" class="submit-btn"  onclick="loadMoreApps()">More</button>
                 </div>
+                <div class="col d-flex justify-content-center pt-2" id="new-app-container">
+                    <a class="submit-btn" href="application_form.php">New Application</a>
+                </div>
+            </div>
+            <!--  Possibly remove this
+            <div class="row py-3">
                 <div class="col-3 d-flex justify-content-center" id="update-account-container">
                     <button id="update-acc-btn" class="submit-btn"><i class="fa-solid fa-gear px-1"></i>Update Account</button>
                 </div>
             </div>
+            -->
         </div>
 
         <div class="row dashboard-top">
@@ -141,7 +199,7 @@ TODO
                     </thead>
                     <tbody>
                         <?php
-                        createReminders($result2);
+                        createReminders($announceResult);
                         ?>
                     </tbody>
                 </table>
@@ -162,7 +220,7 @@ TODO
                     </thead>
                     <tbody>
                         <?php
-                            createUserTable($result3);
+                            createUserTable($usersResult);
                         ?>
                     </tbody>
                 </table>
@@ -191,7 +249,10 @@ TODO
 
 
 <?php include 'php/footer.php' ?>
+<script>let apps = <?php echo json_encode($apps) ?></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="js/main.js"></script>
+<script src="js/dashboard.js"></script>
 </body>
 </html>
 
