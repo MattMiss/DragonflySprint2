@@ -111,52 +111,52 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <table class="dash-table">
                     <thead>
                     <tr>
-                        <th scope="col" class="w-20">
-                            <div class="row">
-                                <div class="col-auto pe-0 m-auto">
+                        <th scope="col" class="app-date-col">
+                            <div class="row clickable" id="date-order-btn">
+                                <div class="col-auto pe-0 my-auto">
                                     Date
                                 </div>
-                                <div class="col ps-2 m-auto">
-                                    <div class="order-icons" id="date-order-btn">
+                                <div class="col-auto ps-2 my-auto">
+                                    <div class="order-icons">
                                         <i class="fa-solid fa-caret-up" id="date-up-btn"></i>
                                         <i class="fa-solid fa-caret-down" id="date-down-btn"></i>
                                     </div>
                                 </div>
                             </div>
                         </th>
-                        <th scope="col">
-                            <div class="row">
-                                <div class="col-auto pe-0 m-auto">
+                        <th scope="col" class="app-job-col" >
+                            <div class="row clickable" id="job-order-btn">
+                                <div class="col-auto pe-0 my-auto">
                                     Job Title
                                 </div>
-                                <div class="col ps-2 m-auto">
-                                    <div class="order-icons" id="job-order-btn">
+                                <div class="col-auto ps-2 my-auto">
+                                    <div class="order-icons">
                                         <i class="fa-solid fa-caret-up" id="job-up-btn"></i>
                                         <i class="fa-solid fa-caret-down" id="job-down-btn"></i>
                                     </div>
                                 </div>
                             </div>
                         </th>
-                        <th scope="col">
-                            <div class="row">
-                                <div class="col pe-0 m-auto">
+                        <th scope="col" class="app-employer-col">
+                            <div class="row clickable" id="employer-order-btn">
+                                <div class="col-auto pe-0 my-auto">
                                     Employer
                                 </div>
-                                <div class="col ps-2 m-auto">
-                                    <div class="order-icons" id="employer-order-btn">
+                                <div class="col-auto ps-2 my-auto">
+                                    <div class="order-icons">
                                         <i class="fa-solid fa-caret-up" id="employer-up-btn"></i>
                                         <i class="fa-solid fa-caret-down" id="employer-down-btn"></i>
                                     </div>
                                 </div>
                             </div>
                         </th>
-                        <th scope="col" class="w-20">
-                            <div class="row">
-                                <div class="col-auto pe-0 m-auto">
+                        <th scope="col" class="app-status-col">
+                            <div class="row clickable" id="status-order-btn">
+                                <div class="col-auto pe-0 my-auto">
                                     Status
                                 </div>
-                                <div class="col ps-2 m-auto">
-                                    <div class="order-icons" id="status-order-btn">
+                                <div class="col-auto ps-2 my-auto">
+                                    <div class="order-icons">
                                         <i class="fa-solid fa-caret-up" id="status-up-btn"></i>
                                         <i class="fa-solid fa-caret-down" id="status-down-btn"></i>
                                     </div>

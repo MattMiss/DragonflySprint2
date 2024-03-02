@@ -112,72 +112,85 @@ TODO
                 <table class="dash-table">
                     <thead>
                     <tr>
-                        <th scope="col" class="w-20">
-                            <div class="row">
-                                <div class="col-auto pe-0 m-auto">
+                        <th scope="col" class="app-date-col">
+                            <div class="row clickable" id="date-order-btn">
+                                <div class="col-auto pe-0 my-auto">
                                     Date
                                 </div>
-                                <div class="col ps-2 m-auto">
-                                    <div class="order-icons" id="date-order-btn">
+                                <div class="col-auto ps-2 my-auto">
+                                    <div class="order-icons">
                                         <i class="fa-solid fa-caret-up" id="date-up-btn"></i>
                                         <i class="fa-solid fa-caret-down" id="date-down-btn"></i>
                                     </div>
                                 </div>
                             </div>
                         </th>
-                        <th scope="col">
-                            <div class="row">
-                                <div class="col-auto pe-0 m-auto">
+                        <th scope="col" class="app-job-col">
+                            <div class="row clickable" id="job-order-btn">
+                                <div class="col-auto pe-0 my-auto">
                                     Job Title
                                 </div>
-                                <div class="col ps-2 m-auto">
-                                    <div class="order-icons" id="job-order-btn">
+                                <div class="col-auto ps-2 my-auto">
+                                    <div class="order-icons">
                                         <i class="fa-solid fa-caret-up" id="job-up-btn"></i>
                                         <i class="fa-solid fa-caret-down" id="job-down-btn"></i>
                                     </div>
                                 </div>
                             </div>
                         </th>
-                        <th scope="col">
-                            <div class="row">
-                                <div class="col pe-0 m-auto">
+                        <th scope="col" class="app-employer-col">
+                            <div class="row clickable" id="employer-order-btn">
+                                <div class="col-auto pe-0 my-auto">
                                     Employer
                                 </div>
-                                <div class="col ps-2 m-auto">
-                                    <div class="order-icons" id="employer-order-btn">
+                                <div class="col-auto ps-2 my-auto">
+                                    <div class="order-icons">
                                         <i class="fa-solid fa-caret-up" id="employer-up-btn"></i>
                                         <i class="fa-solid fa-caret-down" id="employer-down-btn"></i>
                                     </div>
                                 </div>
                             </div>
                         </th>
-                        <th scope="col">
-                            <div class="row">
-                                <div class="col pe-0 m-auto">
+                        <th scope="col" class="app-user-col">
+                            <div class="row clickable" id="user-order-btn">
+                                <div class="col-auto pe-0 my-auto">
                                     User
                                 </div>
-                                <div class="col ps-2 m-auto">
-                                    <div class="order-icons" id="user-name-order-btn">
-                                        <i class="fa-solid fa-caret-up" id="user-name-up-btn"></i>
-                                        <i class="fa-solid fa-caret-down" id="user-name-down-btn"></i>
+                                <div class="col-auto ps-2 my-auto">
+                                    <div class="order-icons">
+                                        <i class="fa-solid fa-caret-up" id="user-up-btn"></i>
+                                        <i class="fa-solid fa-caret-down" id="user-down-btn"></i>
                                     </div>
                                 </div>
                             </div>
                         </th>
-                        <th scope="col" class="w-20">
-                            <div class="row">
-                                <div class="col-auto pe-0 m-auto">
+                        <th scope="col" class="app-email-col" id="email-order-btn">
+                            <div class="row clickable">
+                                <div class="col-auto pe-0 my-auto">
+                                    Email
+                                </div>
+                                <div class="col-auto ps-2 my-auto">
+                                    <div class="order-icons">
+                                        <i class="fa-solid fa-caret-up" id="email-up-btn"></i>
+                                        <i class="fa-solid fa-caret-down" id="email-down-btn"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </th>
+                        <th scope="col" class="app-status-col" id="status-order-btn">
+                            <div class="row clickable">
+                                <div class="col-auto pe-0 my-auto">
                                     Status
                                 </div>
-                                <div class="col ps-2 m-auto">
-                                    <div class="order-icons" id="status-order-btn">
+                                <div class="col-auto ps-2 my-auto">
+                                    <div class="order-icons">
                                         <i class="fa-solid fa-caret-up" id="status-up-btn"></i>
                                         <i class="fa-solid fa-caret-down" id="status-down-btn"></i>
                                     </div>
                                 </div>
                             </div>
                         </th>
-                        <th scope="col" class="w-btn"></th>
+                        <th scope="col" class="w-btn" id="dash-app-btn-header"></th>
                     </tr>
                     </thead>
                     <tbody class="table-body" id="dash-apps-list">
@@ -273,6 +286,14 @@ TODO
                     <div class='modal-body'>
                         <ul class='list-group-item'>
                             <li class='list-group-item pb-1'>
+                                <span class='form-label'>User: </span>
+                                <span id="edit-modal-user"></span>
+                            </li>
+                            <li class='list-group-item pb-3'>
+                                <span class='form-label'>Email: </span>
+                                <span id="edit-modal-email"></span>
+                            </li>
+                            <li class='list-group-item pb-1'>
                                 <span class='form-label'>Job Name: </span>
                                 <span id="edit-modal-jname"></span>
                                 </li>
@@ -295,8 +316,8 @@ TODO
                             <li class='list-group-item pb-1'>
                                 <span class='form-label'>Status: </span>
                                 <span id="edit-modal-astatus-icon" class="status">
-                                            <i class='fa-solid fa-circle'></i>
-                                        </span>
+                                    <i class='fa-solid fa-circle'></i>
+                                </span>
                                 <span id="edit-modal-astatus" style="text-transform: capitalize"></span>
                                 </li>
                             <li class='list-group-item'>

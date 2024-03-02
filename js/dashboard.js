@@ -9,6 +9,8 @@ let dateOrder = 0;
 let jobOrder = 0;
 let employerOrder = 0;
 let statusOrder = 0;
+let userOrder = 0;
+let emailOrder = 0;
 let lastFieldClicked = ['', ''];
 let appShowingCnt = 0;
 const APP_MAX_LOAD_CNT = 10;
@@ -98,15 +100,27 @@ function setOrderBtnListeners(){
         toggleFieldOrder($('#status-up-btn'), $('#status-down-btn'), 'astatus');
     });
 
-    // Set default order to date ascending
+    // Set click listeners for user and email if role is admin
+    if (viewRole === 1){
+        $('#user-order-btn').on('click', () => {
+            toggleFieldOrder($('#user-up-btn'), $('#user-down-btn'), 'fname');
+        });
+        $('#email-order-btn').on('click', () => {
+            toggleFieldOrder($('#email-up-btn'), $('#email-down-btn'), 'email');
+        });
+    }
+
+    // Toggle Date twice to set default order to date ascending
+    toggleFieldOrder($('#date-up-btn'), $('#date-down-btn'), 'adate');
     toggleFieldOrder($('#date-up-btn'), $('#date-down-btn'), 'adate');
 }
 
 
 // Loop through each application in sortedApps and create a <tr> with all the fields filled in
 function populateAppList(){
-    //console.log("POPULATING LIST");
-    //console.log("App Cnt to Load: " + appCntToLoad);
+    // Clear the class on the btn header div and add a hidden class if the admin is viewing
+    $('#dash-app-btn-header').removeClass().addClass('w-btn' + (viewRole === 1 ? ' hidden' : ''));
+
     if (sortedApps.length === 0){
         const noResults = '<tr class="app-list-item">\n' +
                                       '<td></td>\n' +
@@ -147,7 +161,8 @@ function createAppFromData(appData){
 
     // Only show userName if admin role is viewing
     // (username won't exist for a user role since they know their name already)
-    const userName = viewRole === 1 ? `<td>${appData.fname} ${appData.lname}</td>\n` : ``;
+    const userName = (viewRole === 1) ? `<td>${appData.fname} ${appData.lname}</td>\n` : ``;
+    const email = (viewRole === 1) ? `<td>${appData.email}</td>\n` : ``;
 
     const editBtn = `<button class="app-button-inner btn btn-sm btn-update">\n` +
                                 `<i class="fa-solid fa-pen"></i>\n` +
@@ -156,8 +171,9 @@ function createAppFromData(appData){
     $(editBtn).on('click', () => {
         showAppModal(appData, statusReplace, clickableUrl);
     })
+
     // Only show edit and delete btn for user
-    const btnDiv = viewRole === 0 ? `<td class="app-button-outer">\n` +
+    const btnDiv = (viewRole === 0) ? `<td class="app-button-outer">\n` +
                                                  `${editBtn}\n` +
                                                 `<button class="app-button-inner btn btn-sm btn-delete" data-bs-toggle="modal" data-bs-target="#delete-modal" +
                                                                                         onclick="() => deleteAppBtnClicked(${appData.application_id}, ${appData.ename})">\n` +
@@ -172,13 +188,12 @@ function createAppFromData(appData){
             `<td>${appData.jname}</td>\n` +
             `<td>${appData.ename}</td>\n` +
             `${userName}` +
+            `${email}` +
             `<td class="status status-${appData.astatus}">\n` +
                 `<i class="fa-solid fa-circle"></i>\n` +
                 `<span style="text-transform: capitalize">` + statusReplace + `</span>\n` +
             `</td>\n` +
-            `<td class="app-button-outer">\n` +
-                `${btnDiv}` +
-            `</td>\n` +
+            `${btnDiv}` +
         `</tr>`);
 
     app.on('click', ()=> {
@@ -227,6 +242,13 @@ function sortAppsByUserFilters(){
                 singleApp.jname.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 singleApp.astatus.toLowerCase().includes(searchTerm.toLowerCase())){
                 tempApps.push(singleApp);
+            }else if(viewRole === 1){   // Search terms for user and email which is only shown for admins
+
+                if (singleApp.fname.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    singleApp.lname.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    singleApp.email.toLowerCase().includes(searchTerm.toLowerCase())){
+                        tempApps.push(singleApp);
+                }
             }
         }
     })
@@ -252,6 +274,8 @@ function toggleFieldOrder(fieldBtnUp, fieldBtnDown, field){
             jobOrder = 0;
             employerOrder = 0;
             statusOrder = 0;
+            userOrder = 0;
+            emailOrder = 0;
             if(dateOrder === 3) dateOrder = 1;
             fieldIndex = dateOrder;
             break;
@@ -260,6 +284,8 @@ function toggleFieldOrder(fieldBtnUp, fieldBtnDown, field){
             dateOrder = 0;
             employerOrder = 0;
             statusOrder = 0;
+            userOrder = 0;
+            emailOrder = 0;
             if(jobOrder === 3) jobOrder = 1;
             fieldIndex = jobOrder;
             break;
@@ -268,6 +294,8 @@ function toggleFieldOrder(fieldBtnUp, fieldBtnDown, field){
             dateOrder = 0;
             jobOrder = 0;
             statusOrder = 0;
+            userOrder = 0;
+            emailOrder = 0;
             if(employerOrder === 3) employerOrder = 1;
             fieldIndex = employerOrder;
             break;
@@ -276,8 +304,30 @@ function toggleFieldOrder(fieldBtnUp, fieldBtnDown, field){
             dateOrder = 0;
             jobOrder = 0;
             employerOrder = 0;
+            userOrder = 0;
+            emailOrder = 0;
             if(statusOrder === 3) statusOrder = 1;
             fieldIndex = statusOrder;
+            break;
+        case 'fname':
+            userOrder++;
+            dateOrder = 0;
+            jobOrder = 0;
+            employerOrder = 0;
+            statusOrder = 0;
+            emailOrder = 0;
+            if (userOrder === 3) userOrder = 1
+            fieldIndex = userOrder;
+            break;
+        case 'email':
+            emailOrder++;
+            dateOrder = 0;
+            jobOrder = 0;
+            employerOrder = 0;
+            statusOrder = 0;
+            userOrder = 0;
+            if (emailOrder === 3) emailOrder = 1
+            fieldIndex = emailOrder;
             break;
     }
 
@@ -351,4 +401,9 @@ function showAppModal(appData, status, formattedUrl){
     const statusIcon = $('#edit-modal-astatus-icon');
     statusIcon.removeClass();
     statusIcon.addClass('status status-' + appData.astatus);
+
+    if (viewRole === 1){
+        $('#edit-modal-user').text(appData.fname + " " + appData.lname);
+        $('#edit-modal-email').text(appData.email);
+    }
 }
