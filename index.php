@@ -25,6 +25,7 @@ include 'php/nav_bar.php';
 include 'db_picker.php';
 include $db_location;
 
+global $cnxn;
 
 // soft deletes a database entry
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -37,15 +38,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
+$role = 0;
+
 $date = date('Y-m-d', time());
 $start = date('Y-m-d', strtotime($date.'-5days'));
 $finish = date('Y-m-d', strtotime($date.'+5days'));
 
 $sql = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC";
-$sql2 = "SELECT * FROM announcements WHERE is_deleted = 0 AND (date_created BETWEEN '$start' AND '$date') 
-            ORDER BY id DESC LIMIT 5"; // announcements from last 5 days
-$sql3 = "SELECT * FROM applications WHERE is_deleted = 0 AND (date_created BETWEEN '$start' AND '$finish')
-            ORDER BY application_id DESC";
+//$sql2 = "SELECT * FROM announcements WHERE is_deleted = 0 AND (date_created BETWEEN '$start' AND '$date')
+//            ORDER BY id DESC LIMIT 5"; // announcements from last 5 days
+//$sql3 = "SELECT * FROM applications WHERE is_deleted = 0 AND (date_created BETWEEN '$start' AND '$finish')
+//            ORDER BY application_id DESC";
+
+$sql2 = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY id DESC LIMIT 5"; // announcements from last 5 days
+$sql3 = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC";
 $result = @mysqli_query($cnxn, $sql);
 $result2 = @mysqli_query($cnxn, $sql2);
 $result3 = @mysqli_query($cnxn, $sql3);
@@ -240,12 +246,69 @@ while ($row = mysqli_fetch_assoc($result)) {
             </div>
         </div>
     </div>
+    <div class='modal fade' id='edit-modal' tabIndex='-1' role='dialog' aria-labelledby='job-title' aria-hidden='true'>
+        <div class='modal-dialog modal-dialog-centered' role='document'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <h3 class='modal-title' id='job-title'>Application Details</h3>
+                    <button type='button' class='modal-close-primary close' data-bs-dismiss='modal' aria-label='Close'>
+                        <span aria-hidden='true'>&times;</span>
+                </div>
+                <div class='modal-body'>
+                    <ul class='list-group-item'>
+                        <li class='list-group-item pb-1'>
+                            <span class='form-label'>Job Name: </span>
+                            <span id="edit-modal-jname"></span>
+                        </li>
+                        <li class='list-group-item pb-1'>
+                            <span class='form-label'>Employer Name: </span>
+                            <span id="edit-modal-ename"></span>
+                        </li>
+                        <li class='list-group-item pb-1'>
+                            <span class='form-label'>URL:</span>
+                            <a id="edit-modal-url" href="" target="_blank" rel="noopener noreferrer"></a>
+                        </li>
+                        <li class='list-group-item'>
+                            <span class='form-label'>Job Description: </span>
+                            <p id="edit-modal-description" style="margin: 0"></p>
+                        </li>
+                        <li class='list-group-item pb-1'>
+                            <span class='form-label'>Application date: </span>
+                            <span id="edit-modal-adate"></span>
+                        </li>
+                        <li class='list-group-item pb-1'>
+                            <span class='form-label'>Status: </span>
+                            <span id="edit-modal-astatus-icon" class="status">
+                                            <i class='fa-solid fa-circle'></i>
+                                        </span>
+                            <span id="edit-modal-astatus" style="text-transform: capitalize"></span>
+                        </li>
+                        <li class='list-group-item'>
+                            <span class='form-label'>Followup date: </span>
+                            <span id="edit-modal-fdate"></span>
+                        </li>
+                        <li class='list-group-item pb-1'>
+                            <span class='form-label'>Followup updates: </span>
+                            <p id="edit-modal-updates" style="margin: 0"></p>
+                        </li>
+                    </ul>
+                </div>
+                <div class='modal-footer'>
+                    <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Close</button>
+                    <form method="post" action="application_edit.php" target="_blank">
+                        <input id="edit-modal-appid" type="hidden" name="application-id" value="">
+                        <button type="submit" class="modal-edit">Edit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 
 <?php include 'php/footer.php'?>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="js/contactscript.js"></script>
-<script>let apps = <?php echo json_encode($apps) ?></script>
+<script>let apps = <?php echo json_encode($apps) ?>; let role = <?php echo $role ?></script>
 <script src="js/main.js"></script>
 <script src="js/dashboard.js"></script>
 </body>
