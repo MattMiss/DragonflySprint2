@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 // fetches specific data from database tables
 $sql = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC LIMIT 5"; // 5 most recent announcements
-$sql2 = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY id DESC LIMIT 5"; // 5 most recent announcements
+$sql2 = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY date_created DESC LIMIT 5"; // 5 most recent announcements
 $sql3 = "SELECT * FROM users WHERE is_deleted = 0 LIMIT 5"; // 5 users
 $result = @mysqli_query($cnxn, $sql);
 $result2 = @mysqli_query($cnxn, $sql2);
@@ -48,9 +48,8 @@ $result3 = @mysqli_query($cnxn, $sql3);
 ?>
 
 <!--
-TODO
-- Create similar format table for announcements
-- Optimize soft delete
+ TODO
+ Optimize soft delete
 -->
 
 
@@ -120,9 +119,12 @@ TODO
                 <div class="col-9 d-flex justify-content-center" id="new-app-container">
                     <button class="submit-btn">New Application</button>
                 </div>
-                <div class="col-3 d-flex justify-content-center" id="update-account-container">
-                    <button id="update-acc-btn" class="submit-btn"><i class="fa-solid fa-gear px-1"></i>Update Account</button>
-                </div>
+                    <!-- button doesn't do anything -->
+
+
+<!--                <div class="col-3 d-flex justify-content-center" id="update-account-container">-->
+<!--                    <button id="update-acc-btn" class="submit-btn"><i class="fa-solid fa-gear px-1"></i>Update Account</button>-->
+<!--                </div>-->
             </div>
         </div>
 
@@ -134,8 +136,8 @@ TODO
                         <tr>
                             <th scope="col" class="w-20">Date</th>
                             <th scope="col" class="w-30">Position</th>
-                            <th scope="col" class="w-20">Employer</th>
-                            <th scope="col" class="w-20">URL</th>
+                            <th scope="col">Employer</th>
+                            <th scope="col" class="w-30">URL</th>
                             <th scope="col" class="w-btn"></th>
                         </tr>
                     </thead>
@@ -261,7 +263,7 @@ function createReminders($info) {
         echo "
             <tr id='$id'>
                 <td>$date</td>
-                <td>$title jtype</td>
+                <td>$title $jtype</td>
                 <td>$ename</td>
                 <td class='job-url'>$jurl</td>
                 <td class='app-button-outer'>

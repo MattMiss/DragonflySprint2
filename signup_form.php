@@ -49,7 +49,8 @@ include 'php/nav_bar.php' ?>
 
                     <div class="mb-3">
                         <label for="input-cohort-num" class="form-label">Cohort Number*</label>
-                        <input type="number" class="form-control" id="input-cohort-num" name="cohort-num" min="1" max="100" required>
+                        <input type="number" class="form-control" id="input-cohort-num" name="cohort-num" min="1" max="100"
+                               placeholder="1-100" required>
                     </div>
 
                     <div class="mb-3">

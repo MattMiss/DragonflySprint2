@@ -72,7 +72,7 @@ if(! empty($_POST)) {
         $employer = $_POST['employer'];
         $addltext = $_POST['additional-text'];
         $url = $_POST['announcement-url'];
-        $sentto = $_POST['sent-to'];
+        // $sentto = $_POST['sent-to'];
         $fname = $_POST['first-name'] == 'default' ? '' : $_POST['first-name'];
         $lname = $_POST['last-name'] == 'default' ? '' : $_POST['last-name'];
 
@@ -83,68 +83,56 @@ if(! empty($_POST)) {
         $employer = strip_tags(filter_var($employer, FILTER_SANITIZE_ADD_SLASHES));
         $addltext = strip_tags(filter_var($addltext, FILTER_SANITIZE_ADD_SLASHES));
         $url = strip_tags(filter_var($url, FILTER_SANITIZE_ADD_SLASHES));
-        $sentto = filter_var($sentto, FILTER_SANITIZE_ADD_SLASHES);
+        // $sentto = filter_var($sentto, FILTER_SANITIZE_ADD_SLASHES);
 
         $today = date("Y-m-d");
 
-
         $sql = "INSERT INTO `announcements` (`title`, `job_type`, `location`, `ename`, `additional_info`, `jurl`, `sent_to`, `date_created`, 
-                             `is_deleted`) VALUES ('$title', '$jobType', '$location', '$employer', '$addltext', '$url', '$sentto', '$today', 0)";
+                             `is_deleted`) VALUES ('$title', '$jobType', '$location', '$employer', '$addltext', '$url', 'all', '$today', 0)";
 
         $result = @mysqli_query($cnxn, $sql);
 
+        $sql2 = "SELECT fname, lname, email FROM `users` WHERE is_deleted = 0";
+        $result2 = @mysqli_query($cnxn, $sql2);
 
-        if(! preg_match("/[^\s@]+@[^\s@]+\.[^\s@]+/", $sentto) ) {
-            echoError();
-            return;
-        }
+
+//        if(! preg_match("/[^\s@]+@[^\s@]+\.[^\s@]+/", $sentto) ) {
+//            echoError();
+//            return;
+//        }
 
         // mailing
-        $name = ucfirst($fname) . " " . ucfirst($lname);
-        $to = "$name<$sentto>";
-        $subject = "Admin Announcement - New Position";
-        $from = 'Admin' . '<' . 'Admin@Dragonfly.GreenRiverDev.com' . '>';
-        $headers = "MIME-Version: 1.0" . "\r\n" .
-            "Content-type:text/html;charset=UTF-8" . "\r\n" .
-            'From: ' . $from . "\r\n" .
+
+        // static variables
+        $subject = $title . " " . $jobType . " at " . $employer ; // announcement title, job type, and company
+        $from = 'Admin<admin@greenriver.edu>';
+        $headers = 'From: ' . $from . "\r\n" .
             'Reply-To: ' . $from . "\r\n" .
             'X-Mailer: PHP/' . phpversion();
+        $message = "Location: " . $location .
+            "\nURL: ". $url .
+            "\nAdditional Info: " . $addltext;
 
-        $message = "
-            <html>
-            <head>
-                <title>New Opportunity</title>
-            </head>
-            <body>
-                <div class='form-receipt-container p-3'>
-                <h3>Check out the following position:</h3>
-                <ul class='receipt-content list-group list-group-flush'>
-                    <li class='list-group-item text-break'>
-                        Title: $title
-                    </li>
-                    <li class='list-group-item text-break'>
-                        Job Type: $jobType
-                    </li>
-                    <li class='list-group-item text-break'>
-                        Location: $location
-                    </li>
-                    <li class='list-group-item text-break'>
-                        Employer: $employer
-                    </li>
-                    <li class='list-group-item text-break'>
-                        More Information: $addltext
-                    </li>
-                    <li class='list-group-item text-break'>
-                        URL: $url
-                    </li>
-                </ul>
-            </div>
-            </body>
-            </html>
-        ";
+        // to make sure all emails were sent
+        $emailsSent = 0;
+        $numUsers = 0;
 
+        while($row = mysqli_fetch_assoc($result2)) {
+            $fname = $row['fname'];
+            $lname = $row['lname'];
+            $email = $row['email'];
 
-        if (mail($to, $subject, $message, $headers)) {
+            $name = ucfirst($fname) . " " . ucfirst($lname); // user's name
+            $to = $name . "<" . $email . ">"; // user's name and email
+
+            if(mail($to, $subject, $message, $headers)) {
+                $emailsSent++;
+            }
+
+            $numUsers++;
+        }
+
+        if ($numUsers == $emailsSent) {
             echo "
             <h3 class='receipt-message p-3 mb-0'>Success! Your announcement has been sent.</h3>
             <div class='form-receipt-container p-3'>
@@ -167,17 +155,18 @@ if(! empty($_POST)) {
                     <li class='list-group-item text-break'>
                         URL: $url
                     </li>
+                    <!--
                     <li class='list-group-item text-break'>
-                        Sent To: $sentto
+                        Sent To: 
                     </li>
+                    -->
                 </ul>
             </div>
             ";
-
         }
 
     }
-}else {
+} else {
     echo "<div class='content'>
       <h2>Please fill out the form.</h2>
       <a class='link' href='../admin_announcement.php'>Go back</a>
