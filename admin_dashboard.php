@@ -45,7 +45,8 @@ $role = 1;
 
 // fetches specific data from database tables
 //$sqlApps = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC";
-$sqlApps = "SELECT * FROM `applications` JOIN `users` ON `applications`.`user_id` = `users`.`user_id`";
+$sqlApps = "SELECT * FROM `applications` JOIN `users` WHERE `applications`.`user_id` = `users`.`user_id` AND 
+                                                `applications`.is_deleted = 0 AND `users`.is_deleted = 0";
 $sqlAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY id DESC LIMIT 5"; // 5 most recent announcements
 $sqlUsers = "SELECT * FROM users WHERE is_deleted = 0 LIMIT 5"; // 5 users
 $appsResult = @mysqli_query($cnxn, $sqlApps);
