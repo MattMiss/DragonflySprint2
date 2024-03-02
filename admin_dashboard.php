@@ -41,8 +41,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
+$role = 1;
+
 // fetches specific data from database tables
-$sqlApps = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC";
+//$sqlApps = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC";
+$sqlApps = "SELECT * FROM `applications` JOIN `users` ON `applications`.`user_id` = `users`.`user_id`";
 $sqlAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY id DESC LIMIT 5"; // 5 most recent announcements
 $sqlUsers = "SELECT * FROM users WHERE is_deleted = 0 LIMIT 5"; // 5 users
 $appsResult = @mysqli_query($cnxn, $sqlApps);
@@ -148,6 +151,19 @@ TODO
                                 </div>
                             </div>
                         </th>
+                        <th scope="col">
+                            <div class="row">
+                                <div class="col pe-0 m-auto">
+                                    User
+                                </div>
+                                <div class="col ps-2 m-auto">
+                                    <div class="order-icons" id="user-name-order-btn">
+                                        <i class="fa-solid fa-caret-up" id="user-name-up-btn"></i>
+                                        <i class="fa-solid fa-caret-down" id="user-name-down-btn"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </th>
                         <th scope="col" class="w-20">
                             <div class="row">
                                 <div class="col-auto pe-0 m-auto">
@@ -245,11 +261,69 @@ TODO
             </div>
         </div>
 
+
+        <div class='modal fade' id='edit-modal' tabIndex='-1' role='dialog' aria-labelledby='job-title' aria-hidden='true'>
+            <div class='modal-dialog modal-dialog-centered' role='document'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        <h3 class='modal-title' id='job-title'>Application Details</h3>
+                        <button type='button' class='modal-close-primary close' data-bs-dismiss='modal' aria-label='Close'>
+                            <span aria-hidden='true'>&times;</span>
+                            </div>
+                    <div class='modal-body'>
+                        <ul class='list-group-item'>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>Job Name: </span>
+                                <span id="edit-modal-jname"></span>
+                                </li>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>Employer Name: </span>
+                                <span id="edit-modal-ename"></span>
+                                </li>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>URL:</span>
+                                <a id="edit-modal-url" href="" target="_blank" rel="noopener noreferrer"></a>
+                                </li>
+                            <li class='list-group-item'>
+                                <span class='form-label'>Job Description: </span>
+                                <p id="edit-modal-description" style="margin: 0"></p>
+                                </li>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>Application date: </span>
+                                <span id="edit-modal-adate"></span>
+                                </li>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>Status: </span>
+                                <span id="edit-modal-astatus-icon" class="status">
+                                            <i class='fa-solid fa-circle'></i>
+                                        </span>
+                                <span id="edit-modal-astatus" style="text-transform: capitalize"></span>
+                                </li>
+                            <li class='list-group-item'>
+                                <span class='form-label'>Followup date: </span>
+                                <span id="edit-modal-fdate"></span>
+                                </li>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>Followup updates: </span>
+                                <p id="edit-modal-updates" style="margin: 0"></p>
+                                </li>
+                            </ul>
+                        </div>
+                    <div class='modal-footer'>
+                        <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Close</button>
+                        <form method="post" action="application_edit.php" target="_blank">
+                            <input id="edit-modal-appid" type="hidden" name="application-id" value="">
+                            <button type="submit" class="modal-edit">Edit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
 </main>
 
 
 <?php include 'php/footer.php' ?>
-<script>let apps = <?php echo json_encode($apps) ?></script>
+<script>let apps = <?php echo json_encode($apps) ?>; let role = <?php echo $role ?></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="js/main.js"></script>
 <script src="js/dashboard.js"></script>
