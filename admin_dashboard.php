@@ -20,6 +20,9 @@
 session_start();
 $_SESSION['location'] = '';
 
+global $db_location;
+global $cnxn;
+
 include 'php/nav_bar.php';
 include 'db_picker.php';
 include $db_location;
@@ -38,18 +41,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
+$role = 1;
+
 // fetches specific data from database tables
-$sql = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC LIMIT 5"; // 5 most recent announcements
-$sql2 = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY date_created DESC LIMIT 5"; // 5 most recent announcements
-$sql3 = "SELECT * FROM users WHERE is_deleted = 0 LIMIT 5"; // 5 users
-$result = @mysqli_query($cnxn, $sql);
-$result2 = @mysqli_query($cnxn, $sql2);
-$result3 = @mysqli_query($cnxn, $sql3);
+//$sqlApps = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC";
+$sqlApps = "SELECT * FROM `applications` JOIN `users` WHERE `applications`.`user_id` = `users`.`user_id` AND 
+                                                `applications`.is_deleted = 0 AND `users`.is_deleted = 0";
+$sqlAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY id DESC LIMIT 5"; // 5 most recent announcements
+$sqlUsers = "SELECT * FROM users WHERE is_deleted = 0 LIMIT 5"; // 5 users
+$appsResult = @mysqli_query($cnxn, $sqlApps);
+$announceResult = @mysqli_query($cnxn, $sqlAnnounce);
+$usersResult = @mysqli_query($cnxn, $sqlUsers);
+
+// Fill in apps array
+$apps[] = [];
+while ($row = mysqli_fetch_assoc($appsResult)) {
+    $apps[] = $row;
+}
 ?>
 
 <!--
- TODO
- Optimize soft delete
+TODO
+- Create similar format table for announcements
+- Optimize soft delete
 -->
 
 
@@ -63,7 +77,6 @@ $result3 = @mysqli_query($cnxn, $sql3);
                         <div class="input-group input-group-sm">
                             <span class="input-group-text">Start Date</span>
                             <input type="date" class="form-control" id="app-start-date" name="search-start-date">
-<!--                            <i class="fa-regular fa-calendar"></i>-->
                         </div>
                     </div>
                     <div class="col-md-4 pt-2">
@@ -100,32 +113,105 @@ $result3 = @mysqli_query($cnxn, $sql3);
                 <table class="dash-table">
                     <thead>
                     <tr>
-                        <th scope="col" class="w-20">Date</th>
-                        <th scope="col">Title</th>
-                        <th scope="col" class="w-20">Status</th>
-                        <th scope="col" class="w-btn"></th>
+                        <th scope="col" class="app-date-col">
+                            <div class="row clickable" id="date-order-btn">
+                                <div class="col-auto pe-0 my-auto">
+                                    Date
+                                </div>
+                                <div class="col-auto ps-2 my-auto">
+                                    <div class="order-icons">
+                                        <i class="fa-solid fa-caret-up" id="date-up-btn"></i>
+                                        <i class="fa-solid fa-caret-down" id="date-down-btn"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </th>
+                        <th scope="col" class="app-job-col">
+                            <div class="row clickable" id="job-order-btn">
+                                <div class="col-auto pe-0 my-auto">
+                                    Job Title
+                                </div>
+                                <div class="col-auto ps-2 my-auto">
+                                    <div class="order-icons">
+                                        <i class="fa-solid fa-caret-up" id="job-up-btn"></i>
+                                        <i class="fa-solid fa-caret-down" id="job-down-btn"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </th>
+                        <th scope="col" class="app-employer-col">
+                            <div class="row clickable" id="employer-order-btn">
+                                <div class="col-auto pe-0 my-auto">
+                                    Employer
+                                </div>
+                                <div class="col-auto ps-2 my-auto">
+                                    <div class="order-icons">
+                                        <i class="fa-solid fa-caret-up" id="employer-up-btn"></i>
+                                        <i class="fa-solid fa-caret-down" id="employer-down-btn"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </th>
+                        <th scope="col" class="app-user-col">
+                            <div class="row clickable" id="user-order-btn">
+                                <div class="col-auto pe-0 my-auto">
+                                    User
+                                </div>
+                                <div class="col-auto ps-2 my-auto">
+                                    <div class="order-icons">
+                                        <i class="fa-solid fa-caret-up" id="user-up-btn"></i>
+                                        <i class="fa-solid fa-caret-down" id="user-down-btn"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </th>
+                        <th scope="col" class="app-email-col" id="email-order-btn">
+                            <div class="row clickable">
+                                <div class="col-auto pe-0 my-auto">
+                                    Email
+                                </div>
+                                <div class="col-auto ps-2 my-auto">
+                                    <div class="order-icons">
+                                        <i class="fa-solid fa-caret-up" id="email-up-btn"></i>
+                                        <i class="fa-solid fa-caret-down" id="email-down-btn"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </th>
+                        <th scope="col" class="app-status-col" id="status-order-btn">
+                            <div class="row clickable">
+                                <div class="col-auto pe-0 my-auto">
+                                    Status
+                                </div>
+                                <div class="col-auto ps-2 my-auto">
+                                    <div class="order-icons">
+                                        <i class="fa-solid fa-caret-up" id="status-up-btn"></i>
+                                        <i class="fa-solid fa-caret-down" id="status-down-btn"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </th>
+                        <th scope="col" class="w-btn" id="dash-app-btn-header"></th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <?php
-                    createTable($result);
-                    ?>
+                    <tbody class="table-body" id="dash-apps-list">
+                    <!-- List gets populated with applications from the database here-->
                     </tbody>
                 </table>
-<!--                <p class="title mx-auto" style="display: block; width:100px; color: green">More</p>-->
-            </div>
-
-            <div class="row py-3">
-                <div class="col-9 d-flex justify-content-center" id="new-app-container">
-                    <button class="submit-btn">New Application</button>
+                <div class="col text-center pt-2 pb-2" id="more-apps">
+                    <button type="button" class="submit-btn"  onclick="loadMoreApps()">More</button>
                 </div>
-                    <!-- button doesn't do anything -->
-
-
-<!--                <div class="col-3 d-flex justify-content-center" id="update-account-container">-->
-<!--                    <button id="update-acc-btn" class="submit-btn"><i class="fa-solid fa-gear px-1"></i>Update Account</button>-->
-<!--                </div>-->
+                <div class="col d-flex justify-content-center pt-2" id="new-app-container">
+                    <a class="submit-btn" href="application_form.php">New Application</a>
+                </div>
             </div>
+            <!--  Possibly remove this
+            <div class="row py-3">
+                <div class="col-3 d-flex justify-content-center" id="update-account-container">
+                    <button id="update-acc-btn" class="submit-btn"><i class="fa-solid fa-gear px-1"></i>Update Account</button>
+                </div>
+            </div>
+            -->
         </div>
 
         <div class="row dashboard-top">
@@ -143,7 +229,7 @@ $result3 = @mysqli_query($cnxn, $sql3);
                     </thead>
                     <tbody>
                         <?php
-                        createReminders($result2);
+                        createReminders($announceResult);
                         ?>
                     </tbody>
                 </table>
@@ -164,7 +250,7 @@ $result3 = @mysqli_query($cnxn, $sql3);
                     </thead>
                     <tbody>
                         <?php
-                            createUserTable($result3);
+                            createUserTable($usersResult);
                         ?>
                     </tbody>
                 </table>
@@ -189,11 +275,80 @@ $result3 = @mysqli_query($cnxn, $sql3);
             </div>
         </div>
 
+
+        <div class='modal fade' id='edit-modal' tabIndex='-1' role='dialog' aria-labelledby='job-title' aria-hidden='true'>
+            <div class='modal-dialog modal-dialog-centered' role='document'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        <h3 class='modal-title' id='job-title'>Application Details</h3>
+                        <button type='button' class='modal-close-primary close' data-bs-dismiss='modal' aria-label='Close'>
+                            <span aria-hidden='true'>&times;</span>
+                            </div>
+                    <div class='modal-body'>
+                        <ul class='list-group-item'>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>User: </span>
+                                <span id="edit-modal-user"></span>
+                            </li>
+                            <li class='list-group-item pb-3'>
+                                <span class='form-label'>Email: </span>
+                                <span id="edit-modal-email"></span>
+                            </li>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>Job Name: </span>
+                                <span id="edit-modal-jname"></span>
+                                </li>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>Employer Name: </span>
+                                <span id="edit-modal-ename"></span>
+                                </li>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>URL:</span>
+                                <a id="edit-modal-url" href="" target="_blank" rel="noopener noreferrer"></a>
+                                </li>
+                            <li class='list-group-item'>
+                                <span class='form-label'>Job Description: </span>
+                                <p id="edit-modal-description" style="margin: 0"></p>
+                                </li>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>Application date: </span>
+                                <span id="edit-modal-adate"></span>
+                                </li>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>Status: </span>
+                                <span id="edit-modal-astatus-icon" class="status">
+                                    <i class='fa-solid fa-circle'></i>
+                                </span>
+                                <span id="edit-modal-astatus" style="text-transform: capitalize"></span>
+                                </li>
+                            <li class='list-group-item'>
+                                <span class='form-label'>Followup date: </span>
+                                <span id="edit-modal-fdate"></span>
+                                </li>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>Followup updates: </span>
+                                <p id="edit-modal-updates" style="margin: 0"></p>
+                                </li>
+                            </ul>
+                        </div>
+                    <div class='modal-footer'>
+                        <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Close</button>
+                        <form method="post" action="application_edit.php" target="_blank">
+                            <input id="edit-modal-appid" type="hidden" name="application-id" value="">
+                            <button type="submit" class="modal-edit">Edit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
 </main>
 
 
 <?php include 'php/footer.php' ?>
+<script>let apps = <?php echo json_encode($apps) ?>; let role = <?php echo $role ?></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="js/main.js"></script>
+<script src="js/dashboard.js"></script>
 </body>
 </html>
 
