@@ -1,8 +1,11 @@
 let sortedApps = apps;
+let sortedUsers = users;
 let viewRole = role;
 let tempApps;
 let targetStatus = 'any';
+let userStatus = 'any';
 let searchTerm = '';
+let userSearchTerm = '';
 let startDate = '';
 let endDate = '';
 let dateOrder = 0;
@@ -15,14 +18,18 @@ let lastFieldClicked = ['', ''];
 let appShowingCnt = 0;
 const APP_MAX_LOAD_CNT = 10;
 let appCntToLoad = APP_MAX_LOAD_CNT;
+let showDeletedUsers = false;
 const appListDiv = $('#dash-apps-list');
+const userListDiv = $('#dash-users-list');
 
 $(window).on('load', () => {
     setSearchEventListeners();
     setOrderBtnListeners();
     appCntToLoad = APP_MAX_LOAD_CNT;
-    //sortAppsByUserFilters();
-    //populateAppList();
+
+    console.log(users);
+
+    populateUsersList();
 });
 
 function deleteAppBtnClicked(appID, appEmployer){
@@ -50,6 +57,7 @@ function showAlert(message, type) {
 // Set up listeners for User Filter StartDate, EndDate, SearchTerm, and Selected Status
 // List will reload if any User Filters are changed
 function setSearchEventListeners(){
+    // App List Listeners
     $('#app-search-bar').on('change keyup', (e) => {
         searchTerm = e.target.value;
         console.log(e);
@@ -79,6 +87,27 @@ function setSearchEventListeners(){
         populateAppList();
     });
 
+    // User List Listeners
+    $('#users-search-bar').on('change keyup', (e) => {
+        userSearchTerm = e.target.value;
+        emptyUsersList();
+        sortUsersByFilters();
+        populateUsersList();
+    });
+
+    $('#user-status-select').on('change', (e) => {
+        userStatus = e.target.value;
+        emptyUsersList();
+        sortUsersByFilters();
+        populateUsersList();
+    })
+
+    $('#user-deleted-select').on('change', (e) => {
+        showDeletedUsers = e.target.value === 'show-deleted';
+        emptyUsersList();
+        sortUsersByFilters();
+        populateUsersList();
+    })
 }
 
 // Onclick Events for OrderBy buttons on each field
@@ -123,6 +152,7 @@ function populateAppList(){
 
     if (sortedApps.length === 0){
         const noResults = '<tr class="app-list-item">\n' +
+                                      '<td></td>\n' +
                                       '<td></td>\n' +
                                       '<td></td>\n' +
                                       '<td>No Results</td>\n' +
@@ -406,4 +436,113 @@ function showAppModal(appData, status, formattedUrl){
         $('#edit-modal-user').text(appData.fname + " " + appData.lname);
         $('#edit-modal-email').text(appData.email);
     }
+}
+
+function deleteUserClicked(userInfo){
+    $('#delete-user-id').val(userInfo['user_id']);
+}
+
+function sortUsersByFilters(){
+    console.log(users);
+    tempUsers = [];
+    users.forEach(singleUser => {
+        // Return if app has no data
+        if (singleUser.length === 0) return;
+        console.log(singleUser.status);
+        console.log(userStatus);
+        // Only show items that match the dropdown status or if the "any" status is selected
+        if (userStatus === 'any' || userStatus === singleUser.status){
+            console.log(showDeletedUsers);
+            console.log(singleUser.is_deleted);
+            if (!showDeletedUsers && singleUser.is_deleted === '1'){
+                return;
+            }
+            console.log(singleUser.email);
+            console.log(userSearchTerm);
+            console.log(singleUser.email.toLowerCase().includes(userSearchTerm.toLowerCase()));
+            // Show all on an empty search
+            if (userSearchTerm === ''){
+                tempUsers.push(singleUser);
+            }
+
+            // Show app if the user first or last name matches input or
+            // If the user email matches input
+            // If the status matches input
+            else if (singleUser.fname.toLowerCase().includes(userSearchTerm.toLowerCase()) ||
+                    singleUser.lname.toLowerCase().includes(userSearchTerm.toLowerCase()) ||
+                    singleUser.email.toLowerCase().includes(userSearchTerm.toLowerCase())){
+                tempUsers.push(singleUser);
+            }
+        }
+    })
+    sortedUsers = tempUsers;
+    console.log(sortedUsers);
+}
+
+// Loop through each application in sortedApps and create a <tr> with all the fields filled in
+function populateUsersList(){
+    emptyUsersList();
+
+    if (sortedUsers.length === 0){
+        const noResults = '<tr class="user-list-item">\n' +
+            '<td></td>\n' +
+            '<td>No Users</td>\n' +
+            '<td></td>\n' +
+            '<td></td>\n' +
+            '</tr>';
+        appListDiv.append(noResults);
+    }
+
+    for(let i = 0; i < sortedUsers.length; i++){
+        if (showDeletedUsers || sortedUsers[i].is_deleted === '0'){
+            createUserFromData(sortedUsers[i]);
+        }
+    }
+}
+
+function createUserFromData(appData){
+
+    /*
+    $(editBtn).on('click', () => {
+        showAppModal(appData, statusReplace, clickableUrl);
+    })
+     */
+
+    // Create a list item with the application data filled in
+    const user =
+        $(`<tr class="user-list-item" id="user-${appData.user_id}">\n` +
+                `<td>${appData.fname} ${appData.lname}</td>\n` +
+                `<td>${appData.email}</td>\n` +
+                `<td>${appData.status}</td>\n` +
+                `<td class="app-button-outer">\n` +
+                    `<button class="app-button-inner btn btn-sm btn-update">\n` +
+                    `<i class="fa-solid fa-pen"></i>\n` +
+                    `</button>\n` +
+                    `<button class="app-button-inner btn btn-sm btn-delete" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#delete-modal" + 
+                            onclick="() => deleteAppBtnClicked(${appData.application_id}, ${appData.ename})">\n` +
+                        `<i class="fa-solid fa-trash"></i>\n` +
+                    `</button>\n` +
+                `</td>\n` +
+         `</tr>`);
+
+    user.on('click', ()=> {
+        //showAppModal(appData, statusReplace, clickableUrl);
+    })
+
+    userListDiv.append(user);
+}
+
+// Remove children from application list
+function emptyUsersList(){
+    userListDiv.empty();
+}
+
+function showDeletedUsersClicked(){
+    showDeletedUsers = !showDeletedUsers;
+    $('#show-deleted-users-btn').html('Deleted Users ' +(showDeletedUsers ? `<i class="fa-regular fa-eye"></i>` :
+        `<i class="fa-regular fa-eye-slash"></i>`));
+
+    populateUsersList();
 }
