@@ -308,7 +308,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 <?php include 'php/footer.php'?>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="js/contactscript.js"></script>
-<script>let apps = <?php echo json_encode($apps) ?>; let role = <?php echo $role ?></script>
+<script>let apps = <?php echo json_encode($apps) ?>; let role = <?php echo $role ?>; users=''</script>
 <script src="js/main.js"></script>
 <script src="js/dashboard.js"></script>
 </body>

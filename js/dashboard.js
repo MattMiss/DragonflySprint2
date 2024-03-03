@@ -29,7 +29,10 @@ $(window).on('load', () => {
 
     //console.log(users);
 
-    populateUsersList();
+    // Only show users for admin
+    if (viewRole === 1){
+        populateUsersList();
+    }
 });
 
 function deleteAppBtnClicked(appID, appEmployer){
