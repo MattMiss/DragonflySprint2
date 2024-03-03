@@ -27,7 +27,7 @@ $(window).on('load', () => {
     setOrderBtnListeners();
     appCntToLoad = APP_MAX_LOAD_CNT;
 
-    console.log(users);
+    //console.log(users);
 
     populateUsersList();
 });
@@ -60,7 +60,7 @@ function setSearchEventListeners(){
     // App List Listeners
     $('#app-search-bar').on('change keyup', (e) => {
         searchTerm = e.target.value;
-        console.log(e);
+        //console.log(e);
         emptyAppList();
         sortAppsByUserFilters();
         populateAppList();
@@ -243,7 +243,7 @@ function emptyAppList(){
 // Searches through all apps and adds apps that pass the filters into sortedApps
 // sortedApps will be ordered by how the apps are ordered in the database
 function sortAppsByUserFilters(){
-    console.log(apps);
+    //console.log(apps);
     tempApps = [];
     apps.forEach(singleApp => {
         // Return if app has no data
@@ -283,7 +283,7 @@ function sortAppsByUserFilters(){
         }
     })
     sortedApps = tempApps;
-    console.log(sortedApps);
+    //console.log(sortedApps);
 }
 
 // Cycle through buttons depending on the field clicked Each field has 3 states.
@@ -411,7 +411,7 @@ function loadMoreApps(){
 
 
 function showAppModal(appData, status, formattedUrl){
-    console.log(appData.jname);
+    //console.log(appData.jname);
 
     $('#edit-modal').modal('show');
 
@@ -438,28 +438,22 @@ function showAppModal(appData, status, formattedUrl){
     }
 }
 
-function deleteUserClicked(userInfo){
-    $('#delete-user-id').val(userInfo['user_id']);
+function deleteUserClicked(userID){
+    $('#delete-user-id').val(userID);
 }
 
 function sortUsersByFilters(){
-    console.log(users);
+    //console.log(users);
     tempUsers = [];
     users.forEach(singleUser => {
         // Return if app has no data
         if (singleUser.length === 0) return;
-        console.log(singleUser.status);
-        console.log(userStatus);
         // Only show items that match the dropdown status or if the "any" status is selected
         if (userStatus === 'any' || userStatus === singleUser.status){
-            console.log(showDeletedUsers);
-            console.log(singleUser.is_deleted);
+            //console.log(singleUser.is_deleted);
             if (!showDeletedUsers && singleUser.is_deleted === '1'){
                 return;
             }
-            console.log(singleUser.email);
-            console.log(userSearchTerm);
-            console.log(singleUser.email.toLowerCase().includes(userSearchTerm.toLowerCase()));
             // Show all on an empty search
             if (userSearchTerm === ''){
                 tempUsers.push(singleUser);
@@ -476,7 +470,7 @@ function sortUsersByFilters(){
         }
     })
     sortedUsers = tempUsers;
-    console.log(sortedUsers);
+    //console.log(sortedUsers);
 }
 
 // Loop through each application in sortedApps and create a <tr> with all the fields filled in
@@ -500,7 +494,7 @@ function populateUsersList(){
     }
 }
 
-function createUserFromData(appData){
+function createUserFromData(userData){
 
     /*
     $(editBtn).on('click', () => {
@@ -510,18 +504,18 @@ function createUserFromData(appData){
 
     // Create a list item with the application data filled in
     const user =
-        $(`<tr class="user-list-item" id="user-${appData.user_id}">\n` +
-                `<td>${appData.fname} ${appData.lname}</td>\n` +
-                `<td>${appData.email}</td>\n` +
-                `<td>${appData.status}</td>\n` +
+        $(`<tr class="user-list-item" id="user-"${userData.user_id}>\n` +
+                `<td>${userData.fname} ${userData.lname}</td>\n` +
+                `<td>${userData.email}</td>\n` +
+                `<td>${userData.status}</td>\n` +
                 `<td class="app-button-outer">\n` +
                     `<button class="app-button-inner btn btn-sm btn-update">\n` +
                     `<i class="fa-solid fa-pen"></i>\n` +
                     `</button>\n` +
                     `<button class="app-button-inner btn btn-sm btn-delete" 
                             data-bs-toggle="modal" 
-                            data-bs-target="#delete-modal" + 
-                            onclick="() => deleteAppBtnClicked(${appData.application_id}, ${appData.ename})">\n` +
+                            data-bs-target="#user-delete-modal"
+                            onclick="deleteUserClicked(${userData.user_id})">\n` +
                         `<i class="fa-solid fa-trash"></i>\n` +
                     `</button>\n` +
                 `</td>\n` +
