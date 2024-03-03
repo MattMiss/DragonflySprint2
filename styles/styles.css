@@ -324,7 +324,7 @@ nav a:hover {
     margin: 0 auto 3rem auto;
 }
 
-.form-container, .app-list{
+.form-container, .app-list, .user-list{
     & input, & textarea, .input-group-text, .input-group, .form-select{
         background-color: var(--form-input-color) !important;
         border-color: var(--form-outline-color);
@@ -911,6 +911,10 @@ a {
 
 .clickable{
     cursor: pointer;
+}
+
+#show-deleted-users-btn i{
+    font-size: 1rem;
 }
 
 

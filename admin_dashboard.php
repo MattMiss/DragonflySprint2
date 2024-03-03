@@ -48,17 +48,28 @@ $role = 1;
 $sqlApps = "SELECT * FROM `applications` JOIN `users` WHERE `applications`.`user_id` = `users`.`user_id` AND 
                                                 `applications`.is_deleted = 0 AND `users`.is_deleted = 0";
 $sqlAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY date_created DESC LIMIT 5"; // 5 most recent announcements
-$sqlUsers = "SELECT * FROM users WHERE is_deleted = 0 LIMIT 5"; // 5 users
+$sqlUsers = "SELECT * FROM users LIMIT 5"; // 5 users (deleted users get filtered out in dashboard.js so admin can see deleted too)
 $appsResult = @mysqli_query($cnxn, $sqlApps);
 $announceResult = @mysqli_query($cnxn, $sqlAnnounce);
 $usersResult = @mysqli_query($cnxn, $sqlUsers);
 
 // Fill in apps array
-$apps[] = [];
+$apps[] = array();
+$users[] = array();
+
+$appCount = 0;
 while ($row = mysqli_fetch_assoc($appsResult)) {
-    $apps[] = $row;
+    $apps[$appCount] = $row;
+    $appCount++;
+}
+
+$userCount = 0;
+while ($row = mysqli_fetch_assoc($usersResult)) {
+    $users[$userCount] = $row;
+    $userCount++;
 }
 ?>
+
 
 <main>
     <div class="container p-3" id="main-container">
@@ -188,7 +199,7 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
                     </tr>
                     </thead>
                     <tbody class="table-body" id="dash-apps-list">
-                    <!-- List gets populated with applications from the database here-->
+                    <!-- List gets populated with applications from the database here with dashboard.js -->
                     </tbody>
                 </table>
                 <div class="col text-center pt-2 pb-2" id="more-apps">
@@ -232,19 +243,58 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
 
         <div class="row dashboard-top">
             <div class="user-list">
-                <h3>Users</h3>
+                <div class="row">
+                    <div class="col">
+                        <h3>Users</h3>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-5 pt-2">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </span>
+                            <input id="users-search-bar" type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="User Search Bar">
+                        </div>
+                    </div>
+                    <div class="col-4 pt-2">
+                        <div class="input-group">
+                            <span class="input-group-text">Status</span>
+                            <select class="form-select" id="user-status-select">
+                                <option selected value="any">Any</option>
+                                <option value="Seeking Job">Seeking Job</option>
+                                <option value="Seeking Internship">Seeking Internship</option>
+                                <option value="Not Actively Searching">Not Actively Searching</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-3 pt-2">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa-regular fa-eye"></i></span>
+                            <select class="form-select" id="user-deleted-select">
+                                <option selected value="hide-deleted">Hide Deleted</option>
+                                <option value="show-deleted">Show Deleted</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!--
+                    <div class="col-auto text-end my-auto">
+                        <button type='button' class="btn btn-sm m-auto" id="show-deleted-users-btn" style="font-size: 0.7rem" onclick="showDeletedUsersClicked()"><i class="fa-regular fa-eye-slash"></i> Deleted Users</button>
+                    </div>
+                    -->
+                </div>
                 <table class="dash-table">
                     <thead>
                     <tr>
                         <th scope="col" class="w-40">Name</th>
                         <th scope="col">Email</th>
+                        <th scope="col">Status</th>
                         <th scope="col" class="w-btn"></th>
                     </tr>
                     </thead>
-                    <tbody>
-                        <?php
-                            createUserTable($usersResult);
-                        ?>
+                    <tbody id="dash-users-list">
+                        <!-- List gets populated with users from the database here with dashboard.js -->
                     </tbody>
                 </table>
 <!--                <p class="title mx-auto" style="display: block; width:100px; color: green">More</p>-->
@@ -268,7 +318,8 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
             </div>
         </div>
 
-
+        <!-----------------------------  MODALS  ----------------------------------->
+        <!-- Edit App Modal -->
         <div class='modal fade' id='edit-modal' tabIndex='-1' role='dialog' aria-labelledby='job-title' aria-hidden='true'>
             <div class='modal-dialog modal-dialog-centered' role='document'>
                 <div class='modal-content'>
@@ -329,16 +380,38 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
                         <form method="post" action="application_edit.php" target="_blank">
                             <input id="edit-modal-appid" type="hidden" name="application-id" value="">
                             <button type="submit" class="modal-edit">Edit</button>
-                            </form>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- User Delete Modal -->
+        <div class='modal fade' id='user-delete-modal' tabindex='-1' role='dialog' aria-labelledby='delete-app-message' aria-hidden='true'>
+            <div class='modal-dialog modal-dialog-centered' role='document'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        <h4 class='modal-title' id='delete-warning'>Are you sure you want to delete this user?</h4>
+                    </div>
+                    <div class='modal-body'>
+                        <p>Deleted users can be recovered later.</p>
+                    </div>
+                    <div class='modal-footer'>
+                        <form method='POST' action='#'>
+                            <input type='hidden' value='2' name='submit-from'>
+                            <input type='hidden' id="delete-user-id" value='' name='id'>
+                            <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Cancel</button>
+                            <button type='submit' class='modal-delete'>Delete User</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 </main>
 
 
 <?php include 'php/footer.php' ?>
-<script>let apps = <?php echo json_encode($apps) ?>; let role = <?php echo $role ?></script>
+<script>let apps = <?php echo json_encode($apps) ?>; let users = <?php echo json_encode($users) ?>; let role = <?php echo $role ?></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="js/main.js"></script>
 <script src="js/dashboard.js"></script>
@@ -347,54 +420,6 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
 
 <?php
 
-
-function createTable($info) {
-    while ($row = mysqli_fetch_assoc($info)) {
-        $id = $row["application_id"];
-        $jname = $row["jname"];
-        $ename = $row["ename"];
-        $jurl = $row["jurl"];
-        $jdescription = $row["jdescription"];
-        $adate = $row["adate"];
-        $astatus = $row["astatus"];
-        $fupdates = $row["fupdates"];
-        $followupdate = $row["followupdate"];
-
-        echo "
-                <tr class='app-list-item' id='$id'>
-                    <td>$adate</td>
-                    <td>$ename</td>
-                    <td class='status status-$astatus'><i class='fa-solid fa-circle'></i><span>$astatus</span></td>
-                    <td class='app-button-outer'>
-                            <button class='app-button-inner btn btn-sm btn-update'><i class='fa-solid fa-pen'></i></button>
-                            <button class='app-button-inner btn btn-sm btn-delete' type='button' data-bs-toggle='modal' data-bs-target='#delete-modal-$id'><i class='fa-solid fa-trash'></i></button>
-
-                    </td>
-                </tr>
-                
-                <div class='modal fade' id='delete-modal-$id' tabindex='-1' role='dialog' aria-labelledby='delete-app-message' aria-hidden='true'>
-                    <div class='modal-dialog modal-dialog-centered' role='document'>
-                        <div class='modal-content'>
-                            <div class='modal-header'>
-                                <h4 class='modal-title' id='delete-warning'>Are you sure you want to delete this application?</h4>
-                            </div>
-                            <div class='modal-body'>
-                                <p>Deleted applications can be recovered later.</p>
-                            </div>
-                            <div class='modal-footer'>
-                                <form method='POST' action='#'>
-                                    <input type='hidden' value='1' name='submit-from'>
-                                    <input type='hidden' value='$id' name='id'>
-                                    <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Cancel</button>
-                                    <button type='submit' class='modal-delete'>Delete Application</button>
-                                </form>   
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            ";
-    }
-}
 
 function createReminders($info) {
     while ($row = mysqli_fetch_assoc($info)) {
@@ -464,37 +489,21 @@ function createReminders($info) {
             $fname = $row["fname"];
             $lname = $row["lname"];
             $email = $row["email"];
+            $status = $row["status"];
+
+            $userInfo = json_encode($row);
 
             echo "
                 <tr id='user-$id' class='user-list-item'>
                     <td>$fname $lname</td>
                     <td>$email</td>
+                    <td>$status</td>
                     <td class='app-button-outer'>
                         <button class='app-button-inner btn btn-sm btn-update'><i class='fa-solid fa-pen'></i></button>
-                        <button class='app-button-inner btn btn-sm btn-delete' type='button' data-bs-toggle='modal' data-bs-target='#user-delete-modal-$id'><i class='fa-solid fa-trash'></i></button>
+                        <button class='app-button-inner btn btn-sm btn-delete' type='button' data-bs-toggle='modal' 
+                        data-bs-target='#user-delete-modal' onclick='deleteUserClicked($userInfo)'><i class='fa-solid fa-trash'></i></button>
                     </td>
                 </tr>
-                
-                <div class='modal fade' id='user-delete-modal-$id' tabindex='-1' role='dialog' aria-labelledby='delete-app-message' aria-hidden='true'>
-                    <div class='modal-dialog modal-dialog-centered' role='document'>
-                        <div class='modal-content'>
-                            <div class='modal-header'>
-                                <h4 class='modal-title' id='delete-warning'>Are you sure you want to delete this user?</h4>
-                            </div>
-                            <div class='modal-body'>
-                                <p>Deleted users can be recovered later.</p>
-                            </div>
-                            <div class='modal-footer'>
-                                <form method='POST' action='#'>
-                                    <input type='hidden' value='2' name='submit-from'>
-                                    <input type='hidden' value='$id' name='id'> 
-                                    <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Cancel</button>
-                                    <button type='submit' class='modal-delete'>Delete User</button>
-                                </form>   
-                            </div>
-                        </div>
-                    </div>
-                </div>
             ";
         }
     }
