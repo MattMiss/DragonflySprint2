@@ -37,6 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif ($_POST["submit-from"] == 2) {
         $id = $_POST["id"];
         $sql4 = "UPDATE users SET is_deleted = 1 WHERE user_id = $id";
+        echo $sql4;
         $result4 = @mysqli_query($cnxn, $sql4);
     }
 }
@@ -73,7 +74,7 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
 
 <main>
     <div class="container p-3" id="main-container">
-        <div class="dashboard-top">
+        <div class="row dashboard-top">
             <div class="app-list">
                 <h3>Recent Applications</h3>
                 <div class="row">
