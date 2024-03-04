@@ -329,6 +329,8 @@ nav a:hover {
         background-color: var(--form-input-color) !important;
         border-color: var(--form-outline-color);
         color: var(--font-color) !important;
+        border-radius: 4px;
+        min-height: 30px;
     }
 
     input:-webkit-autofill,
@@ -489,6 +491,23 @@ table td {
 
 .app-list-item .btn-delete:hover, .user-list-item .btn-delete:hover, .modal-delete:hover{
     background-color: #b42c2c;
+}
+
+/* User List */
+.deleted-user{
+    box-shadow: 0px 0px 10px 4px #563333 inset;
+    text-decoration: line-through;
+}
+
+.deleted-user-icon{
+    font-size: 1.2rem;
+    padding-right: 8px;
+}
+
+#user-deleted-check{
+    min-height: 20px;
+    height: 20px;
+    width: 20px;
 }
 
 /* delete apps modal */
@@ -728,16 +747,28 @@ a {
     width: 120px;
 }
 
-.app-employer-col{
-    width: 180px;
-}
-
 .app-status-col{
     width: 160px;
 }
 
+.app-employer-col{
+    width: 180px;
+}
+
+.user-status-col{
+    width: 200px;
+}
+
 .app-job-col, .app-user-col, .app-email-col{
     width: 220px;
+}
+
+.user-name-col, .user-email-col{
+    width: 400px;
+}
+
+#user-deleted-label{
+    font-size: 0.8rem;
 }
 
 /* announcements table*/
@@ -899,9 +930,11 @@ a {
 }
 
 .order-icons{
-    padding: 3px 0 0 0;
-    display: flex;
-    flex-direction: column;
+    div{
+        padding: 3px 0 0 0;
+        display: flex;
+        flex-direction: column;
+    }
 
     i{
         line-height: .5rem;
@@ -1074,5 +1107,14 @@ a {
     .app-job-col, .app-user-col, .app-email-col{
         width: 15%;
     }
+
+    .user-name-col, .user-email-col, .user-status-col{
+        width: 33%;
+    }
+
+    #user-deleted-label{
+        font-size: 0.6rem;
+    }
+
 }
 

@@ -106,7 +106,7 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col pt-2">
+                    <div class="col py-2">
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="basic-addon1">
                                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -125,8 +125,7 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                                 </div>
                                 <div class="col-auto ps-2 my-auto">
                                     <div class="order-icons">
-                                        <i class="fa-solid fa-caret-up" id="date-up-btn"></i>
-                                        <i class="fa-solid fa-caret-down" id="date-down-btn"></i>
+                                        <i class="fa-solid fa-sort" id="date-field-icon"></i>
                                     </div>
                                 </div>
                             </div>
@@ -138,8 +137,9 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                                 </div>
                                 <div class="col-auto ps-2 my-auto">
                                     <div class="order-icons">
-                                        <i class="fa-solid fa-caret-up" id="job-up-btn"></i>
-                                        <i class="fa-solid fa-caret-down" id="job-down-btn"></i>
+                                        <div class="order-icons">
+                                            <i class="fa-solid fa-sort" id="job-field-icon"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -151,8 +151,9 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                                 </div>
                                 <div class="col-auto ps-2 my-auto">
                                     <div class="order-icons">
-                                        <i class="fa-solid fa-caret-up" id="employer-up-btn"></i>
-                                        <i class="fa-solid fa-caret-down" id="employer-down-btn"></i>
+                                        <div class="order-icons">
+                                            <i class="fa-solid fa-sort" id="employer-field-icon"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -164,8 +165,9 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                                 </div>
                                 <div class="col-auto ps-2 my-auto">
                                     <div class="order-icons">
-                                        <i class="fa-solid fa-caret-up" id="user-up-btn"></i>
-                                        <i class="fa-solid fa-caret-down" id="user-down-btn"></i>
+                                        <div class="order-icons">
+                                            <i class="fa-solid fa-sort" id="user-field-icon"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -177,8 +179,9 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                                 </div>
                                 <div class="col-auto ps-2 my-auto">
                                     <div class="order-icons">
-                                        <i class="fa-solid fa-caret-up" id="email-up-btn"></i>
-                                        <i class="fa-solid fa-caret-down" id="email-down-btn"></i>
+                                        <div class="order-icons">
+                                            <i class="fa-solid fa-sort" id="email-field-icon"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -190,8 +193,9 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                                 </div>
                                 <div class="col-auto ps-2 my-auto">
                                     <div class="order-icons">
-                                        <i class="fa-solid fa-caret-up" id="status-up-btn"></i>
-                                        <i class="fa-solid fa-caret-down" id="status-down-btn"></i>
+                                        <div class="order-icons">
+                                            <i class="fa-solid fa-sort" id="status-field-icon"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -251,7 +255,7 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
 
                 </div>
                 <div class="row">
-                    <div class="col-5 pt-2">
+                    <div class="col-md-5 py-2">
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="basic-addon1">
                                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -259,24 +263,27 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                             <input id="users-search-bar" type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="User Search Bar">
                         </div>
                     </div>
-                    <div class="col-4 pt-2">
-                        <div class="input-group">
-                            <span class="input-group-text">Status</span>
-                            <select class="form-select" id="user-status-select">
-                                <option selected value="any">Any</option>
-                                <option value="Seeking Job">Seeking Job</option>
-                                <option value="Seeking Internship">Seeking Internship</option>
-                                <option value="Not Actively Searching">Not Actively Searching</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-3 pt-2">
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fa-regular fa-eye"></i></span>
-                            <select class="form-select" id="user-deleted-select">
-                                <option selected value="hide-deleted">Hide Deleted</option>
-                                <option value="show-deleted">Show Deleted</option>
-                            </select>
+                    <div class="col-md-7 py-2">
+                        <div class="row">
+                            <div class="col-8 ">
+                                <div class="input-group">
+                                    <span class="input-group-text">Status</span>
+                                    <select class="form-select" id="user-status-select">
+                                        <option selected value="any">Any</option>
+                                        <option value="Seeking Job">Seeking Job</option>
+                                        <option value="Seeking Internship">Seeking Internship</option>
+                                        <option value="Not Actively Searching">Not Actively Searching</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-check form-check-reverse pt-1">
+                                    <input class="form-check-input pt-1" type="checkbox" value="" id="user-deleted-check">
+                                    <label class="form-check-label pe-1" for="user-deleted-check" id="user-deleted-label">
+                                        Include Deleted Users?
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <!--
@@ -288,9 +295,47 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                 <table class="dash-table">
                     <thead>
                     <tr>
-                        <th scope="col" class="w-40">Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Status</th>
+                        <th scope="col" class="user-name-col">
+                            <div class="row clickable" id="user-name-order-btn">
+                                <div class="col-auto pe-0 my-auto">
+                                    Name
+                                </div>
+                                <div class="col-auto ps-2 my-auto">
+                                    <div class="order-icons">
+                                        <div class="order-icons">
+                                            <i class="fa-solid fa-sort" id="user-name-field-icon"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </th>
+                        <th scope="col" class="user-email-col">
+                            <div class="row clickable" id="user-email-order-btn">
+                                <div class="col-auto pe-0 my-auto">
+                                    Email
+                                </div>
+                                <div class="col-auto ps-2 my-auto">
+                                    <div class="order-icons">
+                                        <div class="order-icons">
+                                            <i class="fa-solid fa-sort" id="user-email-field-icon"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </th><th scope="col" class="user-status-col">
+                            <div class="row clickable" id="user-status-order-btn">
+                                <div class="col-auto pe-0 my-auto">
+                                    Status
+                                </div>
+                                <div class="col-auto ps-2 my-auto">
+                                    <div class="order-icons">
+                                        <div class="order-icons">
+                                            <i class="fa-solid fa-sort" id="user-status-field-icon"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </th>
                         <th scope="col" class="w-btn"></th>
                     </tr>
                     </thead>
