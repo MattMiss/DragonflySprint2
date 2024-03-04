@@ -18,8 +18,9 @@
 <?php
 session_start();
 $_SESSION['location'] = '../';
-include '../php/nav_bar.php' ?>
+include '../php/nav_bar.php'
 
+?>
 <main>
     <div class="container p-3" id="main-container">
 <?php
@@ -64,7 +65,7 @@ if(! empty($_POST)) {
     } else {
         $db_location = '';
         include '../db_picker.php';
-        include $db_location;
+        include '../db_local.php';
 
         $title = $_POST['announcement-title'];
         $jobType = $_POST['job-or-intern'];
@@ -73,8 +74,8 @@ if(! empty($_POST)) {
         $addltext = $_POST['additional-text'];
         $url = $_POST['announcement-url'];
         // $sentto = $_POST['sent-to'];
-        $fname = $_POST['first-name'] == 'default' ? '' : $_POST['first-name'];
-        $lname = $_POST['last-name'] == 'default' ? '' : $_POST['last-name'];
+//        $fname = $_POST['first-name'] == 'default' ? '' : $_POST['first-name'];
+//        $lname = $_POST['last-name'] == 'default' ? '' : $_POST['last-name'];
 
         // sanitization
         $title = strip_tags(filter_var($title, FILTER_SANITIZE_ADD_SLASHES));
@@ -84,15 +85,14 @@ if(! empty($_POST)) {
         $addltext = strip_tags(filter_var($addltext, FILTER_SANITIZE_ADD_SLASHES));
         $url = strip_tags(filter_var($url, FILTER_SANITIZE_ADD_SLASHES));
         // $sentto = filter_var($sentto, FILTER_SANITIZE_ADD_SLASHES);
-
         $today = date("Y-m-d");
 
-        $sql = "INSERT INTO `announcements` (`title`, `job_type`, `location`, `ename`, `additional_info`, `jurl`, `sent_to`, `date_created`, 
-                             `is_deleted`) VALUES ('$title', '$jobType', '$location', '$employer', '$addltext', '$url', 'all', '$today', 0)";
-
+        // run queries
+        $sql = "INSERT INTO announcements (title, job_type, location, ename, additional_info, jurl, sent_to, date_created, is_deleted) 
+                VALUES ('$title', '$jobType', '$location', '$employer', '$addltext', '$url', 'all', '$today', 0)";
         $result = @mysqli_query($cnxn, $sql);
 
-        $sql2 = "SELECT fname, lname, email FROM `users` WHERE is_deleted = 0";
+        $sql2 = "SELECT fname, lname, email FROM users WHERE is_deleted = 0";
         $result2 = @mysqli_query($cnxn, $sql2);
 
 
@@ -104,6 +104,7 @@ if(! empty($_POST)) {
         // mailing
 
         // static variables
+        $addltext = wordwrap($addltext, 70); // formatted message
         $subject = $title . " " . $jobType . " at " . $employer ; // announcement title, job type, and company
         $from = 'Admin<admin@greenriver.edu>';
         $headers = 'From: ' . $from . "\r\n" .
@@ -111,28 +112,29 @@ if(! empty($_POST)) {
             'X-Mailer: PHP/' . phpversion();
         $message = "Location: " . $location .
             "\nURL: ". $url .
-            "\nAdditional Info: " . $addltext;
+            "\nAdditional Info: \n" . $addltext;
 
-        // to make sure all emails were sent
-        $emailsSent = 0;
-        $numUsers = 0;
 
-        while($row = mysqli_fetch_assoc($result2)) {
-            $fname = $row['fname'];
-            $lname = $row['lname'];
-            $email = $row['email'];
+        $isSent = false;
 
-            $name = ucfirst($fname) . " " . ucfirst($lname); // user's name
-            $to = $name . "<" . $email . ">"; // user's name and email
+        // checks if result2 is null/empty
+        if($result2) {
+            // loops throw result2 array
+            foreach ($result2 as $row) {
+                $fname = $row['fname'];
+                $lname = $row['lname'];
+                $email = $row['email'];
 
-            if(mail($to, $subject, $message, $headers)) {
-                $emailsSent++;
+                $name = $fname . " " . $lname; // user's name
+                $to = $name . "<" . $email . ">"; // user's name and email
+
+                if(mail($to, $subject, $message, $headers)) {
+                    $isSent = true;
+                }
             }
-
-            $numUsers++;
         }
 
-        if ($numUsers == $emailsSent) {
+        if ($isSent) {
             echo "
             <h3 class='receipt-message p-3 mb-0'>Success! Your announcement has been sent.</h3>
             <div class='form-receipt-container p-3'>

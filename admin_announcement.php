@@ -19,7 +19,14 @@
 <?php
 session_start();
 $_SESSION['location'] = '';
-include 'php/nav_bar.php'
+include 'php/nav_bar.php';
+
+global $db_location;
+global $cnxn;
+
+include 'db_picker.php';
+include $db_location;
+
 ?>
 
 <main>
@@ -81,7 +88,7 @@ include 'php/nav_bar.php'
                 <input type="hidden" id="first-name" name="first-name" value="default">
                 <input type="hidden" id="last-name" name="last-name" value="default">
 
-                <button id="submit-btn" type="button" class="submit-btn" data-bs-target="#announcement-modal">Submit</button>
+                <button id="submit-btn" type="submit" class="submit-btn" data-bs-target="#announcement-modal">Submit</button>
             </form>
         </div>
     </div>
