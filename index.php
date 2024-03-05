@@ -118,6 +118,7 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
                 <table class="dash-table">
                     <thead>
                     <tr>
+
                         <th scope="col" class="app-date-col">
                             <div class="row clickable" id="date-order-btn">
                                 <div class="col-auto pe-0 my-auto">
@@ -125,21 +126,21 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
                                 </div>
                                 <div class="col-auto ps-2 my-auto">
                                     <div class="order-icons">
-                                        <i class="fa-solid fa-caret-up" id="date-up-btn"></i>
-                                        <i class="fa-solid fa-caret-down" id="date-down-btn"></i>
+                                        <i class="fa-solid fa-sort" id="date-field-icon"></i>
                                     </div>
                                 </div>
                             </div>
                         </th>
-                        <th scope="col" class="app-job-col" >
+                        <th scope="col" class="app-job-col">
                             <div class="row clickable" id="job-order-btn">
                                 <div class="col-auto pe-0 my-auto">
                                     Job Title
                                 </div>
                                 <div class="col-auto ps-2 my-auto">
                                     <div class="order-icons">
-                                        <i class="fa-solid fa-caret-up" id="job-up-btn"></i>
-                                        <i class="fa-solid fa-caret-down" id="job-down-btn"></i>
+                                        <div class="order-icons">
+                                            <i class="fa-solid fa-sort" id="job-field-icon"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -151,21 +152,23 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
                                 </div>
                                 <div class="col-auto ps-2 my-auto">
                                     <div class="order-icons">
-                                        <i class="fa-solid fa-caret-up" id="employer-up-btn"></i>
-                                        <i class="fa-solid fa-caret-down" id="employer-down-btn"></i>
+                                        <div class="order-icons">
+                                            <i class="fa-solid fa-sort" id="employer-field-icon"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </th>
-                        <th scope="col" class="app-status-col">
-                            <div class="row clickable" id="status-order-btn">
+                        <th scope="col" class="app-status-col" id="status-order-btn">
+                            <div class="row clickable">
                                 <div class="col-auto pe-0 my-auto">
                                     Status
                                 </div>
                                 <div class="col-auto ps-2 my-auto">
                                     <div class="order-icons">
-                                        <i class="fa-solid fa-caret-up" id="status-up-btn"></i>
-                                        <i class="fa-solid fa-caret-down" id="status-down-btn"></i>
+                                        <div class="order-icons">
+                                            <i class="fa-solid fa-sort" id="status-field-icon"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -333,7 +336,7 @@ function createAppAnnouncements($info) {
         echo "
             <div class='reminder'>
                 <i class='fa-regular fa-comment'></i>
-                <button class='announcement-modal-btn' type='button' data-bs-toggle='modal' data-bs-target='#announcement-modal-$id'>$title $jtype at <span>$ename</span></button>
+                <button class='announcement-modal-btn text-start' type='button' data-bs-toggle='modal' data-bs-target='#announcement-modal-$id'>$title $jtype at <span>$ename</span></button>
                 <p>Date Created: <span>$date</span></p>
             </div>
             
@@ -392,7 +395,7 @@ function createAppReminders($info) {
         echo "
             <div class='reminder'>
                 <i class='fa-regular fa-comment'></i>
-                <button class='reminder-modal-btn' type='button' data-bs-toggle='modal' data-bs-target='#view-app-modal-$id'>$jobName at <span>$ename</span></button>
+                <button class='reminder-modal-btn text-start' type='button' data-bs-toggle='modal' data-bs-target='#view-app-modal-$id'>$jobName at <span>$ename</span></button>
                 <p>Follow-up Date: <span>$followupdate</span></p>
             </div>
             
