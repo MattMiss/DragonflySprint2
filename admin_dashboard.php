@@ -44,6 +44,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $userWasDeleted = true;
         //echo $sql4;
         $deleteUserResult = @mysqli_query($cnxn, $sqlDeleteUser);
+    }else if($_POST["submit-from"] == 3) {
+        $id = $_POST["id"];
+        $sqlMakeUserAdmin = "UPDATE users SET permission = 1 WHERE user_id = $id";
+        $makeAdminResult = @mysqli_query($cnxn, $sqlMakeUserAdmin);
     }
 }
 
@@ -303,6 +307,20 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                 <table class="dash-table">
                     <thead>
                     <tr>
+                        <th scope="col" class="user-role-col">
+                            <div class="row clickable" id="user-role-order-btn">
+                                <div class="col-auto pe-0 my-auto">
+                                    Role
+                                </div>
+                                <div class="col-auto ps-2 my-auto">
+                                    <div class="order-icons">
+                                        <div class="order-icons">
+                                            <i class="fa-solid fa-sort" id="user-role-field-icon"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </th>
                         <th scope="col" class="user-name-col">
                             <div class="row clickable" id="user-name-order-btn">
                                 <div class="col-auto pe-0 my-auto">
@@ -461,7 +479,30 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                 </div>
             </div>
         </div>
+
+        <!-- Make User Admin Modal -->
+        <div class='modal fade' id='make-admin-modal' tabindex='-1' role='dialog' aria-labelledby='make-admin-message' aria-hidden='true'>
+            <div class='modal-dialog modal-dialog-centered' role='document'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        <h4 class='modal-title' id='delete-warning'>Make Admin?</h4>
+                    </div>
+                    <div class='modal-body'>
+                        <p>Make <span id="make-admin-modal-name"></span> an admin?</p>
+                    </div>
+                    <div class='modal-footer'>
+                        <form method='POST' action='#'>
+                            <input type='hidden' value='3' name='submit-from'>
+                            <input type='hidden' id="make-admin-user-id" value='' name='id'>
+                            <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Cancel</button>
+                            <button type='submit' class='modal-delete'>Make Admin</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 </main>
+
 
 
 <?php include 'php/footer.php' ?>

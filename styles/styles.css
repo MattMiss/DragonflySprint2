@@ -481,6 +481,14 @@ table td {
     background-color: #6CB443;
 }
 
+.btn-make-admin{
+    background-color: #0b65c4;
+}
+
+.btn-make-admin:hover{
+    background-color: #033a94;
+}
+
 .app-list-item .btn-update:hover, .user-list-item .btn-update:hover {
     background-color: #006225;
 }
@@ -605,13 +613,13 @@ table td {
     background: var(--modal-edit-hover-color);
 }
 
-.announcement-modal-btn {
+.announcement-modal-btn, .reminder-modal-btn {
     border: none;
     background-color: unset;
     color: var(--header-color);
 }
 
-.announcement-modal-btn:hover {
+.announcement-modal-btn:hover, .reminder-modal-btn:hover {
     text-decoration: underline ;
 }
 
@@ -743,7 +751,7 @@ a {
     width: 100px;
 }
 
-.app-date-col {
+.app-date-col, .user-role-col {
     width: 120px;
 }
 

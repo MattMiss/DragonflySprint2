@@ -51,8 +51,8 @@ $(window).on('load', () => {
         setUserSearchListeners();
         setUserFieldBtnListeners();
 
-        sortUsersByFilters();
-        populateUsersList();
+        toggleUserFieldOrder('#user-name-field-icon', 'fname');
+
     }
 
     if (userWasDeleted){
@@ -165,6 +165,9 @@ function setUserFieldBtnListeners(){
     $('#user-status-order-btn').on('click', () => {
         toggleUserFieldOrder('#user-status-field-icon', 'status');
     });
+    $('#user-role-order-btn').on('click', () => {
+        toggleUserFieldOrder('#user-role-field-icon', 'permission');
+    })
 }
 
 // Cycle through buttons depending on the field clicked Each field has 3 states.
@@ -496,9 +499,12 @@ function createUserFromData(userData) {
     const itemClass = "user-list-item" + (deletedUser ? " deleted-user" : "");
     const deletedIcon = deletedUser ? '<i class="fa-solid fa-user-slash deleted-user-icon"></i>' : "";
 
+    const role = userData.permission == 0 ? 'User' : 'Admin';
+
     // Create a list item with the application data filled in
     const user =
         $(`<tr class="${itemClass}" id="user-${userData.user_id}">\n` +
+            `<td>${role}</td>\n` +
             `<td>${deletedIcon}${userData.fname} ${userData.lname}</td>\n` +
             `<td>${userData.email}</td>\n` +
             `<td>${userData.status}</td>\n` +
@@ -514,6 +520,12 @@ function createUserFromData(userData) {
      */
 
     // Create an edit button and add an onclick listener to Open User Modal when edit button is clicked
+    const makeAdminBtn = $(`<button class="app-button-inner btn btn-sm btn-make-admin"><i class="fa-solid fa-user"></i></button>`);
+    makeAdminBtn.on('click', () => {
+        askToMakeUserAdmin(userData.user_id, userData.fname, userData.lname);
+    })
+
+    // Create an edit button and add an onclick listener to Open User Modal when edit button is clicked
     const editBtn = $(`<button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>`);
     editBtn.on('click', () => {
 
@@ -527,7 +539,8 @@ function createUserFromData(userData) {
 
     // Show edit and delete btn div is viewRole is a USER and nothing is viewRole is ADMIN
     const btnDiv = $('<td class="app-button-outer"></td>');
-    btnDiv.append(editBtn);
+    btnDiv.append(makeAdminBtn);
+    //btnDiv.append(editBtn);
     btnDiv.append(deleteBtn);
     // Add button div to app
     user.append(btnDiv);
@@ -650,6 +663,18 @@ function askToDeleteUser(userID, userFName, userLName){
     // Set the value of the hidden input for delete-user-id
     // THis will be sent to POST as the userID to delete
     $('#delete-user-id').val(userID);
+}
+
+// Open dmake user admin modal and fill in user info
+function askToMakeUserAdmin(userID, userFName, userLName){
+    // Open the user delete modal
+    $('#make-admin-modal').modal('show');
+
+    $('#make-admin-modal-name').text(`${userFName} ${userLName}`)
+
+    // Set the value of the hidden input for delete-user-id
+    // THis will be sent to POST as the userID to delete
+    $('#make-admin-user-id').val(userID);
 }
 
 // Toggle the eye and eye-slash icon on and off

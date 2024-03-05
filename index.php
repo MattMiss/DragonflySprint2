@@ -46,16 +46,19 @@ $role = 0;
 $date = date('Y-m-d', time());
 $start = date('Y-m-d', strtotime($date.'-5days'));
 $finish = date('Y-m-d', strtotime($date.'+5days'));
+$date_created =
 
-//$sql2 = "SELECT * FROM announcements WHERE is_deleted = 0 AND (date_created BETWEEN '$start' AND '$date')
-//            ORDER BY id DESC LIMIT 5"; // announcements from last 5 days
-//$sql3 = "SELECT * FROM applications WHERE is_deleted = 0 AND (date_created BETWEEN '$start' AND '$finish')
-//            ORDER BY application_id DESC";
+$sqlRecentAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 AND (date_created BETWEEN '$start' AND '$date')
+            ORDER BY id DESC LIMIT 5"; // announcements from last 5 days
+$sqlRecentApps = "SELECT * FROM applications WHERE is_deleted = 0 AND (followupdate BETWEEN '$start' AND '$finish')
+            ORDER BY application_id DESC";
+
 
 $sqlApps = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC";
-$sqlAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY id DESC LIMIT 5"; // announcements from last 5 days
+//$sqlAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY id DESC LIMIT 5"; // announcements from last 5 days
 $appsResult = @mysqli_query($cnxn, $sqlApps);
-$announceResult = @mysqli_query($cnxn, $sqlAnnounce);
+$announceResult = @mysqli_query($cnxn, $sqlRecentAnnounce);
+$appReminders = @mysqli_query($cnxn, $sqlRecentApps);
 
 $apps[] = [];
 
@@ -181,33 +184,22 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
                     <a class="submit-btn" href="application_form.php">New Application</a>
                 </div>
             </div>
-            
+
             <div class="reminders col ">
                 <h3>Reminders</h3>
                 <div>
-                    <h6>Follow Up</h6>
+                    <h6>Announcements</h6>
                     <hr>
-<!--                    <div class="reminder">-->
-<!--                        <i class="fa-regular fa-comment"></i>-->
-<!--                        <a href="#">Follow up with <span>Costco</span></a>-->
-<!--                        <p>Applied on: <span>1/22/24</span></p>-->
-<!--                    </div>-->
-<!--                    <div class="reminder">-->
-<!--                        <i class="fa-regular fa-comment"></i>-->
-<!--                        <a href="#">Follow up with <span>Meta</span></a>-->
-<!--                        <p>Applied on: <span>12/22/23</span></p>-->
-<!--                    </div>-->
                     <?php
-                    createAppReminders($announceResult);
+                    createAppAnnouncements($announceResult);
                     ?>
                 </div>
                 <div style="padding-top: 20px;">
-                    <h6>Incomplete Apps</h6>
+                    <h6>Follow Up</h6>
                     <hr>
-                    <div class="incomplete-app">
-                        <i class="fa-solid fa-pen"></i>
-                        <a href="#">Incomplete applications <span>(3)</span></a>
-                    </div>
+                    <?php
+                    createAppReminders($appReminders);
+                    ?>
                 </div>
                 <div class="col pt-5 d-flex justify-content-center" id="update-account-container">
                     <button id="update-acc-btn" class="submit-btn"><i class="fa-solid fa-gear px-1"></i>Update Account</button>
@@ -323,7 +315,7 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
 </html>
 
 <?php
-function createAppReminders($info) {
+function createAppAnnouncements($info) {
     while ($row = mysqli_fetch_assoc($info)) {
         $id = $row["id"];
         $title = $row["title"];
@@ -340,7 +332,7 @@ function createAppReminders($info) {
             <div class='reminder'>
                 <i class='fa-regular fa-comment'></i>
                 <button class='announcement-modal-btn' type='button' data-bs-toggle='modal' data-bs-target='#announcement-modal-$id'>$title $jtype at <span>$ename</span></button>
-                <p>Follow-up Date: <span>$date</span></p>
+                <p>Date Created: <span>$date</span></p>
             </div>
             
             <div class='modal fade' id='announcement-modal-$id' tabindex='-1' role='dialog' aria-labelledby='job-title' aria-hidden='true'>
@@ -377,6 +369,30 @@ function createAppReminders($info) {
                     </div>
                 </div>
             </div>
+            
+            ";
+    }
+}
+
+function createAppReminders($info) {
+    while ($row = mysqli_fetch_assoc($info)) {
+        $id = $row["application_id"];
+        $jobName = $row["jname"];
+        $ename = $row["ename"];
+        $jurl = $row["jurl"];
+        $adate = $row["adate"];
+        $followupdate = $row["followupdate"];
+
+        //$app_info = json_encode($row);
+
+        echo "
+            <div class='reminder'>
+                <i class='fa-regular fa-comment'></i>
+                <button class='reminder-modal-btn' type='button' data-bs-toggle='modal' data-bs-target='#reminder-modal-$id'>$jobName at <span>$ename</span></button>
+                <p>Follow-up Date: <span>$followupdate</span></p>
+            </div>
+            
+            
             
             ";
     }
