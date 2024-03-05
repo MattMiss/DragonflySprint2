@@ -26,15 +26,18 @@ include 'db_picker.php';
 include $db_location;
 
 global $cnxn;
+$appWasDeleted = false;
+$userWasDeleted = false;
 
 // soft deletes a database entry
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if($_POST["submit-from"] == 1) {
-        echo "ID is: " . $_POST["id"];
+        //echo "ID is: " . $_POST["id"];
         $id = $_POST["id"];
-        $sql4 = "UPDATE applications SET is_deleted = 1 WHERE application_id = $id";
-        $result4 = @mysqli_query($cnxn, $sql4);
+        $sqlDeleteApp = "UPDATE applications SET is_deleted = 1 WHERE application_id = $id";
+        $appWasDeleted = true;
+        $deleteAppResult = @mysqli_query($cnxn, $sqlDeleteApp);
     }
 }
 
@@ -43,30 +46,34 @@ $role = 0;
 $date = date('Y-m-d', time());
 $start = date('Y-m-d', strtotime($date.'-5days'));
 $finish = date('Y-m-d', strtotime($date.'+5days'));
+$date_created =
 
-$sql = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC";
-//$sql2 = "SELECT * FROM announcements WHERE is_deleted = 0 AND (date_created BETWEEN '$start' AND '$date')
-//            ORDER BY id DESC LIMIT 5"; // announcements from last 5 days
-//$sql3 = "SELECT * FROM applications WHERE is_deleted = 0 AND (date_created BETWEEN '$start' AND '$finish')
-//            ORDER BY application_id DESC";
+$sqlRecentAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 AND (date_created BETWEEN '$start' AND '$date')
+            ORDER BY id DESC LIMIT 5"; // announcements from last 5 days
+$sqlRecentApps = "SELECT * FROM applications WHERE is_deleted = 0 AND (followupdate BETWEEN '$start' AND '$finish')
+            ORDER BY application_id DESC";
 
-$sql2 = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY id DESC LIMIT 5"; // announcements from last 5 days
-$sql3 = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC";
-$result = @mysqli_query($cnxn, $sql);
-$result2 = @mysqli_query($cnxn, $sql2);
-$result3 = @mysqli_query($cnxn, $sql3);
+
+$sqlApps = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC";
+//$sqlAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY id DESC LIMIT 5"; // announcements from last 5 days
+$appsResult = @mysqli_query($cnxn, $sqlApps);
+$announceResult = @mysqli_query($cnxn, $sqlRecentAnnounce);
+$appReminders = @mysqli_query($cnxn, $sqlRecentApps);
 
 $apps[] = [];
 
-while ($row = mysqli_fetch_assoc($result)) {
+while ($row = mysqli_fetch_assoc($appsResult)) {
     $apps[] = $row;
 }
 
 ?>
 
-<main style="position: relative">
+<main>
 <!--    <div id="alertPlaceholder" style="position: absolute; left: 50%; transform: translate(-50%, 0)"></div> -->
-    <div class="container p-3" id="main-container">
+    <div class="container p-3 position-relative" id="main-container">
+        <div id="toastContainer"  class="position-absolute start-50 top-0 translate-middle-x mt-3 alert-hide">
+            <p class="pt-2 px-5" id="toastText"></p>
+        </div>
         <div class="row dashboard-top">
             <div class="app-list col-md-9">
                 <h3>Recent Applications</h3>
@@ -177,33 +184,22 @@ while ($row = mysqli_fetch_assoc($result)) {
                     <a class="submit-btn" href="application_form.php">New Application</a>
                 </div>
             </div>
-            
+
             <div class="reminders col ">
                 <h3>Reminders</h3>
                 <div>
-                    <h6>Follow Up</h6>
+                    <h6>Announcements</h6>
                     <hr>
-<!--                    <div class="reminder">-->
-<!--                        <i class="fa-regular fa-comment"></i>-->
-<!--                        <a href="#">Follow up with <span>Costco</span></a>-->
-<!--                        <p>Applied on: <span>1/22/24</span></p>-->
-<!--                    </div>-->
-<!--                    <div class="reminder">-->
-<!--                        <i class="fa-regular fa-comment"></i>-->
-<!--                        <a href="#">Follow up with <span>Meta</span></a>-->
-<!--                        <p>Applied on: <span>12/22/23</span></p>-->
-<!--                    </div>-->
                     <?php
-                    createAppReminders($result2);
+                    createAppAnnouncements($announceResult);
                     ?>
                 </div>
                 <div style="padding-top: 20px;">
-                    <h6>Incomplete Apps</h6>
+                    <h6>Follow Up</h6>
                     <hr>
-                    <div class="incomplete-app">
-                        <i class="fa-solid fa-pen"></i>
-                        <a href="#">Incomplete applications <span>(3)</span></a>
-                    </div>
+                    <?php
+                    createAppReminders($appReminders);
+                    ?>
                 </div>
                 <div class="col pt-5 d-flex justify-content-center" id="update-account-container">
                     <button id="update-acc-btn" class="submit-btn"><i class="fa-solid fa-gear px-1"></i>Update Account</button>
@@ -226,14 +222,18 @@ while ($row = mysqli_fetch_assoc($result)) {
             </div>
         </div>
     </div>
-    <div class='modal fade' id='delete-modal' tabindex='-1' role='dialog' aria-labelledby='delete-app-message' aria-hidden='true'>
+
+    <!-----------------------------  MODALS  ----------------------------------->
+    <!-- Delete App Modal -->
+
+    <div class='modal fade' id='app-delete-modal' tabindex='-1' role='dialog' aria-labelledby='delete-app-message' aria-hidden='true'>
         <div class='modal-dialog modal-dialog-centered' role='document'>
             <div class='modal-content'>
                 <div class='modal-header'>
-                    <h4 class='modal-title' id='delete-warning'>Are you sure you want to delete this application?</h4>
+                    <h4 class='modal-title' id='delete-warning'>Delete Application?</h4>
                 </div>
                 <div class='modal-body'>
-                    <p>Deleted applications can be recovered later.</p>
+                    <p>Are you sure you want to delete application for<span id="app-delete-modal-company"></span>? Deleted applications can be recovered later.</p>
                 </div>
                 <div class='modal-footer'>
                     <form method='POST' action='#'>
@@ -246,6 +246,8 @@ while ($row = mysqli_fetch_assoc($result)) {
             </div>
         </div>
     </div>
+
+    <!-- Edit App Modal -->
     <div class='modal fade' id='edit-modal' tabIndex='-1' role='dialog' aria-labelledby='job-title' aria-hidden='true'>
         <div class='modal-dialog modal-dialog-centered' role='document'>
             <div class='modal-content'>
@@ -308,14 +310,14 @@ while ($row = mysqli_fetch_assoc($result)) {
 <?php include 'php/footer.php'?>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="js/contactscript.js"></script>
-<script>let apps = <?php echo json_encode($apps) ?>; let role = <?php echo $role ?>; users=''</script>
+<script>let apps = <?php echo json_encode($apps) ?>; let role = <?php echo $role ?>; users=''; let appWasDeleted = <?php echo json_encode($appWasDeleted) ?>; let userWasDeleted = <?php echo json_encode($userWasDeleted) ?>;</script>
 <script src="js/main.js"></script>
 <script src="js/dashboard.js"></script>
 </body>
 </html>
 
 <?php
-function createAppReminders($info) {
+function createAppAnnouncements($info) {
     while ($row = mysqli_fetch_assoc($info)) {
         $id = $row["id"];
         $title = $row["title"];
@@ -332,7 +334,7 @@ function createAppReminders($info) {
             <div class='reminder'>
                 <i class='fa-regular fa-comment'></i>
                 <button class='announcement-modal-btn' type='button' data-bs-toggle='modal' data-bs-target='#announcement-modal-$id'>$title $jtype at <span>$ename</span></button>
-                <p>Follow-up Date: <span>$date</span></p>
+                <p>Date Created: <span>$date</span></p>
             </div>
             
             <div class='modal fade' id='announcement-modal-$id' tabindex='-1' role='dialog' aria-labelledby='job-title' aria-hidden='true'>
@@ -364,11 +366,93 @@ function createAppReminders($info) {
                         </div>
                         <div class='modal-footer'>
                             <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Close</button>
-                            <button type='button' class='modal-edit'>Edit</button>
                         </div>
                     </div>
                 </div>
             </div>
+            
+            ";
+    }
+}
+
+function createAppReminders($info) {
+    while ($row = mysqli_fetch_assoc($info)) {
+        $id = $row["application_id"];
+        $jobName = $row["jname"];
+        $ename = $row["ename"];
+        $jurl = $row["jurl"];
+        $adate = $row["adate"];
+        $followupdate = $row["followupdate"];
+        $astatus = $row['astatus'];
+        $jdescription = $row['jdescription'];
+        $fupdates = $row['fupdates'];
+
+        //$app_info = json_encode($row);
+
+        echo "
+            <div class='reminder'>
+                <i class='fa-regular fa-comment'></i>
+                <button class='reminder-modal-btn' type='button' data-bs-toggle='modal' data-bs-target='#view-app-modal-$id'>$jobName at <span>$ename</span></button>
+                <p>Follow-up Date: <span>$followupdate</span></p>
+            </div>
+            
+            <div class='modal fade' id='view-app-modal-$id' tabIndex='-1' role='dialog' aria-labelledby='job-title' aria-hidden='true'>
+        <div class='modal-dialog modal-dialog-centered' role='document'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <h3 class='modal-title' id='job-title'>Application Details</h3>
+                    <button type='button' class='modal-close-primary close' data-bs-dismiss='modal' aria-label='Close'>
+                        <span aria-hidden='true'>&times;</span>
+                </div>
+                <div class='modal-body'>
+                    <ul class='list-group-item'>
+                        <li class='list-group-item pb-1'>
+                            <span class='form-label'>Job Name: </span>
+                            <span>$jobName</span>
+                        </li>
+                        <li class='list-group-item pb-1'>
+                            <span class='form-label'>Employer Name:</span>
+                            <span>$ename</span>
+                        </li>
+                        <li class='list-group-item pb-1'>
+                            <span class='form-label'>URL:</span>
+                            <a href='' target='_blank' rel='noopener noreferrer'>$jurl</a>
+                        </li>
+                        <li class='list-group-item'>
+                            <span class='form-label'>Job Description: </span>
+                            <p style='margin: 0'>$jdescription</p>
+                        </li>
+                        <li class='list-group-item pb-1'>
+                            <span class='form-label'>Application date: </span>
+                            <span>$adate</span>
+                        </li>
+                        <li class='list-group-item pb-1'>
+                            <span class='form-label'>Status: </span>
+                            <span class='status status-$astatus'>
+                                            <i class='fa-solid fa-circle'></i>
+                                        </span>
+                            <span style='text-transform: capitalize'>$astatus</span>
+                        </li>
+                        <li class='list-group-item'>
+                            <span class='form-label'>Followup date: </span>
+                            <span>$followupdate</span>
+                        </li>
+                        <li class='list-group-item pb-1'>
+                            <span class='form-label'>Followup updates: </span>
+                            <p style='margin: 0'>$fupdates</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class='modal-footer'>
+                    <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Close</button>
+                    <form method='post' action='application_edit.php' target='_blank'>
+                        <input type='hidden' name='application-id' value=$id>
+                        <button type='submit' class='modal-edit'>Edit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
             
             ";
     }
