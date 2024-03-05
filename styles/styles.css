@@ -751,7 +751,7 @@ a {
     width: 100px;
 }
 
-.app-date-col, .user-role-col {
+.app-date-col, .user-role-col, .announce-date-col {
     width: 120px;
 }
 
@@ -763,12 +763,16 @@ a {
     width: 180px;
 }
 
-.user-status-col{
+.user-status-col, .announce-employer-col{
     width: 200px;
 }
 
 .app-job-col, .app-user-col, .app-email-col{
     width: 220px;
+}
+
+.announce-position-col, .announce-url-col{
+    width: 250px;
 }
 
 .user-name-col, .user-email-col{
@@ -778,6 +782,11 @@ a {
 #user-deleted-label{
     font-size: 0.8rem;
 }
+
+.announce-url-col{
+
+}
+
 
 /* announcements table*/
 .job-url {
@@ -1117,15 +1126,12 @@ a {
         align-items: start !important;
     }
 
-    .app-date-col {
+    .app-date-col, .announce-date-col
+    {
         width: 15%;
     }
 
-    .app-employer-col{
-        width: 20%;
-    }
-
-    .app-status-col{
+    .app-employer-col, .app-status-col, .announce-position-col, .announce-employer-col{
         width: 20%;
     }
 
@@ -1133,7 +1139,8 @@ a {
         width: 15%;
     }
 
-    .user-name-col, .user-email-col, .user-status-col{
+
+    .user-name-col, .user-email-col, .user-status-col, .announce-url-col{
         width: 33%;
     }
 

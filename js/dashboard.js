@@ -613,9 +613,10 @@ function loadMoreApps(){
 
 // Open the edit-modal and fill in the data from the appData
 function showAppModal(appData, status, formattedUrl){
-    //console.log(appData.jname);
+    console.log(appData.jname);
 
     $('#edit-modal').modal('show');
+
 
     // Fill in modal info
     $('#edit-modal-jname').text(appData.jname);
