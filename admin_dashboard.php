@@ -29,6 +29,7 @@ include $db_location;
 
 $appWasDeleted = false;
 $userWasDeleted = false;
+$announcementWasDeleted = false;
 
 // soft deletes a database entry
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -48,6 +49,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $id = $_POST["id"];
         $sqlMakeUserAdmin = "UPDATE users SET permission = 1 WHERE user_id = $id";
         $makeAdminResult = @mysqli_query($cnxn, $sqlMakeUserAdmin);
+    }else if($_POST["submit-from"] == 4) {
+        $id = $_POST["id"];
+        $sqlDeleteAnnouncement = "UPDATE announcements SET is_deleted = 1 WHERE id = $id";
+        $deletedAnnouncementResult = @mysqli_query($cnxn, $sqlDeleteAnnouncement);
+        $announcementWasDeleted = true;
     }
 }
 
@@ -513,9 +519,9 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
 </body>
 </html>
 
+
+
 <?php
-
-
 function createReminders($info) {
     while ($row = mysqli_fetch_assoc($info)) {
         $id = $row["id"];
@@ -535,8 +541,8 @@ function createReminders($info) {
                 <td>$ename</td>
                 <td class='job-url'>$jurl</td>
                 <td class='app-button-outer'>
-                        <button class='app-button-inner btn btn-sm btn-update'><i class='fa-solid fa-pen'></i></button>
-                        <button class='app-button-inner btn btn-sm btn-delete' type='button' data-bs-toggle='modal' data-bs-target='#announcement-modal-$id'><i class='fa-solid fa-trash'></i></button>
+                        <button class='app-button-inner btn btn-sm btn-update' type='button' data-bs-toggle='modal' data-bs-target='#announcement-modal-$id'><i class='fa-solid fa-pen'></i></button>
+                        <button class='app-button-inner btn btn-sm btn-delete' type='button' data-bs-toggle='modal' data-bs-target='#announcement-delete-modal-$id'><i class='fa-solid fa-trash'></i></button>
                 </td>
             </tr>
 
@@ -575,9 +581,32 @@ function createReminders($info) {
                     </div>
                 </div>
                 
-            ";
+                <!-- Announcement Delete Modal -->
+                <div class='modal fade' id='announcement-delete-modal-$id' tabindex='-1' role='dialog' aria-labelledby='delete-announce' aria-hidden='true'>
+                    <div class='modal-dialog modal-dialog-centered' role='document'>
+                        <div class='modal-content'>
+                            <div class='modal-header'>
+                                <h4 class='modal-title' id='delete-warning'>Delete Announcement?</h4>
+                            </div>
+                            <div class='modal-body'>
+                                <p>Are you sure you want to delete announcement for $ename?</p>
+                            </div>
+                            <div class='modal-footer'>
+                                <form method='POST' action='#'>
+                                    <input type='hidden' value='4' name='submit-from'>
+                                    <input type='hidden' id='delete-announcement-id' value=$id name='id'>
+                                    <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Cancel</button>
+                                    <button type='submit' class='modal-delete'>Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                ";
     }
-
+}
+?>
+<?php
     function createUserTable($info) {
         while ($row = mysqli_fetch_assoc($info)) {
             $id = $row["user_id"];
@@ -602,5 +631,5 @@ function createReminders($info) {
             ";
         }
     }
-}
 ?>
+
