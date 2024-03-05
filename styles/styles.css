@@ -977,7 +977,24 @@ a {
     display: none;
 }
 
+/*        Toasts        */
+#toastContainer{
+    background-color: var(--status-rejected);
+    border-radius: 4px;
+    opacity: 0;
 
+    transition: top .5s ease-in-out, opacity .5s ease-in-out;
+}
+
+.alert-show{
+    opacity: 1!important;
+    top: 0;
+}
+
+.alert-hide{
+    opacity: 0 !important;
+    top: -50px !important;
+}
 
 /*********************** mobile **************************/ /*********************** mobile **************************/
 /*********************** mobile **************************/ /*********************** mobile **************************/

@@ -54,23 +54,25 @@ $(window).on('load', () => {
         sortUsersByFilters();
         populateUsersList();
     }
+
+    if (userWasDeleted){
+        showToast("User was deleted!", 2000);
+    }else if (appWasDeleted){
+        showToast("Application was deleted!", 2000);
+    }
 });
 
-// TODO: Get this working correctly
-function showAlert(message, type) {
-    const alertPlaceholder = $('#alertPlaceholder');
-    const wrapper = document.createElement('div');
-    wrapper.innerHTML = [
-        `<div class="alert alert-${type} alert-dismissible" role="alert">`,
-        `   <div>${message}</div>`,
-        '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-        '</div>'
-    ].join('');
-    alertPlaceholder.append(wrapper);
+// Shows a div with a message at the top of the screen. Removes the div after supplied timeout time
+function showToast(message, length) {
+    const toastContainer = $('#toastContainer');
 
-    window.setTimeout(() => {
-        wrapper.remove();
-    }, 2000);
+    toastContainer.addClass('alert-show');
+    toastContainer.removeClass('alert-hide');
+    $('#toastText').text(message);
+    setTimeout(() => {
+        toastContainer.removeClass('alert-show');
+        toastContainer.addClass('alert-hide');
+    }, length)
 }
 
 // Set up listeners for User Filter StartDate, EndDate, SearchTerm, and Selected Status
@@ -459,7 +461,7 @@ function createAppFromData(appData){
         // Create a delete button and add an onclick listener to ask to Delete App when delete button is clicked
         const deleteBtn = $(`<button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i>`);
         deleteBtn.on('click', () => {
-            showDeleteAppModal(appData.application_id, appData.ename);
+            askToDeleteApplication(appData.application_id, appData.ename);
         })
 
         // Show edit and delete btn div is viewRole is a USER and nothing is viewRole is ADMIN
@@ -500,20 +502,36 @@ function createUserFromData(userData) {
             `<td>${deletedIcon}${userData.fname} ${userData.lname}</td>\n` +
             `<td>${userData.email}</td>\n` +
             `<td>${userData.status}</td>\n` +
-            `<td class="app-button-outer">\n` +
-            `<button class="app-button-inner btn btn-sm btn-update">\n` +
-            `<i class="fa-solid fa-pen"></i>\n` +
-            `</button>\n` +
-            `<button class="app-button-inner btn btn-sm btn-delete" 
-                            onclick="askToDeleteUser(${userData.user_id})">\n` +
-            `<i class="fa-solid fa-trash"></i>\n` +
-            `</button>\n` +
             `</td>\n` +
             `</tr>`);
 
+
+
+    /*
     user.on('click', () => {
-        //showAppModal(appData, statusReplace, clickableUrl);
+        //TODO: show user info
     })
+     */
+
+    // Create an edit button and add an onclick listener to Open User Modal when edit button is clicked
+    const editBtn = $(`<button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>`);
+    editBtn.on('click', () => {
+
+    })
+
+    // Create a delete button and add an onclick listener to ask to Delete App when delete button is clicked
+    const deleteBtn = $(`<button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i>`);
+    deleteBtn.on('click', () => {
+        askToDeleteUser(userData.user_id, userData.fname, userData.lname);
+    })
+
+    // Show edit and delete btn div is viewRole is a USER and nothing is viewRole is ADMIN
+    const btnDiv = $('<td class="app-button-outer"></td>');
+    btnDiv.append(editBtn);
+    btnDiv.append(deleteBtn);
+    // Add button div to app
+    user.append(btnDiv);
+
     //console.log(user);
     userListDiv.append(user);
 }
@@ -572,6 +590,14 @@ function emptySortAndPopulateUsersList(sortBySpecificField = false, selectedFiel
     populateUsersList();
 }
 
+// Load more apps by increasing the app count to load by APP_MAX_LOAD_CNT and then refresh the list
+function loadMoreApps(){
+    console.log("Loading more Apps");
+    appCntToLoad += APP_MAX_LOAD_CNT;
+    emptyAppList();
+    populateAppList();
+}
+
 // Open the edit-modal and fill in the data from the appData
 function showAppModal(appData, status, formattedUrl){
     //console.log(appData.jname);
@@ -602,28 +628,24 @@ function showAppModal(appData, status, formattedUrl){
     }
 }
 
-// Open the delete-modal and fill in the user ID
-function showDeleteAppModal(appID, appEmployer){
+// Open the app-delete-modal and fill in the user ID
+function askToDeleteApplication(appID, appEmployer){
     // TODO: Possibly show the appEmployer name on the delete modal so the user knows for sure which app was clicked
-    $('#delete-modal').modal('show');
+    $('#app-delete-modal').modal('show');
+
+    $('#app-delete-modal-company').text(' ' + appEmployer);
 
     // Set the modal hidden input to the appID so POST can grab the ID from index.php on submit
     const deleteID = $('#delete-id');
     deleteID.val(appID);
 }
 
-// Load more apps by increasing the app count to load by APP_MAX_LOAD_CNT and then refresh the list
-function loadMoreApps(){
-    console.log("Loading more Apps");
-    appCntToLoad += APP_MAX_LOAD_CNT;
-    emptyAppList();
-    populateAppList();
-}
-
 // Open delete user modal and set the value for user id to delete
-function askToDeleteUser(userID){
+function askToDeleteUser(userID, userFName, userLName){
     // Open the user delete modal
     $('#user-delete-modal').modal('show');
+
+    $('#user-delete-modal-name').text(`${userFName} ${userLName}`)
 
     // Set the value of the hidden input for delete-user-id
     // THis will be sent to POST as the userID to delete

@@ -26,15 +26,18 @@ include 'db_picker.php';
 include $db_location;
 
 global $cnxn;
+$appWasDeleted = false;
+$userWasDeleted = false;
 
 // soft deletes a database entry
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if($_POST["submit-from"] == 1) {
-        echo "ID is: " . $_POST["id"];
+        //echo "ID is: " . $_POST["id"];
         $id = $_POST["id"];
-        $sql4 = "UPDATE applications SET is_deleted = 1 WHERE application_id = $id";
-        $result4 = @mysqli_query($cnxn, $sql4);
+        $sqlDeleteApp = "UPDATE applications SET is_deleted = 1 WHERE application_id = $id";
+        $appWasDeleted = true;
+        $deleteAppResult = @mysqli_query($cnxn, $sqlDeleteApp);
     }
 }
 
@@ -44,29 +47,30 @@ $date = date('Y-m-d', time());
 $start = date('Y-m-d', strtotime($date.'-5days'));
 $finish = date('Y-m-d', strtotime($date.'+5days'));
 
-$sql = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC";
 //$sql2 = "SELECT * FROM announcements WHERE is_deleted = 0 AND (date_created BETWEEN '$start' AND '$date')
 //            ORDER BY id DESC LIMIT 5"; // announcements from last 5 days
 //$sql3 = "SELECT * FROM applications WHERE is_deleted = 0 AND (date_created BETWEEN '$start' AND '$finish')
 //            ORDER BY application_id DESC";
 
-$sql2 = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY id DESC LIMIT 5"; // announcements from last 5 days
-$sql3 = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC";
-$result = @mysqli_query($cnxn, $sql);
-$result2 = @mysqli_query($cnxn, $sql2);
-$result3 = @mysqli_query($cnxn, $sql3);
+$sqlApps = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC";
+$sqlAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY id DESC LIMIT 5"; // announcements from last 5 days
+$appsResult = @mysqli_query($cnxn, $sqlApps);
+$announceResult = @mysqli_query($cnxn, $sqlAnnounce);
 
 $apps[] = [];
 
-while ($row = mysqli_fetch_assoc($result)) {
+while ($row = mysqli_fetch_assoc($appsResult)) {
     $apps[] = $row;
 }
 
 ?>
 
-<main style="position: relative">
+<main>
 <!--    <div id="alertPlaceholder" style="position: absolute; left: 50%; transform: translate(-50%, 0)"></div> -->
-    <div class="container p-3" id="main-container">
+    <div class="container p-3 position-relative" id="main-container">
+        <div id="toastContainer"  class="position-absolute start-50 top-0 translate-middle-x mt-3 alert-hide">
+            <p class="pt-2 px-5" id="toastText"></p>
+        </div>
         <div class="row dashboard-top">
             <div class="app-list col-md-9">
                 <h3>Recent Applications</h3>
@@ -194,7 +198,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 <!--                        <p>Applied on: <span>12/22/23</span></p>-->
 <!--                    </div>-->
                     <?php
-                    createAppReminders($result2);
+                    createAppReminders($announceResult);
                     ?>
                 </div>
                 <div style="padding-top: 20px;">
@@ -226,14 +230,18 @@ while ($row = mysqli_fetch_assoc($result)) {
             </div>
         </div>
     </div>
-    <div class='modal fade' id='delete-modal' tabindex='-1' role='dialog' aria-labelledby='delete-app-message' aria-hidden='true'>
+
+    <!-----------------------------  MODALS  ----------------------------------->
+    <!-- Delete App Modal -->
+
+    <div class='modal fade' id='app-delete-modal' tabindex='-1' role='dialog' aria-labelledby='delete-app-message' aria-hidden='true'>
         <div class='modal-dialog modal-dialog-centered' role='document'>
             <div class='modal-content'>
                 <div class='modal-header'>
-                    <h4 class='modal-title' id='delete-warning'>Are you sure you want to delete this application?</h4>
+                    <h4 class='modal-title' id='delete-warning'>Delete Application?</h4>
                 </div>
                 <div class='modal-body'>
-                    <p>Deleted applications can be recovered later.</p>
+                    <p>Are you sure you want to delete application for<span id="app-delete-modal-company"></span>? Deleted applications can be recovered later.</p>
                 </div>
                 <div class='modal-footer'>
                     <form method='POST' action='#'>
@@ -308,7 +316,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 <?php include 'php/footer.php'?>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="js/contactscript.js"></script>
-<script>let apps = <?php echo json_encode($apps) ?>; let role = <?php echo $role ?>; users=''</script>
+<script>let apps = <?php echo json_encode($apps) ?>; let role = <?php echo $role ?>; users=''; let appWasDeleted = <?php echo json_encode($appWasDeleted) ?>; let userWasDeleted = <?php echo json_encode($userWasDeleted) ?>;</script>
 <script src="js/main.js"></script>
 <script src="js/dashboard.js"></script>
 </body>
