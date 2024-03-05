@@ -18,7 +18,13 @@
 <?php
 session_start();
 $_SESSION['location'] = '../';
-include '../php/nav_bar.php'
+include '../php/nav_bar.php';
+
+global $db_location;
+global $cnxn;
+
+include '../db_picker.php';
+include $db_location;
 
 ?>
 <main>
