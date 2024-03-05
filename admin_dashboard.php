@@ -27,18 +27,27 @@ include 'php/nav_bar.php';
 include 'db_picker.php';
 include $db_location;
 
+$appWasDeleted = false;
+$userWasDeleted = false;
+
 // soft deletes a database entry
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if($_POST["submit-from"] == 1) {
         $id = $_POST["id"];
-        $sql4 = "UPDATE applications SET is_deleted = 1 WHERE application_id = $id";
-        $result4 = @mysqli_query($cnxn, $sql4);
+        $sqlDeleteApp = "UPDATE applications SET is_deleted = 1 WHERE application_id = $id";
+        $appWasDeleted = true;
+        $deleteAppResult = @mysqli_query($cnxn, $sqlDeleteApp);
     } elseif ($_POST["submit-from"] == 2) {
         $id = $_POST["id"];
-        $sql4 = "UPDATE users SET is_deleted = 1 WHERE user_id = $id";
-        echo $sql4;
-        $result4 = @mysqli_query($cnxn, $sql4);
+        $sqlDeleteUser = "UPDATE users SET is_deleted = 1 WHERE user_id = $id";
+        $userWasDeleted = true;
+        //echo $sql4;
+        $deleteUserResult = @mysqli_query($cnxn, $sqlDeleteUser);
+    }else if($_POST["submit-from"] == 3) {
+        $id = $_POST["id"];
+        $sqlMakeUserAdmin = "UPDATE users SET permission = 1 WHERE user_id = $id";
+        $makeAdminResult = @mysqli_query($cnxn, $sqlMakeUserAdmin);
     }
 }
 
@@ -73,7 +82,10 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
 
 
 <main>
-    <div class="container p-3" id="main-container">
+    <div class="container p-3 position-relative" id="main-container">
+        <div id="toastContainer"  class="position-absolute start-50 top-0 translate-middle-x mt-3 alert-hide">
+            <p class="pt-2 px-5" id="toastText"></p>
+        </div>
         <div class="row dashboard-top">
             <div class="app-list">
                 <h3>Recent Applications</h3>
@@ -295,6 +307,20 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                 <table class="dash-table">
                     <thead>
                     <tr>
+                        <th scope="col" class="user-role-col">
+                            <div class="row clickable" id="user-role-order-btn">
+                                <div class="col-auto pe-0 my-auto">
+                                    Role
+                                </div>
+                                <div class="col-auto ps-2 my-auto">
+                                    <div class="order-icons">
+                                        <div class="order-icons">
+                                            <i class="fa-solid fa-sort" id="user-role-field-icon"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </th>
                         <th scope="col" class="user-name-col">
                             <div class="row clickable" id="user-name-order-btn">
                                 <div class="col-auto pe-0 my-auto">
@@ -437,10 +463,10 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
             <div class='modal-dialog modal-dialog-centered' role='document'>
                 <div class='modal-content'>
                     <div class='modal-header'>
-                        <h4 class='modal-title' id='delete-warning'>Are you sure you want to delete this user?</h4>
+                        <h4 class='modal-title' id='delete-warning'>Delete User?</h4>
                     </div>
                     <div class='modal-body'>
-                        <p>Deleted users can be recovered later.</p>
+                        <p>Are you sure you want to delete <span id="user-delete-modal-name"></span>? Deleted users can be recovered later.</p>
                     </div>
                     <div class='modal-footer'>
                         <form method='POST' action='#'>
@@ -453,11 +479,34 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                 </div>
             </div>
         </div>
+
+        <!-- Make User Admin Modal -->
+        <div class='modal fade' id='make-admin-modal' tabindex='-1' role='dialog' aria-labelledby='make-admin-message' aria-hidden='true'>
+            <div class='modal-dialog modal-dialog-centered' role='document'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        <h4 class='modal-title' id='delete-warning'>Make Admin?</h4>
+                    </div>
+                    <div class='modal-body'>
+                        <p>Make <span id="make-admin-modal-name"></span> an admin?</p>
+                    </div>
+                    <div class='modal-footer'>
+                        <form method='POST' action='#'>
+                            <input type='hidden' value='3' name='submit-from'>
+                            <input type='hidden' id="make-admin-user-id" value='' name='id'>
+                            <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Cancel</button>
+                            <button type='submit' class='modal-delete'>Make Admin</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 </main>
 
 
+
 <?php include 'php/footer.php' ?>
-<script>let apps = <?php echo json_encode($apps) ?>; let users = <?php echo json_encode($users) ?>; let role = <?php echo $role ?></script>
+<script>let apps = <?php echo json_encode($apps) ?>; let users = <?php echo json_encode($users) ?>; let role = <?php echo $role ?>; let appWasDeleted = <?php echo json_encode($appWasDeleted) ?>; let userWasDeleted = <?php echo json_encode($userWasDeleted) ?>;</script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="js/main.js"></script>
 <script src="js/dashboard.js"></script>

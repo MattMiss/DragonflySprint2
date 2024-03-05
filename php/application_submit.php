@@ -76,8 +76,9 @@ if(! empty($_POST)) {
         $fupdates = strip_tags(filter_var($fupdates, FILTER_SANITIZE_ADD_SLASHES));
         $followupdate = filter_var($followupdate, FILTER_SANITIZE_NUMBER_INT);
 
-        $sql = "INSERT INTO `applications` (`jname`, `ename`, `jurl`, `jdescription`, `adate`, `astatus`, `fupdates`, 
-                `followupdate`) VALUES ('$jname', '$ename', '$jurl', '$jdescription', '$adate', '$astatus', '$fupdates',
+        // TODO: Replace user_id = 1 with the user_id of user creating the app
+        $sql = "INSERT INTO `applications` (`user_id`, `jname`, `ename`, `jurl`, `jdescription`, `adate`, `astatus`, `fupdates`, 
+                `followupdate`) VALUES (1, '$jname', '$ename', '$jurl', '$jdescription', '$adate', '$astatus', '$fupdates',
                                         '$followupdate')";
 
 //        echo $sql;
