@@ -73,9 +73,9 @@ if(! empty($_POST)) {
     }
 
     // mailing
-    $name = ucfirst($fname) . " contact_submit.php" . ucfirst($lname);
-    //$to = "Yadira Cervantes<cervantes.yadira@student.greenriver.edu>";
-    $to = "Matt Miss<miss.matthew@student.greenriver.edu>";
+    $name = ucfirst($fname) . " " . ucfirst($lname);
+    $to = "Yadira Cervantes<cervantes.yadira@student.greenriver.edu>";
+    //$to = "Matt Miss<miss.matthew@student.greenriver.edu>";
     $subject = "Message from " . $name;
     $from = $name . '<' . $_POST['email'] . '>';
     $headers = 'From: ' . $from . "\r\n" .

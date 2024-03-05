@@ -60,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $role = 1;
 
 // fetches specific data from database tables
-//$sqlApps = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC";
+// $sqlApps = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC";
 $sqlApps = "SELECT * FROM `applications` JOIN `users` WHERE `applications`.`user_id` = `users`.`user_id` AND 
                                                 `applications`.is_deleted = 0 AND `users`.is_deleted = 0";
 $sqlAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY date_created DESC LIMIT 5"; // 5 most recent announcements
@@ -93,7 +93,7 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
             <p class="pt-2 px-5" id="toastText"></p>
         </div>
         <div class="row dashboard-top">
-            <div class="app-list">
+            <div class="app-list-admin">
                 <h3>Recent Applications</h3>
                 <div class="row">
                     <div class="col-md-4 pt-2">
@@ -133,7 +133,9 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                         </div>
                     </div>
                 </div>
-                <table class="dash-table">
+
+<!--                start of app table -->
+                <table class="dash-table admin-app">
                     <thead>
                     <tr>
                         <th scope="col" class="app-date-col">
@@ -228,9 +230,6 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                 <div class="col text-center pt-2 pb-2" id="more-apps">
                     <button type="button" class="submit-btn"  onclick="loadMoreApps()">More</button>
                 </div>
-                <div class="col d-flex justify-content-center pt-2" id="new-app-container">
-                    <a class="submit-btn" href="application_form.php">New Application</a>
-                </div>
             </div>
             <!--  Possibly remove this
             <div class="row py-3">
@@ -242,9 +241,9 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
         </div>
 
         <div class="row dashboard-top">
-            <div class="reminders-list">
+            <div class="reminders-list pt-4">
                 <h3>Announcements</h3>
-                <table class="dash-table">
+                <table class="dash-table admin-announcement">
                     <thead>
                         <tr>
                             <th scope="col" class="announce-date-col">Date</th>
@@ -265,7 +264,7 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
 
 
         <div class="row dashboard-top">
-            <div class="user-list">
+            <div class="user-list pt-4">
                 <div class="row">
                     <div class="col">
                         <h3>Users</h3>
@@ -310,7 +309,7 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                     </div>
                     -->
                 </div>
-                <table class="dash-table">
+                <table class="dash-table admin-user">
                     <thead>
                     <tr>
                         <th scope="col" class="user-role-col">
