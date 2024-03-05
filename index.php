@@ -204,9 +204,6 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
                     createAppReminders($appReminders);
                     ?>
                 </div>
-                <div class="col pt-5 d-flex justify-content-center" id="update-account-container">
-                    <button id="update-acc-btn" class="submit-btn"><i class="fa-solid fa-gear px-1"></i>Update Account</button>
-                </div>
             </div>
         </div>
         <div class="row welcome-info">

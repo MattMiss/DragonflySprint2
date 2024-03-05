@@ -473,7 +473,7 @@ table td {
     background-color: #033a94;
 }
 
-.app-list-item .btn-update:hover, .user-list-item .btn-update:hover {
+.app-list-item .btn-update:hover, .user-list-item .btn-update:hover, .admin-announcement .btn-update:hover {
     background-color: #006225;
 }
 
@@ -481,7 +481,7 @@ table td {
     background-color: #d24747;
 }
 
-.app-list-item .btn-delete:hover, .user-list-item .btn-delete:hover, .modal-delete:hover{
+.app-list-item .btn-delete:hover, .user-list-item .btn-delete:hover, .modal-delete:hover, .admin-announcement .btn-delete:hover{
     background-color: #b42c2c;
 }
 
