@@ -241,10 +241,10 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                 <table class="dash-table">
                     <thead>
                         <tr>
-                            <th scope="col" class="w-20">Date</th>
-                            <th scope="col" class="w-30">Position</th>
-                            <th scope="col">Employer</th>
-                            <th scope="col" class="w-30">URL</th>
+                            <th scope="col" class="announce-date-col">Date</th>
+                            <th scope="col" class="announce-position-col">Position</th>
+                            <th scope="col" class="announce-employer-col">Employer</th>
+                            <th scope="col" class="announce-url-col">URL</th>
                             <th scope="col" class="w-btn"></th>
                         </tr>
                     </thead>

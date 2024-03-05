@@ -246,6 +246,8 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
             </div>
         </div>
     </div>
+
+    <!-- Edit App Modal -->
     <div class='modal fade' id='edit-modal' tabIndex='-1' role='dialog' aria-labelledby='job-title' aria-hidden='true'>
         <div class='modal-dialog modal-dialog-centered' role='document'>
             <div class='modal-content'>
@@ -364,7 +366,6 @@ function createAppAnnouncements($info) {
                         </div>
                         <div class='modal-footer'>
                             <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Close</button>
-                            <button type='button' class='modal-edit'>Edit</button>
                         </div>
                     </div>
                 </div>
@@ -382,17 +383,76 @@ function createAppReminders($info) {
         $jurl = $row["jurl"];
         $adate = $row["adate"];
         $followupdate = $row["followupdate"];
+        $astatus = $row['astatus'];
+        $jdescription = $row['jdescription'];
+        $fupdates = $row['fupdates'];
 
         //$app_info = json_encode($row);
 
         echo "
             <div class='reminder'>
                 <i class='fa-regular fa-comment'></i>
-                <button class='reminder-modal-btn' type='button' data-bs-toggle='modal' data-bs-target='#reminder-modal-$id'>$jobName at <span>$ename</span></button>
+                <button class='reminder-modal-btn' type='button' data-bs-toggle='modal' data-bs-target='#view-app-modal-$id'>$jobName at <span>$ename</span></button>
                 <p>Follow-up Date: <span>$followupdate</span></p>
             </div>
             
-            
+            <div class='modal fade' id='view-app-modal-$id' tabIndex='-1' role='dialog' aria-labelledby='job-title' aria-hidden='true'>
+        <div class='modal-dialog modal-dialog-centered' role='document'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <h3 class='modal-title' id='job-title'>Application Details</h3>
+                    <button type='button' class='modal-close-primary close' data-bs-dismiss='modal' aria-label='Close'>
+                        <span aria-hidden='true'>&times;</span>
+                </div>
+                <div class='modal-body'>
+                    <ul class='list-group-item'>
+                        <li class='list-group-item pb-1'>
+                            <span class='form-label'>Job Name: </span>
+                            <span>$jobName</span>
+                        </li>
+                        <li class='list-group-item pb-1'>
+                            <span class='form-label'>Employer Name:</span>
+                            <span>$ename</span>
+                        </li>
+                        <li class='list-group-item pb-1'>
+                            <span class='form-label'>URL:</span>
+                            <a href='' target='_blank' rel='noopener noreferrer'>$jurl</a>
+                        </li>
+                        <li class='list-group-item'>
+                            <span class='form-label'>Job Description: </span>
+                            <p style='margin: 0'>$jdescription</p>
+                        </li>
+                        <li class='list-group-item pb-1'>
+                            <span class='form-label'>Application date: </span>
+                            <span>$adate</span>
+                        </li>
+                        <li class='list-group-item pb-1'>
+                            <span class='form-label'>Status: </span>
+                            <span class='status status-$astatus'>
+                                            <i class='fa-solid fa-circle'></i>
+                                        </span>
+                            <span style='text-transform: capitalize'>$astatus</span>
+                        </li>
+                        <li class='list-group-item'>
+                            <span class='form-label'>Followup date: </span>
+                            <span>$followupdate</span>
+                        </li>
+                        <li class='list-group-item pb-1'>
+                            <span class='form-label'>Followup updates: </span>
+                            <p style='margin: 0'>$fupdates</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class='modal-footer'>
+                    <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Close</button>
+                    <form method='post' action='application_edit.php' target='_blank'>
+                        <input type='hidden' name='application-id' value=$id>
+                        <button type='submit' class='modal-edit'>Edit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
             
             ";
     }
