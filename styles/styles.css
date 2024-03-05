@@ -607,6 +607,7 @@ table td {
     border: none;
     background-color: unset;
     color: var(--header-color);
+    max-width: 220px;
 }
 
 .announcement-modal-btn:hover, .reminder-modal-btn:hover {
