@@ -37,7 +37,7 @@ include $db_location;
                 <div class="mb-4">
                     <label for="announcement-title" class="form-label">Title*</label>
                     <input type="text" class="form-control" id="announcement-title" name="announcement-title"
-                           placeholder="Name of Position" required>
+                           placeholder="Position Name" required>
                 </div>
                 <div class="mb-4">
                     <label class="form-label">Job or Internship*</label>
@@ -58,7 +58,7 @@ include $db_location;
                 <div class="mb-4">
                     <label for="employer" class="form-label">Employer*</label>
                     <input type="text" class="form-control" id="employer" name="employer"
-                           placeholder="From Who" required>
+                           placeholder="Company Name" required>
                 </div>
                 <div class="mb-4">
                     <label for="additional-text" class="form-label">More Information</label>
