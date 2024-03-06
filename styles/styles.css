@@ -132,6 +132,10 @@ main{
     padding-bottom: 3rem;
 }
 
+footer{
+    background-color: var(--footer-color)
+}
+
 #bio-container p {
     text-align: justify;
 }
@@ -309,7 +313,6 @@ nav a:hover {
         border-color: var(--form-outline-color);
         color: var(--font-color) !important;
         border-radius: 4px;
-        /*min-height: 30px;*/
     }
 
     input:-webkit-autofill,
@@ -787,9 +790,6 @@ a {
     white-space: nowrap;
 }
 
-footer {
-    background: var(--footer-color);
-}
 
 .footer-div{
     font-size: .8rem;
