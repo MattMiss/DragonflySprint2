@@ -25,7 +25,7 @@ include 'php/nav_bar.php' ?>
         <h3 class="form-header p-3 mb-0">Sign-up</h3>
         <div class="form-container mb-5">
             <div class="form-body">
-                <form method="post" action="php/signup_submit.php" onsubmit="return validateForm()" class="my-3">
+                <form method="POST" action="php/signup_submit.php" onsubmit="return validateForm()" class="my-3">
                     <div class="mb-3">
                         <label for="name" class="form-label">Name*</label>
                         <div id="name" class="row mb-4">
@@ -45,6 +45,18 @@ include 'php/nav_bar.php' ?>
                         <input type="email" class="form-control" id="input-email" name="email"
                                placeholder="e.g. example@email.com" maxlength="60" required>
                         <small id="email-message">Note: an @greenriver.edu email is preferred</small>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="input-password" class="form-label">Password*</label>
+                            <input type="password" class="form-control" id="input-password" name="password" minlength="8" maxlength="16" required>
+                        </div>
+
+                        <div class="col">
+                            <label for="input-password-confirm" class="form-label">Re-enter Password*</label>
+                            <input type="password" class="form-control" id="input-password-confirm" name="password-confirm" minlength="8" maxlength="16" required>
+                        </div>
                     </div>
 
                     <div class="mb-3">

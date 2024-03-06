@@ -26,11 +26,11 @@ include '../php/nav_bar.php' ?>
 
 function echoError() {
     echo "
-                <div class='form-error'>
-                    <h3>Sign-up failed, please try again.</h3>
-                    <a class='link' href='../signup_form.php'>Go to sign-up form</a>
-                </div>
-            ";
+            <div class='form-error'>
+                <h3>Sign-up failed, please try again.</h3>
+                <a class='link' href='../signup_form.php'>Go to sign-up form</a>
+            </div>
+         ";
 }
 
 if(! empty($_POST)) {
@@ -54,11 +54,15 @@ if(! empty($_POST)) {
     $MAX_COHORT_NUM = 100;
     $MIN_ROLES = 5;
     $MAX_ROLES = 250;
+    $MIN_PASSWORD = 8;
+    $MAX_PASSWORD = 16;
 
     // form values
     $fname = $_POST['firstName'];
     $lname = $_POST['lastName'];
     $email = $_POST['email'];
+    $password = $_POST['password'];
+    $passwordConfirm = $_POST['password-confirm'];
     $cohortNum = $_POST['cohort-num'];
     $status = $_POST['status'];
     $roles = $_POST['roles'];
@@ -69,6 +73,8 @@ if(! empty($_POST)) {
     $email = filter_var($email, FILTER_SANITIZE_EMAIL);
     $cohortNum = filter_var($cohortNum, FILTER_SANITIZE_NUMBER_INT);
     $roles = strip_tags(filter_var($roles, FILTER_SANITIZE_ADD_SLASHES));
+    $password = strip_tags($password);
+    $passwordConfirm = strip_tags($passwordConfirm);
 
     $name = ucfirst($fname) . " " . ucfirst($lname);
 
@@ -78,25 +84,46 @@ if(! empty($_POST)) {
         return;
     }
 
-    if(! strlen($roles) > $MIN_ROLES && ! strlen($roles) <= $MAX_ROLES) {
+    if(! strlen($roles) >= $MIN_ROLES && ! strlen($roles) <= $MAX_ROLES) {
         echoError();
         return;
     }
+
+    // email
 
     if(! preg_match("/[^\s@]+@[^\s@]+\.[^\s@]+/", $email) ) {
         echoError();
         return;
     }
 
+    // password
+    if(strlen($password) < $MIN_PASSWORD || strlen($password) > $MAX_PASSWORD) {
+        echoError();
+        return;
+    }
+
+    if(! $password == $passwordConfirm) {
+        echo "password == passwordConfirm";
+        echoError();
+        return;
+    }
+
+    if(! preg_match("/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z\d!@#$%&*-_.]{" . $MIN_PASSWORD . "," . $MAX_PASSWORD . "}$/", $password)) {
+        echoError();
+        return;
+    }
+
+    //  status
+
     if(! in_array($status, $RADIO_VALUES)) {
         echoError();
         return;
     }
 
-    $sql = "INSERT INTO `users` (`fname`, `lname`, `email`, `cohortNum`, `status`, `roles`) VALUES ('$fname', 
-            '$lname', '$email', '$cohortNum', '$status', '$roles')";
+    $sql = "INSERT INTO `users` (`fname`, `lname`, `email`, `password`, `cohortNum`, `status`, `roles`) VALUES ('$fname', 
+            '$lname', '$email', '$password', '$cohortNum', '$status', '$roles')";
 
-    echo $sql;
+    //echo $sql;
 
     $result = @mysqli_query($cnxn, $sql);
 
@@ -111,6 +138,9 @@ if(! empty($_POST)) {
                     </li>
                     <li class='list-group-item'>
                         Email: $email
+                    </li>
+                    <li class='list-group-item'>
+                        Password: " . str_pad('',strlen($password),'*') . "
                     </li>
                     <li class='list-group-item'>
                         Cohort Number: $cohortNum
