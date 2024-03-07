@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
 <?php
 session_start();
 $_SESSION['location'] = '';
 
 $loginLocation =  'http://localhost:63342/Sprint4/login.php';
-//$loginLocation =  'https://dragonfly.greenriverdev.com/sprint5/login.php'; cpanel
+//$loginLocation =  'https://dragonfly.greenriverdev.com/sprint5/login.php'; //cpanel
 
 $viewingID = null;
 if (isset($_SESSION['user_id'])){
@@ -17,7 +15,10 @@ if (isset($_GET['logout'])) {
     header("Location:$loginLocation");
 }
 
-echo '<head>
+echo '
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard Homepage</title>

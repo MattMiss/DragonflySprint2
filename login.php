@@ -1,9 +1,10 @@
 <?php
 session_start();
 $_SESSION['location'] = '';
+$location = $_SESSION['location'];
 
-$indexLocation =  'http://localhost:63342/Sprint4/index.php'; // local (may need to change port number)
-//$indexLocation =  'https://dragonfly.greenriverdev.com/sprint5/index.php'; cpanel
+//$indexLocation =  'http://localhost:63342/Sprint4/index.php'; // local (may need to change port number)
+$indexLocation =  'https://dragonfly.greenriverdev.com/sprint5/index.php'; //cpanel
 
 global $db_location;
 global $cnxn;
@@ -59,6 +60,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! empty($_POST)) {
                 <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js'></script>
             </head>
             <body>
+                <nav class='navbar navbar-expand-md sticky-top py-1 '>
+                    <div class='container-fluid'>
+                        <img src='$location images/GRC_Logo-Rich-Black.png' alt='GreenRiver College logo' id='grc-logo'>
+                        <button type='button' data-bs-toggle='collapse' data-bs-target='#navbar-menu' class='navbar-toggler'><span class='navbar-toggler-icon'></span></button>
+                        <div class='collapse navbar-collapse mx-1' id='navbar-menu'>
+                            <ul class='navbar-nav nav-underline'>
+                                <!-- <li><a href='$location index.php' class='nav-link'>User Dashboard</a></li> -->
+                                <li><a href='$location signup_form.php' class='nav-link'>Sign-up</a></li>
+                                <!-- <li><a href='$location application_form.php' class='nav-link'>New Application</a></li> -->
+                                <li><a href='$location contact_form.php' class='nav-link'>Contact</a></li>
+                                <li class='d-flex justify-content-end' id='dark-mode-list-item'>
+                                    <div class='dark-switch-outer'>
+                                        <input type='checkbox' id='dark-mode-switch'>
+                                        <label for='dark-mode-switch'>
+                                            <i class='fas fa-sun'></i>
+                                            <i class='fas fa-moon'></i>
+                                        </label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            
             <main>
                 <div class='container p-3' id='main-container'>
                     <h3 class='form-header'>Login</h3>
@@ -101,27 +126,50 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! empty($_POST)) {
                 <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js'></script>
             </head>
         <body>
-        <main>
-            <div class='container p-3' id='main-container'>
-                <h3 class='form-header'>Login</h3>
-                <div class='form-container'>
-                    <div class='form-body'>
-                <form id='login-form' class='p-5' method='POST' action='#'>
-                  
-                    <div class='mb-4'>
-                        <label for='input-email' class='form-label'>Email*</label>
-                        <input type='email' class='form-control' id='input-email' name='email' placeholder='e.g. example@email.com' required>
+            <nav class='navbar navbar-expand-md sticky-top py-1 '>
+                <div class='container-fluid'>
+                    <img src='$location images/GRC_Logo-Rich-Black.png' alt='GreenRiver College logo' id='grc-logo'>
+                    <button type='button' data-bs-toggle='collapse' data-bs-target='#navbar-menu' class='navbar-toggler'><span class='navbar-toggler-icon'></span></button>
+                    <div class='collapse navbar-collapse mx-1' id='navbar-menu'>
+                        <ul class='navbar-nav nav-underline'>
+                            <!-- <li><a href='$location index.php' class='nav-link'>User Dashboard</a></li> -->
+                            <li><a href='$location signup_form.php' class='nav-link'>Sign-up</a></li>
+                            <!-- <li><a href='$location application_form.php' class='nav-link'>New Application</a></li> -->
+                            <li><a href='$location contact_form.php' class='nav-link'>Contact</a></li>
+                            <li class='d-flex justify-content-end' id='dark-mode-list-item'>
+                                <div class='dark-switch-outer'>
+                                    <input type='checkbox' id='dark-mode-switch'>
+                                    <label for='dark-mode-switch'>
+                                        <i class='fas fa-sun'></i>
+                                        <i class='fas fa-moon'></i>
+                                    </label>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
-                    
-                    <div class='mb-4'>
-                        <label for='input-password' class='form-label'>Password*</label>
-                        <input type='password' class='form-control' id='input-password' name='password' minlength='8' maxlength='16' required>
-                    </div>
-                    
-                    <button type='submit' class='submit-btn'>Submit</button>
-                </form>
-            </div>
-        </main>
+                </div>
+            </nav>
+            <main>
+                <div class='container p-3' id='main-container'>
+                    <h3 class='form-header'>Login</h3>
+                    <div class='form-container'>
+                        <div class='form-body'>
+                    <form id='login-form' class='p-5' method='POST' action='#'>
+                      
+                        <div class='mb-4'>
+                            <label for='input-email' class='form-label'>Email*</label>
+                            <input type='email' class='form-control' id='input-email' name='email' placeholder='e.g. example@email.com' required>
+                        </div>
+                        
+                        <div class='mb-4'>
+                            <label for='input-password' class='form-label'>Password*</label>
+                            <input type='password' class='form-control' id='input-password' name='password' minlength='8' maxlength='16' required>
+                        </div>
+                        
+                        <button type='submit' class='submit-btn'>Submit</button>
+                    </form>
+                </div>
+            </main>
         ";
 }
 
