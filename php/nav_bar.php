@@ -31,11 +31,34 @@ if (isset($_SESSION['fname'])){
                         </label>
                     </div>
                 </li>
+                <li class="d-flex justify-content-end">
+                    <div class="">
+                        <button class='app-button-inner btn btn-sm btn-update' type='button' data-bs-toggle='modal' data-bs-target='#logout-modal'>LogOut</button>
+                    </div>
+                </li>
             </ul>
         </div>
     </div>
     <?php showWelcome() ?>
 </nav>
+
+    <div class='modal fade' id='logout-modal' tabindex='-1' role='dialog' aria-labelledby='make-admin-message' aria-hidden='true'>
+        <div class='modal-dialog modal-dialog-centered' role='document'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <h4 class='modal-title' id='delete-warning'>Log Out?</h4>
+                </div>
+                <div class='modal-body'>
+                    <p>Would you like to log out?</p>
+                </div>
+                <div class='modal-footer'>
+                    <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Cancel</button>
+                    <button type='submit' class='modal-delete'><a href='index.php?logout=true'>Logout</a></button>
+
+                </div>
+            </div>
+        </div>
+    </div>
 
 <?php
 function checkPermission(){
