@@ -110,17 +110,12 @@ if(! empty($_POST)) {
         return;
     }
 
-
-    echo "$password $passwordConfirm";
-
-    // FIX
     if( $password !== $passwordConfirm) {
         echoError();
         return;
     }
 
-    // works
-    if(! preg_match("/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z\d!@#$%&*-_.]{" . $MIN_PASSWORD . "," . $MAX_PASSWORD . "}$/", $password)) {
+    if(! preg_match("/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z\d!@#$%&*_\-.]{8,16}$/", $password)) {
         echoError();
         return;
     }

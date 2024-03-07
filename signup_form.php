@@ -26,16 +26,16 @@ include 'php/nav_bar.php'
         <h3 class="form-header p-3 mb-0">Sign-up</h3>
         <div class="form-container mb-5">
             <div class="form-body">
-                <form method="POST" action="php/signup_submit.php" onsubmit="return validateForm()" class="my-3">
+                <form  onsubmit="return validateForm()" method="POST" action="php/signup_submit.php" class="my-3">
                     <div class="mb-3">
                         <label for="name" class="form-label">Name*</label>
                         <div id="name" class="row mb-4">
                             <div class="col-sm">
-                                <input type="text" class="form-control" name="firstName" placeholder="First name"
+                                <input type="text" id="input-first-name" class="form-control" name="firstName" placeholder="First name"
                                        aria-label="First name" maxlength="30" required>
                             </div>
                             <div class="col-sm pt-sm-0 pt-2">
-                                <input type="text" class="form-control" name="lastName" placeholder="Last name"
+                                <input type="text" id="input-last-name" class="form-control" name="lastName" placeholder="Last name"
                                        aria-label="Last name" maxlength="30" required>
                             </div>
                         </div>
