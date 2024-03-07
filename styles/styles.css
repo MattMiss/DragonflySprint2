@@ -215,8 +215,15 @@ nav a:hover {
 
 .dark-switch-outer{
     position: relative;
-    width: 100px;
+    width: 300px;
 }
+
+.welcome-outer{
+    position: absolute;
+    right: 100px;
+    top: 24px;
+}
+
 
 /*********************** dark mode **************************/ /*********************** dark mode **************************/
 /*********************** dark mode **************************/ /*********************** dark mode **************************/
@@ -470,6 +477,10 @@ table td {
 
 .btn-make-admin{
     background-color: #0b65c4;
+    font-size: 0.8rem;
+    color: white;
+    width: 120px !important;
+    height: 36px;
 }
 
 .btn-make-admin:hover{
@@ -698,8 +709,8 @@ a {
 
 .app-button-outer{
     display: flex;
-    justify-content: space-around;
-    padding-left: -10px;
+    justify-content: flex-end;
+    gap: 10px;
 }
 
 .app-button-inner{
@@ -744,11 +755,15 @@ a {
     width: 100px;
 }
 
-.app-date-col, .user-role-col, .announce-date-col {
+.user-role-col{
+    width: 70px;
+}
+
+.app-date-col, .announce-date-col {
     width: 120px;
 }
 
-.app-status-col{
+.app-status-col,.user-status-col{
     width: 160px;
 }
 
@@ -756,7 +771,7 @@ a {
     width: 180px;
 }
 
-.user-status-col, .announce-employer-col{
+.announce-employer-col{
     width: 200px;
 }
 
@@ -769,15 +784,15 @@ a {
 }
 
 .user-name-col, .user-email-col{
-    width: 400px;
+    width: 200px;
 }
 
 #user-deleted-label{
     font-size: 0.8rem;
 }
 
-.announce-url-col{
-
+.user-buttons-col{
+    width: 200px;
 }
 
 
@@ -1087,6 +1102,11 @@ a {
     .footer-jobs-div{
         width: 300px;
     }
+
+    .welcome-outer{
+
+    }
+
 }
 
 @media screen and (max-width: 575px) {

@@ -1,6 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+
+<?php
+session_start();
+$_SESSION['location'] = '';
+
+$loginLocation =  'http://localhost:63342/Sprint4/login.php';
+//$loginLocation =  'https://dragonfly.greenriverdev.com/sprint5/login.php'; cpanel
+$indexLocation = 'http://localhost:63342/Sprint4/index.php';
+//$indexLocation =  'https://dragonfly.greenriverdev.com/sprint5/index.php'; cpanel
+
+
+$viewingID = null;
+if (isset($_SESSION['user_id'])){
+    $viewingID = $_SESSION['user_id'];
+}
+
+if (isset($_GET['logout'])) {
+    session_destroy();
+    header("Location:$loginLocation");
+}
+
+echo '<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
@@ -14,11 +35,7 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
-<body>
-
-<?php
-session_start();
-$_SESSION['location'] = '';
+<body>';
 
 global $db_location;
 global $cnxn;
@@ -31,58 +48,72 @@ $appWasDeleted = false;
 $userWasDeleted = false;
 $announcementWasDeleted = false;
 
-// soft deletes a database entry
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($viewingID){
+    $viewingUser = "SELECT permission FROM users WHERE user_id = $viewingID";
+    $viewingUserResult =  @mysqli_query($cnxn, $viewingUser);
+    $isAdmin = mysqli_fetch_assoc($viewingUserResult)['permission'] === '1';
 
-    if($_POST["submit-from"] == 1) {
-        $id = $_POST["id"];
-        $sqlDeleteApp = "UPDATE applications SET is_deleted = 1 WHERE application_id = $id";
-        $appWasDeleted = true;
-        $deleteAppResult = @mysqli_query($cnxn, $sqlDeleteApp);
-    } elseif ($_POST["submit-from"] == 2) {
-        $id = $_POST["id"];
-        $sqlDeleteUser = "UPDATE users SET is_deleted = 1 WHERE user_id = $id";
-        $userWasDeleted = true;
-        //echo $sql4;
-        $deleteUserResult = @mysqli_query($cnxn, $sqlDeleteUser);
-    }else if($_POST["submit-from"] == 3) {
-        $id = $_POST["id"];
-        $sqlMakeUserAdmin = "UPDATE users SET permission = 1 WHERE user_id = $id";
-        $makeAdminResult = @mysqli_query($cnxn, $sqlMakeUserAdmin);
-    }else if($_POST["submit-from"] == 4) {
-        $id = $_POST["id"];
-        $sqlDeleteAnnouncement = "UPDATE announcements SET is_deleted = 1 WHERE id = $id";
-        $deletedAnnouncementResult = @mysqli_query($cnxn, $sqlDeleteAnnouncement);
-        $announcementWasDeleted = true;
-    }
-}
+    if ($isAdmin){
+        // soft deletes a database entry
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-$role = 1;
+            if($_POST["submit-from"] == 1) {
+                $id = $_POST["id"];
+                $sqlDeleteApp = "UPDATE applications SET is_deleted = 1 WHERE application_id = $id";
+                $appWasDeleted = true;
+                $deleteAppResult = @mysqli_query($cnxn, $sqlDeleteApp);
+            } elseif ($_POST["submit-from"] == 2) {
+                $id = $_POST["id"];
+                $sqlDeleteUser = "UPDATE users SET is_deleted = 1 WHERE user_id = $id";
+                $userWasDeleted = true;
+                //echo $sql4;
+                $deleteUserResult = @mysqli_query($cnxn, $sqlDeleteUser);
+            }else if($_POST["submit-from"] == 3) {
+                $id = $_POST["id"];
+                $sqlMakeUserAdmin = "UPDATE users SET permission = 1 WHERE user_id = $id";
+                $makeAdminResult = @mysqli_query($cnxn, $sqlMakeUserAdmin);
+            }else if($_POST["submit-from"] == 4) {
+                $id = $_POST["id"];
+                $sqlDeleteAnnouncement = "UPDATE announcements SET is_deleted = 1 WHERE id = $id";
+                $deletedAnnouncementResult = @mysqli_query($cnxn, $sqlDeleteAnnouncement);
+                $announcementWasDeleted = true;
+            }
+        }
 
-// fetches specific data from database tables
-// $sqlApps = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC";
-$sqlApps = "SELECT * FROM `applications` JOIN `users` WHERE `applications`.`user_id` = `users`.`user_id` AND 
+        $role = 1;
+
+        // fetches specific data from database tables
+        // $sqlApps = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC";
+        $sqlApps = "SELECT * FROM `applications` JOIN `users` WHERE `applications`.`user_id` = `users`.`user_id` AND 
                                                 `applications`.is_deleted = 0 AND `users`.is_deleted = 0";
-$sqlAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY date_created DESC LIMIT 5"; // 5 most recent announcements
-$sqlUsers = "SELECT * FROM users LIMIT 5"; // 5 users (deleted users get filtered out in dashboard.js so admin can see deleted too)
-$appsResult = @mysqli_query($cnxn, $sqlApps);
-$announceResult = @mysqli_query($cnxn, $sqlAnnounce);
-$usersResult = @mysqli_query($cnxn, $sqlUsers);
+        $sqlAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY date_created DESC LIMIT 5"; // 5 most recent announcements
+        $sqlUsers = "SELECT * FROM users"; // 5 users (deleted users get filtered out in dashboard.js so admin can see deleted too)
+        $appsResult = @mysqli_query($cnxn, $sqlApps);
+        $announceResult = @mysqli_query($cnxn, $sqlAnnounce);
+        $usersResult = @mysqli_query($cnxn, $sqlUsers);
 
-// Fill in apps array
-$apps[] = array();
-$users[] = array();
+        // Fill in apps array
+        $apps[] = array();
+        $users[] = array();
 
-$appCount = 0;
-while ($row = mysqli_fetch_assoc($appsResult)) {
-    $apps[$appCount] = $row;
-    $appCount++;
-}
+        $appCount = 0;
+        while ($row = mysqli_fetch_assoc($appsResult)) {
+            $apps[$appCount] = $row;
+            $appCount++;
+        }
 
-$userCount = 0;
-while ($row = mysqli_fetch_assoc($usersResult)) {
-    $users[$userCount] = $row;
-    $userCount++;
+        $userCount = 0;
+        while ($row = mysqli_fetch_assoc($usersResult)) {
+            $users[$userCount] = $row;
+            $userCount++;
+        }
+    }else{
+        // Redirect back to dashboard if a non admin user is logged in
+        header("Location:$indexLocation");
+    }
+}else{
+    // Redirect back to login if nobody is logged in
+    header("Location:$loginLocation");
 }
 ?>
 
@@ -254,8 +285,9 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php
-                        createReminders($announceResult);
+                        <?php if ($isAdmin){
+                            createReminders($announceResult);
+                        }
                         ?>
                     </tbody>
                 </table>
@@ -367,7 +399,7 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                                 </div>
                             </div>
                         </th>
-                        <th scope="col" class="w-btn"></th>
+                        <th scope="col" class="user-buttons-col"></th>
                     </tr>
                     </thead>
                     <tbody id="dash-users-list">
@@ -506,21 +538,32 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                 </div>
             </div>
         </div>
+        <div class="text-center">
+            <a href='admin_dashboard.php?logout=true'>Logout</a>
+        </div>
 </main>
 
-
-
 <?php include 'php/footer.php' ?>
-<script>let apps = <?php echo json_encode($apps) ?>; let users = <?php echo json_encode($users) ?>; let role = <?php echo $role ?>; let appWasDeleted = <?php echo json_encode($appWasDeleted) ?>; let userWasDeleted = <?php echo json_encode($userWasDeleted) ?>;</script>
+<script>
+    let apps = <?php echo json_encode($apps) ?>;
+    let users = <?php echo json_encode($users) ?>;
+    let role = <?php echo $role ?>;
+    let userID = <?php echo $viewingID ?>;
+    let appWasDeleted = <?php echo json_encode($appWasDeleted) ?>;
+    let userWasDeleted = <?php echo json_encode($userWasDeleted) ?>;
+</script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="js/main.js"></script>
-<script src="js/dashboard.js"></script>
+<script src="js/dash-functions.js"></script>
+<script src="js/dash-apps.js"></script>
+<script src="js/dash-users.js"></script>
 </body>
 </html>
 
 
 
 <?php
+
 function createReminders($info) {
     while ($row = mysqli_fetch_assoc($info)) {
         $id = $row["id"];
