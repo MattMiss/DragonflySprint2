@@ -1,30 +1,34 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign-up Submit</title>
-    <!-- Load theme from localstorage -->
-    <script src="../js/themescript.js"></script>
-    <!-- Latest compiled and minified CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="../styles/styles.css"/>
-    <!-- Latest compiled JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</head>
-<body>
-
 <?php
 session_start();
 $_SESSION['location'] = '../';
 include '../php/nav_bar.php' ?>
-
-<main>
-    <div class="container p-3" id="main-container">
 <?php
 
+function echoHeader() {
+    echo "
+        <html lang='en'>
+        <head>
+            <meta charset='UTF-8'>
+            <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+            <title>Sign-up Submit</title>
+            <!-- Load theme from localstorage -->
+            <script src='../js/themescript.js'></script>
+            <!-- Latest compiled and minified CSS -->
+            <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css' rel='stylesheet'>
+            <!-- Font awesome -->
+            <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'>
+            <link rel='stylesheet' href='../styles/styles.css'/>
+            <!-- Latest compiled JavaScript -->
+            <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js'></script>
+        </head>
+        <body>
+            <main>
+                <div class='container p-3' id='main-container'>
+     ";
+}
+
 function echoError() {
+    echoHeader();
     echo "
             <div class='form-error'>
                 <h3>Sign-up failed, please try again.</h3>
@@ -104,13 +108,22 @@ if(! empty($_POST)) {
         return;
     }
 
+    // checks if email is already in use
+    $checkEmail = "SELECT * FROM users WHERE email = '$email'";
+    $resultCheckEmail = @mysqli_query($cnxn, $checkEmail);
+
+    if(mysqli_num_rows($resultCheckEmail) !== 0) {
+        echoError();
+        return;
+    }
+
     // password
     if(strlen($password) < $MIN_PASSWORD || strlen($password) > $MAX_PASSWORD) {
         echoError();
         return;
     }
 
-    if( $password !== $passwordConfirm) {
+    if($password !== $passwordConfirm) {
         echoError();
         return;
     }
@@ -136,8 +149,8 @@ if(! empty($_POST)) {
 
     $result = @mysqli_query($cnxn, $sql);
 
+    echoHeader();
     echo "
-        <main>
             <div class='container p-3'>
             <h3 class='receipt-message p-3 mb-0'>Success! Your account has been created.</h3>
             <div class='form-receipt-container p-3'>
@@ -161,7 +174,7 @@ if(! empty($_POST)) {
                         " . stripslashes($roles) . "
                     </li>
                     <li class='align-self-center'>
-                        <a class='link' href='../index.php'>Return home</a>
+                        <a class='link' href='../login.php'>Please Login</a>
                     </li>
                 </ul>
         
@@ -170,10 +183,12 @@ if(! empty($_POST)) {
         </main>
     ";
 } else {
-    echo "<div class='content'>
-              <h2>Please fill out the form.</h2>
-              <a class='link' href='../signup_form.php'>Go back</a>
-          </div>
+    echoHeader();
+    echo "
+               <div class='content'>
+                  <h2>Please fill out the form.</h2>
+                  <a class='link' href='../signup_form.php'>Go back</a>
+              </div>
           ";
 }
 ?>
