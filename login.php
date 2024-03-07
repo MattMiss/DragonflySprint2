@@ -1,41 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
-    <!-- Load theme from localstorage -->
-    <script src="js/themescript.js"></script>
-    <!-- Latest compiled and minified CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="styles/styles.css"/>
-    <!-- Latest compiled JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</head>
-<body>
-
 <?php
 session_start();
 $_SESSION['location'] = '';
 
+global $db_location;
+global $cnxn;
+
 $db_location = '';
-include 'php/nav_bar.php';
+//include 'php/nav_bar.php';
+include 'db_picker.php';
+include $db_location;
+
+
+// get user email, id and password from db
+$email = "";
+$pass = "";
 
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && ! empty($_POST)) {
     $email = $_POST['email'];
-    $password = $_POST['password'];
+    $pass = $_POST['password'];
+    $sqlUserPass = "SELECT `user_id`, `email`, password FROM users WHERE `email`='$email' AND `password`='$pass' AND `users`.is_deleted = 0 ";
 
-    if($email == "admin@admin.com" && $password == "admin123") {
-        $_SESSION['user_id'] = 1;
+    $result = mysqli_query($cnxn, $sqlUserPass);
 
-        header("Location:https://dragonfly.greenriverdev.com/sprint5/index.php");
-        exit;
+    if(mysqli_num_rows($result)===1) {
+        $row = mysqli_fetch_assoc($result);
+
+        if($row['email']===$email && $row['password']===$pass){
+//            echo "Logged in!";
+            $_SESSION['user_id'] = $row['user_id'];
+            header("Location:https://dragonfly.greenriverdev.com/sprint5/index.php");
+            exit();
+        }else{
+
+        }
+
+
+
     } else {
         echo "
+            <!DOCTYPE html>
+            <html lang='en'>
+            <head>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <title>Login Page</title>
+                <!-- Load theme from localstorage -->
+                <script src='js/themescript.js'></script>
+                <!-- Latest compiled and minified CSS -->
+                <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css' rel='stylesheet'>
+                <!-- Font awesome -->
+                <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'>
+                <link rel='stylesheet' href='styles/styles.css'/>
+                <!-- Latest compiled JavaScript -->
+                <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js'></script>
+            </head>
+            <body>
             <main>
                 <div class='container p-3' id='main-container'>
                     <h3 class='form-header'>Login</h3>
@@ -61,6 +82,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! empty($_POST)) {
     }
 } else {
     echo "
+        <!DOCTYPE html>
+            <html lang='en'>
+            <head>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <title>Login Page</title>
+                <!-- Load theme from localstorage -->
+                <script src='js/themescript.js'></script>
+                <!-- Latest compiled and minified CSS -->
+                <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css' rel='stylesheet'>
+                <!-- Font awesome -->
+                <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'>
+                <link rel='stylesheet' href='styles/styles.css'/>
+                <!-- Latest compiled JavaScript -->
+                <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js'></script>
+            </head>
+        <body>
         <main>
             <div class='container p-3' id='main-container'>
                 <h3 class='form-header'>Login</h3>
