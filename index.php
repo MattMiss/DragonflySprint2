@@ -1,6 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<?php
+session_start();
+$_SESSION['location'] = '';
+
+$loginLocation =  'http://localhost:63342/Sprint4/login.php';
+//$loginLocation =  'https://dragonfly.greenriverdev.com/sprint5/login.php'; //cpanel
+
+$viewingID = null;
+if (isset($_SESSION['user_id'])){
+    $viewingID = $_SESSION['user_id'];
+}
+
+if (isset($_GET['logout'])) {
+    session_destroy();
+    header("Location:$loginLocation");
+}
+
+echo '
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard Homepage</title>
@@ -14,11 +32,7 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
-<body>
-
-<?php
-session_start();
-$_SESSION['location'] = '';
+<body>';
 
 $db_location = '';
 include 'php/nav_bar.php';
@@ -29,41 +43,50 @@ global $cnxn;
 $appWasDeleted = false;
 $userWasDeleted = false;
 
-// soft deletes a database entry
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($viewingID) {
+    $viewingUser = "SELECT permission FROM users WHERE user_id = $viewingID";
+    $viewingUserResult = @mysqli_query($cnxn, $viewingUser);
+    $isAdmin = mysqli_fetch_assoc($viewingUserResult)['permission'] === '1';
 
-    if($_POST["submit-from"] == 1) {
-        //echo "ID is: " . $_POST["id"];
-        $id = $_POST["id"];
-        $sqlDeleteApp = "UPDATE applications SET is_deleted = 1 WHERE application_id = $id";
-        $appWasDeleted = true;
-        $deleteAppResult = @mysqli_query($cnxn, $sqlDeleteApp);
+    // soft deletes a database entry
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+        if ($_POST["submit-from"] == 1) {
+            //echo "ID is: " . $_POST["id"];
+            $id = $_POST["id"];
+            $sqlDeleteApp = "UPDATE applications SET is_deleted = 1 WHERE application_id = $id";
+            $appWasDeleted = true;
+            $deleteAppResult = @mysqli_query($cnxn, $sqlDeleteApp);
+        }
     }
-}
 
-$role = 0;
+    $role = 0;
 
-$date = date('Y-m-d', time());
-$start = date('Y-m-d', strtotime($date.'-5days'));
-$finish = date('Y-m-d', strtotime($date.'+5days'));
-$date_created =
+    $date = date('Y-m-d', time());
+    $start = date('Y-m-d', strtotime($date . '-5days'));
+    $finish = date('Y-m-d', strtotime($date . '+5days'));
+    $date_created =
 
-$sqlRecentAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 AND (date_created BETWEEN '$start' AND '$date')
+    $sqlRecentAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 AND (date_created BETWEEN '$start' AND '$date')
             ORDER BY id DESC LIMIT 5"; // announcements from last 5 days
-$sqlRecentApps = "SELECT * FROM applications WHERE is_deleted = 0 AND (followupdate BETWEEN '$start' AND '$finish')
+    $sqlRecentApps = "SELECT * FROM applications WHERE is_deleted = 0 AND (followupdate BETWEEN '$start' AND '$finish')
             ORDER BY application_id DESC";
 
 
-$sqlApps = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC";
-//$sqlAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY id DESC LIMIT 5"; // announcements from last 5 days
-$appsResult = @mysqli_query($cnxn, $sqlApps);
-$announceResult = @mysqli_query($cnxn, $sqlRecentAnnounce);
-$appReminders = @mysqli_query($cnxn, $sqlRecentApps);
+    $sqlApps = "SELECT * FROM applications WHERE is_deleted = 0 AND user_id = $viewingID ORDER BY application_id DESC";
+    //$sqlAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY id DESC LIMIT 5"; // announcements from last 5 days
+    $appsResult = @mysqli_query($cnxn, $sqlApps);
+    $announceResult = @mysqli_query($cnxn, $sqlRecentAnnounce);
+    $appReminders = @mysqli_query($cnxn, $sqlRecentApps);
 
-$apps[] = [];
+    $apps[] = [];
 
-while ($row = mysqli_fetch_assoc($appsResult)) {
-    $apps[] = $row;
+    while ($row = mysqli_fetch_assoc($appsResult)) {
+        $apps[] = $row;
+    }
+}else{
+    // Redirect back to login if nobody is logged in
+    header("Location:$loginLocation");
 }
 
 ?>
@@ -305,14 +328,17 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
             </div>
         </div>
     </div>
+    <div class="text-center">
+        <a href='index.php?logout=true'>Logout</a>
+    </div>
 </main>
-
 <?php include 'php/footer.php'?>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="js/contactscript.js"></script>
 <script>let apps = <?php echo json_encode($apps) ?>; let role = <?php echo $role ?>; users=''; let appWasDeleted = <?php echo json_encode($appWasDeleted) ?>; let userWasDeleted = <?php echo json_encode($userWasDeleted) ?>;</script>
 <script src="js/main.js"></script>
-<script src="js/dashboard.js"></script>
+<script src="js/dash-functions.js"></script>
+<script src="js/dash-apps.js"></script>
 </body>
 </html>
 
