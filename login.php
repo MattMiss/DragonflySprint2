@@ -2,10 +2,13 @@
 session_start();
 $_SESSION['location'] = '';
 
+$indexLocation =  'http://localhost:63342/Sprint4/index.php'; // local (may need to change port number)
+//$indexLocation =  'https://dragonfly.greenriverdev.com/sprint5/index.php'; cpanel
+
 global $db_location;
 global $cnxn;
 
-$db_location = '';
+global $db_location;
 //include 'php/nav_bar.php';
 include 'db_picker.php';
 include $db_location;
@@ -15,22 +18,21 @@ include $db_location;
 $email = "";
 $pass = "";
 
-
-
 if ($_SERVER["REQUEST_METHOD"] == "POST" && ! empty($_POST)) {
     $email = $_POST['email'];
     $pass = $_POST['password'];
-    $sqlUserPass = "SELECT `user_id`, `email`, password FROM users WHERE `email`='$email' AND `password`='$pass' AND `users`.is_deleted = 0 ";
+    $sqlUserPass = "SELECT `user_id`, `email`, password, permission, fname  FROM users WHERE `email`='$email' AND `password`='$pass' AND `users`.is_deleted = 0 ";
 
     $result = mysqli_query($cnxn, $sqlUserPass);
 
     if(mysqli_num_rows($result)===1) {
         $row = mysqli_fetch_assoc($result);
-
         if($row['email']===$email && $row['password']===$pass){
 //            echo "Logged in!";
             $_SESSION['user_id'] = $row['user_id'];
-            header("Location:https://dragonfly.greenriverdev.com/sprint5/index.php");
+            $_SESSION['permission'] = $row['permission'];
+            $_SESSION['fname'] = $row['fname'];
+            header("Location:$indexLocation");
             exit();
         }else{
 

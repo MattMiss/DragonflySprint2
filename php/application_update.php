@@ -82,6 +82,8 @@ include '../php/nav_bar.php' ?>
                             `adate` = '$adate', `astatus` = '$astatus', `fupdates` = '$fupdates', `followupdate` = '$followupdate'
                         WHERE `application_id` = '$applicationid';";
 
+                echo $sql;
+
                 $result = @mysqli_query($cnxn, $sql);
 
                 echo "
