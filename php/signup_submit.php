@@ -56,6 +56,8 @@ if(! empty($_POST)) {
     $MAX_ROLES = 250;
     $MIN_PASSWORD = 8;
     $MAX_PASSWORD = 16;
+    $MIN_NAME = 1;
+    $MAX_NAME = 30;
 
     // form values
     $fname = $_POST['firstName'];
@@ -76,21 +78,27 @@ if(! empty($_POST)) {
     $password = strip_tags($password);
     $passwordConfirm = strip_tags($passwordConfirm);
 
-    $name = ucfirst($fname) . " " . ucfirst($lname);
-
     // validation
+
+    // names
+    if (! (strlen($fname) >= $MIN_NAME && strlen($fname) <= $MAX_NAME) || ! (strlen($lname) >= $MIN_NAME && strlen($lname) <= $MAX_NAME)) {
+        echoError();
+        return;
+    }
+
+    // cohort number
     if(! $cohortNum >= $MIN_COHORT_NUM && ! $cohortNum <= $MAX_COHORT_NUM) {
         echoError();
         return;
     }
 
+    // roles
     if(! strlen($roles) >= $MIN_ROLES && ! strlen($roles) <= $MAX_ROLES) {
         echoError();
         return;
     }
 
     // email
-
     if(! preg_match("/[^\s@]+@[^\s@]+\.[^\s@]+/", $email) ) {
         echoError();
         return;
@@ -102,12 +110,16 @@ if(! empty($_POST)) {
         return;
     }
 
-    if(! $password == $passwordConfirm) {
-        echo "password == passwordConfirm";
+
+    echo "$password $passwordConfirm";
+
+    // FIX
+    if( $password !== $passwordConfirm) {
         echoError();
         return;
     }
 
+    // works
     if(! preg_match("/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z\d!@#$%&*-_.]{" . $MIN_PASSWORD . "," . $MAX_PASSWORD . "}$/", $password)) {
         echoError();
         return;
@@ -119,6 +131,8 @@ if(! empty($_POST)) {
         echoError();
         return;
     }
+
+    $name = ucfirst($fname) . " " . ucfirst($lname);
 
     $sql = "INSERT INTO `users` (`fname`, `lname`, `email`, `password`, `cohortNum`, `status`, `roles`) VALUES ('$fname', 
             '$lname', '$email', '$password', '$cohortNum', '$status', '$roles')";
@@ -174,6 +188,7 @@ if(! empty($_POST)) {
 <?php include '../php/footer.php' ?>
 
 <script src="../js/main.js"></script>
+<script src="../js/signupscript.js"></script>
 </body>
 </html>
 

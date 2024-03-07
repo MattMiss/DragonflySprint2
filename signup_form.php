@@ -19,7 +19,8 @@
 <?php
 session_start();
 $_SESSION['location'] = '';
-include 'php/nav_bar.php' ?>
+include 'php/nav_bar.php'
+?>
 <main>
     <div class="container p-3" id="main-container">
         <h3 class="form-header p-3 mb-0">Sign-up</h3>
