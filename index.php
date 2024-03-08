@@ -4,16 +4,16 @@
 session_start();
 $_SESSION['location'] = '';
 
-$adminLocation =  'http://localhost:63342/Sprint4/admin_dashboard.php';
-//$adminLocation =  'https://dragonfly.greenriverdev.com/sprint5/admin_dashboard.php'; //cpanel
+global $cnxn;
+global $viewingID;
+global $db_location;
 
+// Logout and return to login.php if ?logout=true
+include 'php/roles/logout_check.php';
 // Check for user_id in SESSION and redirect to login if null
-include 'user_check.php';
-
-if ($_SESSION['permission'] === '1'){
-    // Redirect to admin dashboard if an admin navigates here
-    header("Location:$adminLocation");
-}
+include 'php/roles/user_check.php';
+// Redirect admins to admin dashboard
+include 'php/roles/admin_kick.php';
 
 echo '
     <!DOCTYPE html>
@@ -34,13 +34,9 @@ echo '
 </head>
 <body>';
 
-$db_location = '';
 include 'php/nav_bar.php';
 include 'db_picker.php';
 include $db_location;
-
-global $cnxn;
-global $viewingID;
 
 $appWasDeleted = false;
 $userWasDeleted = false;

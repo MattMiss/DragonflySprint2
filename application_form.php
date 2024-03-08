@@ -1,3 +1,14 @@
+<?php
+session_start();
+$_SESSION['location'] = '';
+
+// Logout and return to login.php if ?logout=true
+include 'php/roles/logout_check.php';
+// Ensure a user is logged in
+include 'php/roles/user_check.php';
+// Redirect admins to admin dashboard
+include 'php/roles/admin_kick.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,8 +28,6 @@
 <body>
 
 <?php
-session_start();
-$_SESSION['location'] = '';
 include 'php/nav_bar.php' ?>
 <main>
     <div class="container p-3" id="main-container">

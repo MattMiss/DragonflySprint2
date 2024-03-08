@@ -1,29 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Announcement</title>
-    <!-- Load theme from localstorage -->
-    <script src="js/themescript.js"></script>
-    <!-- Latest compiled and minified CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="styles/styles.css"/>
-    <!-- Latest compiled JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</head>
-<body>
+
 
 <?php
 session_start();
 $_SESSION['location'] = '';
-include 'php/nav_bar.php';
 
 global $db_location;
 global $cnxn;
+global $viewingID;
 
+// Logout and return to login.php if ?logout=true
+include 'php/roles/logout_check.php';
+// Ensure a user is logged in
+include 'php/roles/user_check.php';
+// Ensure an admin is logged in
+include 'php/roles/admin_check.php';
+
+echo
+'<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Admin Announcement</title>
+        <!-- Load theme from localstorage -->
+        <script src="js/themescript.js"></script>
+        <!-- Latest compiled and minified CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Font awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <link rel="stylesheet" href="styles/styles.css"/>
+        <!-- Latest compiled JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    </head>
+<body>';
+
+include 'php/nav_bar.php';
 include 'db_picker.php';
 include $db_location;
 
@@ -70,21 +81,6 @@ include $db_location;
                     <input type="url" class="form-control" id="announcement-url" name="announcement-url"
                            placeholder="e.g. https://www.example.com" required>
                 </div>
-<!--                <div class="mb-4">-->
-<!--                    <label for="sent-to" class="form-label">Send to*</label>-->
-<!--                    <div class="row">-->
-<!--                        <div class="col-8">-->
-<!--                            <input type="email" class="form-control" id="sent-to" name="sent-to"-->
-<!--                                   placeholder="e.g. example@email.com" required>-->
-<!--                        </div>-->
-<!--                        <div class="col-1 m-auto text-center">-->
-<!--                            Or-->
-<!--                        </div>-->
-<!--                        <div class="col-3 text-end">-->
-<!--                            <button type="button" class='submit-btn' data-bs-toggle='modal' data-bs-target='#selectUserModal' onclick=''>Select A User</button>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
                 <input type="hidden" id="first-name" name="first-name" value="default">
                 <input type="hidden" id="last-name" name="last-name" value="default">
 
@@ -92,50 +88,6 @@ include $db_location;
             </form>
         </div>
     </div>
-<!--    <div class='modal modal-xl fade' id='selectUserModal' tabindex='-1'>-->
-<!--        <div class='modal-dialog modal-dialog-centered'>-->
-<!--            <div class='modal-content'>-->
-<!--                <div class='modal-header'>-->
-<!--                    <h3>Choose A User</h3>-->
-<!--                </div>-->
-<!--                <div class='modal-body text-center'>-->
-<!--                    <table class='dash-table'>-->
-<!--                        <thead>-->
-<!--                        <tr>-->
-<!--                            <th scope='col'>-->
-<!--                                First-->
-<!--                            </th>-->
-<!--                            <th scope='col'>-->
-<!--                                Last-->
-<!--                            </th>-->
-<!--                            <th scope='col'>-->
-<!--                                Status-->
-<!--                            </th>-->
-<!--                            <th scope='col'>-->
-<!--                                Cohort-->
-<!--                            </th>-->
-<!--                            <th scope='col'>-->
-<!--                                Email-->
-<!--                            </th>-->
-<!--                            <th scope='col'>-->
-<!--                                Roles-->
-<!--                            </th>-->
-<!--                        </tr>-->
-<!--                        </thead>-->
-<!--                        <tbody class='table-body'>-->
-<!--                        --><?php
-//                        createUsers();
-//                        ?>
-<!---->
-<!--                        </tbody>-->
-<!--                    </table>-->
-<!--                </div>-->
-<!--                <div class='modal-footer'>-->
-<!--                    <button type='button' class='btn btn-danger m-auto' data-bs-dismiss='modal'>Cancel</button>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
 </main>
 
 
@@ -146,36 +98,3 @@ include $db_location;
 <script src="js/main.js"></script>
 </body>
 </html>
-
-<?php
-//function createUsers(){
-//    $db_location = '';
-//    include 'db_picker.php';
-//    include $db_location;
-//
-//    $sql = "SELECT * FROM users";
-//    $result = @mysqli_query($cnxn, $sql);
-//
-//    while ($row = mysqli_fetch_assoc($result)){
-//        $id = $row['user_id'];
-//        $fname = $row['fname'];
-//        $lname = $row['lname'];
-//        $status = $row['status'];
-//        $cohortNum = $row['cohortNum'];
-//        $email = $row['email'];
-//        $roles = $row['roles'];
-//        $user_info = json_encode($row);
-//        echo "
-//                <tr onclick='userSelected($user_info)'>
-//                    <td>$fname</td>
-//                    <td>$lname</td>
-//                    <td>$status</td>
-//                    <td>$cohortNum</td>
-//                    <td>$email</td>
-//                    <td>$roles</td>
-//                </tr>
-//             ";
-//    }
-//}
-//
-//?>

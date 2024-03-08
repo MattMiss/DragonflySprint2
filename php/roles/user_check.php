@@ -9,9 +9,4 @@ if (isset($_SESSION['user_id'])){
     // Redirect back to login if nobody is logged in
     header("Location:$loginLocation");
 }
-
-if (isset($_GET['logout'])) {
-    session_destroy();
-    header("Location:$loginLocation");
-}
 ?>
