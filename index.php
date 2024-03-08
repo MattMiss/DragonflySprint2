@@ -4,20 +4,21 @@
 session_start();
 $_SESSION['location'] = '';
 
-$loginLocation =  'http://localhost:63342/Sprint4/login.php';
-//$loginLocation =  'https://dragonfly.greenriverdev.com/sprint5/login.php'; cpanel
+$adminLocation =  'http://localhost:63342/Sprint4/admin_dashboard.php';
+//$adminLocation =  'https://dragonfly.greenriverdev.com/sprint5/admin_dashboard.php'; //cpanel
 
-$viewingID = null;
-if (isset($_SESSION['user_id'])){
-    $viewingID = $_SESSION['user_id'];
+// Check for user_id in SESSION and redirect to login if null
+include 'user_check.php';
+
+if ($_SESSION['permission'] === '1'){
+    // Redirect to admin dashboard if an admin navigates here
+    header("Location:$adminLocation");
 }
 
-if (isset($_GET['logout'])) {
-    session_destroy();
-    header("Location:$loginLocation");
-}
-
-echo '<head>
+echo '
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard Homepage</title>
@@ -39,53 +40,50 @@ include 'db_picker.php';
 include $db_location;
 
 global $cnxn;
+global $viewingID;
+
 $appWasDeleted = false;
 $userWasDeleted = false;
 
-if ($viewingID) {
-    $viewingUser = "SELECT permission FROM users WHERE user_id = $viewingID";
-    $viewingUserResult = @mysqli_query($cnxn, $viewingUser);
-    $isAdmin = mysqli_fetch_assoc($viewingUserResult)['permission'] === '1';
+$viewingUser = "SELECT permission FROM users WHERE user_id = $viewingID";
+$viewingUserResult = @mysqli_query($cnxn, $viewingUser);
+$isAdmin = mysqli_fetch_assoc($viewingUserResult)['permission'] === '1';
 
-    // soft deletes a database entry
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// soft deletes a database entry
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-        if ($_POST["submit-from"] == 1) {
-            //echo "ID is: " . $_POST["id"];
-            $id = $_POST["id"];
-            $sqlDeleteApp = "UPDATE applications SET is_deleted = 1 WHERE application_id = $id";
-            $appWasDeleted = true;
-            $deleteAppResult = @mysqli_query($cnxn, $sqlDeleteApp);
-        }
+    if ($_POST["submit-from"] == 1) {
+        //echo "ID is: " . $_POST["id"];
+        $id = $_POST["id"];
+        $sqlDeleteApp = "UPDATE applications SET is_deleted = 1 WHERE application_id = $id";
+        $appWasDeleted = true;
+        $deleteAppResult = @mysqli_query($cnxn, $sqlDeleteApp);
     }
+}
 
-    $role = 0;
+$role = 0;
 
-    $date = date('Y-m-d', time());
-    $start = date('Y-m-d', strtotime($date . '-5days'));
-    $finish = date('Y-m-d', strtotime($date . '+5days'));
-    $date_created =
+$date = date('Y-m-d', time());
+$start = date('Y-m-d', strtotime($date . '-5days'));
+$finish = date('Y-m-d', strtotime($date . '+5days'));
+$date_created =
 
-    $sqlRecentAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 AND (date_created BETWEEN '$start' AND '$date')
-            ORDER BY id DESC LIMIT 5"; // announcements from last 5 days
-    $sqlRecentApps = "SELECT * FROM applications WHERE is_deleted = 0 AND (followupdate BETWEEN '$start' AND '$finish')
-            ORDER BY application_id DESC";
+$sqlRecentAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 AND (date_created BETWEEN '$start' AND '$date')
+        ORDER BY announcement_id DESC LIMIT 5"; // announcements from last 5 days
+$sqlRecentApps = "SELECT * FROM applications WHERE is_deleted = 0 AND (followupdate BETWEEN '$start' AND '$finish')
+        ORDER BY application_id DESC";
 
 
-    $sqlApps = "SELECT * FROM applications WHERE is_deleted = 0 AND user_id = $viewingID ORDER BY application_id DESC";
-    //$sqlAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY id DESC LIMIT 5"; // announcements from last 5 days
-    $appsResult = @mysqli_query($cnxn, $sqlApps);
-    $announceResult = @mysqli_query($cnxn, $sqlRecentAnnounce);
-    $appReminders = @mysqli_query($cnxn, $sqlRecentApps);
+$sqlApps = "SELECT * FROM applications WHERE is_deleted = 0 AND user_id = $viewingID ORDER BY application_id DESC";
+//$sqlAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY id DESC LIMIT 5"; // announcements from last 5 days
+$appsResult = @mysqli_query($cnxn, $sqlApps);
+$announceResult = @mysqli_query($cnxn, $sqlRecentAnnounce);
+$appReminders = @mysqli_query($cnxn, $sqlRecentApps);
 
-    $apps[] = [];
+$apps[] = [];
 
-    while ($row = mysqli_fetch_assoc($appsResult)) {
-        $apps[] = $row;
-    }
-}else{
-    // Redirect back to login if nobody is logged in
-    header("Location:$loginLocation");
+while ($row = mysqli_fetch_assoc($appsResult)) {
+    $apps[] = $row;
 }
 
 ?>
@@ -344,7 +342,7 @@ if ($viewingID) {
 <?php
 function createAppAnnouncements($info) {
     while ($row = mysqli_fetch_assoc($info)) {
-        $id = $row["id"];
+        $id = $row["announcement_id"];
         $title = $row["title"];
         $jtype = $row["job_type"];
         $location = $row["location"];

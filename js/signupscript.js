@@ -51,7 +51,6 @@ function validateCohortNum() {
 
 // validates roles input
 function validateRoles() {
-    alert("validateRoles()");
     let isValid = (roles.value.length >= MIN_CHARACTERS) && (roles.value.length <= MAX_CHARACTERS);
 
     return isValid;
