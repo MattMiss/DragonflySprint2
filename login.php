@@ -3,8 +3,8 @@ session_start();
 $_SESSION['location'] = '';
 $location = $_SESSION['location'];
 
-//$indexLocation =  'http://localhost:63342/Sprint4/index.php'; // local (may need to change port number)
-$indexLocation =  'https://dragonfly.greenriverdev.com/sprint5/index.php'; //cpanel
+$indexLocation =  'http://localhost:63342/Sprint4/index.php'; // local (may need to change port number)
+//$indexLocation =  'https://dragonfly.greenriverdev.com/sprint5/index.php'; //cpanel
 
 global $db_location;
 global $cnxn;

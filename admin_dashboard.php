@@ -1,27 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-
 <?php
 session_start();
 $_SESSION['location'] = '';
 
-$loginLocation =  'http://localhost:63342/Sprint4/login.php';
-//$loginLocation =  'https://dragonfly.greenriverdev.com/sprint5/login.php'; cpanel
 $indexLocation = 'http://localhost:63342/Sprint4/index.php';
-//$indexLocation =  'https://dragonfly.greenriverdev.com/sprint5/index.php'; cpanel
+//$indexLocation =  'https://dragonfly.greenriverdev.com/sprint5/index.php'; //cpanel
 
+// Check for user_id in SESSION and redirect to login if null
+include 'user_check.php';
 
-$viewingID = null;
-if (isset($_SESSION['user_id'])){
-    $viewingID = $_SESSION['user_id'];
-}
-
-if (isset($_GET['logout'])) {
-    session_destroy();
-    header("Location:$loginLocation");
-}
-
-echo '<head>
+echo '
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
@@ -39,6 +29,7 @@ echo '<head>
 
 global $db_location;
 global $cnxn;
+global $viewingID;
 
 include 'php/nav_bar.php';
 include 'db_picker.php';
@@ -48,73 +39,69 @@ $appWasDeleted = false;
 $userWasDeleted = false;
 $announcementWasDeleted = false;
 
-if ($viewingID){
-    $viewingUser = "SELECT permission FROM users WHERE user_id = $viewingID";
-    $viewingUserResult =  @mysqli_query($cnxn, $viewingUser);
-    $isAdmin = mysqli_fetch_assoc($viewingUserResult)['permission'] === '1';
+$viewingUser = "SELECT permission FROM users WHERE user_id = $viewingID";
+$viewingUserResult =  @mysqli_query($cnxn, $viewingUser);
+$isAdmin = mysqli_fetch_assoc($viewingUserResult)['permission'] === '1';
 
-    if ($isAdmin){
-        // soft deletes a database entry
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($isAdmin){
+    // soft deletes a database entry
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-            if($_POST["submit-from"] == 1) {
-                $id = $_POST["id"];
-                $sqlDeleteApp = "UPDATE applications SET is_deleted = 1 WHERE application_id = $id";
-                $appWasDeleted = true;
-                $deleteAppResult = @mysqli_query($cnxn, $sqlDeleteApp);
-            } elseif ($_POST["submit-from"] == 2) {
-                $id = $_POST["id"];
-                $sqlDeleteUser = "UPDATE users SET is_deleted = 1 WHERE user_id = $id";
-                $userWasDeleted = true;
-                //echo $sql4;
-                $deleteUserResult = @mysqli_query($cnxn, $sqlDeleteUser);
-            }else if($_POST["submit-from"] == 3) {
-                $id = $_POST["id"];
-                $sqlMakeUserAdmin = "UPDATE users SET permission = 1 WHERE user_id = $id";
-                $makeAdminResult = @mysqli_query($cnxn, $sqlMakeUserAdmin);
-            }else if($_POST["submit-from"] == 4) {
-                $id = $_POST["id"];
-                $sqlDeleteAnnouncement = "UPDATE announcements SET is_deleted = 1 WHERE id = $id";
-                $deletedAnnouncementResult = @mysqli_query($cnxn, $sqlDeleteAnnouncement);
-                $announcementWasDeleted = true;
-            }
+        if($_POST["submit-from"] == 1) {
+            $id = $_POST["id"];
+            $sqlDeleteApp = "UPDATE applications SET is_deleted = 1 WHERE application_id = $id";
+            $appWasDeleted = true;
+            $deleteAppResult = @mysqli_query($cnxn, $sqlDeleteApp);
+        } elseif ($_POST["submit-from"] == 2) {
+            $id = $_POST["id"];
+            $sqlDeleteUser = "UPDATE users SET is_deleted = 1 WHERE user_id = $id";
+            $userWasDeleted = true;
+            //echo $sql4;
+            $deleteUserResult = @mysqli_query($cnxn, $sqlDeleteUser);
+        }else if($_POST["submit-from"] == 3) {
+            $id = $_POST["id"];
+            $sqlMakeUserAdmin = "UPDATE users SET permission = 1 WHERE user_id = $id";
+            $makeAdminResult = @mysqli_query($cnxn, $sqlMakeUserAdmin);
+        }else if($_POST["submit-from"] == 4) {
+            $id = $_POST["id"];
+            $sqlDeleteAnnouncement = "UPDATE announcements SET is_deleted = 1 WHERE id = $id";
+            $deletedAnnouncementResult = @mysqli_query($cnxn, $sqlDeleteAnnouncement);
+            $announcementWasDeleted = true;
         }
+    }
 
-        $role = 1;
+    $role = 1;
 
-        // fetches specific data from database tables
-        // $sqlApps = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC";
-        $sqlApps = "SELECT * FROM `applications` JOIN `users` WHERE `applications`.`user_id` = `users`.`user_id` AND 
-                                                `applications`.is_deleted = 0 AND `users`.is_deleted = 0";
-        $sqlAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY date_created DESC LIMIT 5"; // 5 most recent announcements
-        $sqlUsers = "SELECT * FROM users"; // 5 users (deleted users get filtered out in dashboard.js so admin can see deleted too)
-        $appsResult = @mysqli_query($cnxn, $sqlApps);
-        $announceResult = @mysqli_query($cnxn, $sqlAnnounce);
-        $usersResult = @mysqli_query($cnxn, $sqlUsers);
+    // fetches specific data from database tables
+    // $sqlApps = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC";
+    $sqlApps = "SELECT * FROM `applications` JOIN `users` WHERE `applications`.`user_id` = `users`.`user_id` AND 
+                                            `applications`.is_deleted = 0 AND `users`.is_deleted = 0";
+    $sqlAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY date_created DESC LIMIT 5"; // 5 most recent announcements
+    $sqlUsers = "SELECT * FROM users"; // 5 users (deleted users get filtered out in dashboard.js so admin can see deleted too)
+    $appsResult = @mysqli_query($cnxn, $sqlApps);
+    $announceResult = @mysqli_query($cnxn, $sqlAnnounce);
+    $usersResult = @mysqli_query($cnxn, $sqlUsers);
 
-        // Fill in apps array
-        $apps[] = array();
-        $users[] = array();
+    // Fill in apps array
+    $apps[] = array();
+    $users[] = array();
 
-        $appCount = 0;
-        while ($row = mysqli_fetch_assoc($appsResult)) {
-            $apps[$appCount] = $row;
-            $appCount++;
-        }
+    $appCount = 0;
+    while ($row = mysqli_fetch_assoc($appsResult)) {
+        $apps[$appCount] = $row;
+        $appCount++;
+    }
 
-        $userCount = 0;
-        while ($row = mysqli_fetch_assoc($usersResult)) {
-            $users[$userCount] = $row;
-            $userCount++;
-        }
-    }else{
-        // Redirect back to dashboard if a non admin user is logged in
-        header("Location:$indexLocation");
+    $userCount = 0;
+    while ($row = mysqli_fetch_assoc($usersResult)) {
+        $users[$userCount] = $row;
+        $userCount++;
     }
 }else{
-    // Redirect back to login if nobody is logged in
-    header("Location:$loginLocation");
+    // Redirect back to dashboard if a non admin user is logged in
+    header("Location:$indexLocation");
 }
+
 ?>
 
 
@@ -209,6 +196,7 @@ if ($viewingID){
                                 </div>
                             </div>
                         </th>
+                        <!--
                         <th scope="col" class="app-user-col">
                             <div class="row clickable" id="user-order-btn">
                                 <div class="col-auto pe-0 my-auto">
@@ -252,6 +240,21 @@ if ($viewingID){
                             </div>
                         </th>
                         <th scope="col" class="w-btn" id="dash-app-btn-header"></th>
+                        -->
+                        <th scope="col" class="app-status-col" id="status-order-btn">
+                            <div class="row clickable">
+                                <div class="col-auto pe-0 my-auto">
+                                    URL
+                                </div>
+                                <div class="col-auto ps-2 my-auto">
+                                    <div class="order-icons">
+                                        <div class="order-icons">
+                                            <i class="fa-solid fa-sort" id="status-field-icon"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </th>
                     </tr>
                     </thead>
                     <tbody class="table-body" id="dash-apps-list">
@@ -566,7 +569,7 @@ if ($viewingID){
 
 function createReminders($info) {
     while ($row = mysqli_fetch_assoc($info)) {
-        $id = $row["id"];
+        $id = $row["announcement_id"];
         $title = $row["title"];
         $jtype = $row["job_type"];
         $location = $row["location"];

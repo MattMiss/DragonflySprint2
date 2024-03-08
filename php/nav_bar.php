@@ -17,11 +17,8 @@ if (isset($_SESSION['fname'])){
         <button type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" class="navbar-toggler"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse mx-1" id="navbar-menu">
             <ul class="navbar-nav nav-underline">
-                <li><a href="<?php echo $location?>index.php" class="nav-link">User Dashboard</a></li>
-                <!--<li><a href="<?php echo $location?>signup_form.php" class="nav-link">Sign-up</a></li>-->
-                <li><a href="<?php echo $location?>application_form.php" class="nav-link">New Application</a></li>
-                <li><a href="<?php echo $location?>contact_form.php" class="nav-link">Contact</a></li>
-                <?php checkPermission() ?>
+                <?php if ($permission === '0') showUserNav(); ?>
+                <?php if ($permission === '1') showAdminNav(); ?>
                 <li class="d-flex justify-content-end" id="dark-mode-list-item">
                     <div class="dark-switch-outer">
                         <input type="checkbox" id="dark-mode-switch">
@@ -61,22 +58,20 @@ if (isset($_SESSION['fname'])){
     </div>
 
 <?php
-function checkPermission(){
-    global $permission;
+function showAdminNav(){
     global $location;
 
-    if ($permission === '1'){
-        echo "<li class='nav-item dropdown'>
-                    <button class='btn btn-secondary btn-lg' id='navbarDropdown' role='button' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-                        <i class='fa-solid fa-caret-down me-2'></i>
-                        Admin
-                    </button>
-                    <div class='dropdown-menu' aria-labelledby='navbarDropdown'>
-                        <a class='dropdown-item' href='{$location}admin_dashboard.php'>Admin Dashboard</a>
-                        <a class='dropdown-item' href='{$location}admin_announcement.php'>Make Announcement</a>
-                    </div>
-                </li>";
-    }
+    echo "<li><a href='{$location}admin_dashboard.php' class='nav-link'>Admin Dashboard</a></li>
+            <li><a href='{$location}admin_announcement.php' class='nav-link'>Make Announcement</a></li>";
+
+}
+
+function showUserNav(){
+    global $location;
+
+    echo "<li><a href='{$location}index.php' class='nav-link'>User Dashboard</a></li>
+            <li><a href='{$location}application_form.php' class='nav-link'>New Application</a></li>
+            <li><a href='{$location}contact_form.php' class='nav-link'>Contact</a></li>'";
 }
 
 function showWelcome(){

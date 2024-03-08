@@ -263,12 +263,13 @@ function createAppFromData(appData){
             `<td>${appData.adate}</td>\n` +
             `<td>${appData.jname}</td>\n` +
             `<td>${appData.ename}</td>\n` +
-            `<td>${appData.fname} ${appData.lname}</td>\n` +
-            `<td>${appData.email}</td>\n` +
-            `<td class="status status-${appData.astatus}">\n` +
-            `    <i class="fa-solid fa-circle"></i>\n` +
-            `    <span style="text-transform: capitalize">` + statusReplace + `</span>\n` +
-            `</td>\n` +
+            `<td>${appData.jurl}</td>\n` +
+            //`<td>${appData.fname} ${appData.lname}</td>\n` +
+            //`<td>${appData.email}</td>\n` +
+            //`<td class="status status-${appData.astatus}">\n` +
+            //`    <i class="fa-solid fa-circle"></i>\n` +
+            //`    <span style="text-transform: capitalize">` + statusReplace + `</span>\n` +
+            //`</td>\n` +
             `</tr>`);
     }else{
         // Create a list item with the application data filled in for a USER
