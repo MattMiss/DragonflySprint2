@@ -1,6 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<?php
+session_start();
+$_SESSION['location'] = '';
+
+global $db_location;
+global $cnxn;
+global $viewingID;
+
+// Logout and return to login.php if ?logout=true
+include 'php/roles/logout_check.php';
+// Ensure a user is logged in
+include 'php/roles/user_check.php';
+// Redirect admins to admin dashboard
+include 'php/roles/admin_kick.php';
+
+$indexLocation =  'http://localhost:63342/Sprint4/index.php'; // local (may need to change port number)
+//$indexLocation =  'https://dragonfly.greenriverdev.com/sprint5/index.php'; //cpanel
+
+// Redirect back to index if a user navigates here without supplying an app_id
+$app_id = $_POST['application-id'];
+if (!$app_id){
+    header("Location:$indexLocation");
+}
+
+echo '
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Application</title>
@@ -14,21 +39,18 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
-<body>
-<?php
-session_start();
-$_SESSION['location'] = '';
+<body>';
 
-$db_location = '';
+
 include 'db_picker.php';
 include $db_location;
 
-$id = $_POST['application-id'];
-$sql = "SELECT * FROM `applications` WHERE `application_id` = $id;";
 
-$result = @mysqli_query($cnxn, $sql);
+$sqlApp = "SELECT * FROM `applications` WHERE `application_id` = $app_id";
 
-while ($row = mysqli_fetch_assoc($result))
+$appResult = @mysqli_query($cnxn, $sqlApp);
+
+while ($row = mysqli_fetch_assoc($appResult))
 {
     $jname = $row['jname'];
     $ename = $row['ename'];
@@ -38,7 +60,15 @@ while ($row = mysqli_fetch_assoc($result))
     $astatus = $row['astatus'];
     $fupdates = $row['fupdates'];
     $followupdate = $row['followupdate'];
+    $user_id = $row['user_id'];
+
+    if ($viewingID !== $user_id){
+        // TODO: user ID doesnt match here, dont load the app
+    }
 }
+
+
+
 include 'php/nav_bar.php' ?>
 <main>
     <div class="container p-3" id="main-container">

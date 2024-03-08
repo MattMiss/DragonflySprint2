@@ -212,16 +212,64 @@ nav a:hover {
 .dropdown-item:hover {
     border-bottom: none !important;
 }
-
+/*
 .dark-switch-outer{
     position: relative;
     width: 300px;
 }
+*/
+.dark-switch-outer{
+    position: relative;
+    width: 100%;
+}
 
+/*
 .welcome-outer{
     position: absolute;
     right: 100px;
     top: 24px;
+}
+*/
+
+.welcome-outer{
+    position: absolute;
+    right: 30px;
+    top: 20px;
+
+    .dark-switch-outer:hover{
+        background-color: transparent;
+    }
+    .dropdown-item{
+        width: auto;
+    }
+}
+
+.logout-outer{
+    position: absolute;
+}
+
+#user-dropdown{
+    border: none !important;
+}
+
+.user-menu-label{
+    color: var(--font-color);
+}
+
+.btn-logout{
+    background-color: var(--submit-color);
+    border: 1px solid var(--submit-border-color) !important;
+    border-radius: 2px;
+    color: var(--submit-text-color);
+    font-weight: 600;
+
+}
+.btn-logout:hover{
+    background-color: var(--submit-hover-color);
+    text-decoration: none;
+    border: 1px solid var(--submit-border-hover-color) !important;
+    color: var(--submit-text-hover-color);
+    transition: .75s;
 }
 
 
@@ -1104,7 +1152,7 @@ a {
     }
 
     .welcome-outer{
-
+        right: 100px;
     }
 
 }
