@@ -1,34 +1,45 @@
 <?php
 session_start();
 $_SESSION['location'] = '../';
-include '../php/nav_bar.php' ?>
+
+global $db_location;
+global $cnxn;
+global $use_local;
+global $viewingID;
+
+// Logout and return to login.php if ?logout=true
+include '../php/roles/logout_check.php';
+// Redirect users to user dashboard
+include '../php/roles/user_kick.php';
+// Redirect admins to admin dashboard
+include '../php/roles/admin_kick.php';
+
+echo
+'<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sign-up Submit</title>
+        <!-- Load theme from localstorage -->
+        <script src="../js/themescript.js"></script>
+        <!-- Latest compiled and minified CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Font awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <link rel="stylesheet" href="../styles/styles.css"/>
+        <!-- Latest compiled JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    </head>
+<body>';
+
+include '../php/nav_bar.php';
+?>
+<main>
+    <div class="container p-3" id="main-container">
 <?php
 
-function echoHeader() {
-    echo "
-        <html lang='en'>
-        <head>
-            <meta charset='UTF-8'>
-            <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-            <title>Sign-up Submit</title>
-            <!-- Load theme from localstorage -->
-            <script src='../js/themescript.js'></script>
-            <!-- Latest compiled and minified CSS -->
-            <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css' rel='stylesheet'>
-            <!-- Font awesome -->
-            <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'>
-            <link rel='stylesheet' href='../styles/styles.css'/>
-            <!-- Latest compiled JavaScript -->
-            <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js'></script>
-        </head>
-        <body>
-            <main>
-                <div class='container p-3' id='main-container'>
-     ";
-}
-
 function echoError() {
-    echoHeader();
     echo "
             <div class='form-error'>
                 <h3>Sign-up failed, please try again.</h3>
@@ -48,9 +59,12 @@ if(! empty($_POST)) {
         }
     }
 
-    $db_location = '';
     include '../db_picker.php';
-    include '../' . $db_location;
+    if ($use_local){
+        include '../' . $db_location;
+    }else{
+        include $db_location;
+    }
 
     // constants
     $RADIO_VALUES = array("Seeking Internship", "Seeking Job", "Not Actively Searching");
@@ -149,7 +163,6 @@ if(! empty($_POST)) {
 
     $result = @mysqli_query($cnxn, $sql);
 
-    echoHeader();
     echo "
             <div class='container p-3'>
             <h3 class='receipt-message p-3 mb-0'>Success! Your account has been created.</h3>
@@ -183,7 +196,6 @@ if(! empty($_POST)) {
         </main>
     ";
 } else {
-    echoHeader();
     echo "
                <div class='content'>
                   <h2>Please fill out the form.</h2>
@@ -196,7 +208,7 @@ if(! empty($_POST)) {
 </main>
 
 <?php include '../php/footer.php' ?>
-
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="../js/main.js"></script>
 <script src="../js/signupscript.js"></script>
 </body>
