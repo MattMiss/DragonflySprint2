@@ -1,5 +1,8 @@
 <?php
 $location = $_SESSION['location'];
+
+global $isLogin;
+
 $permission = 0;
 $firstName = '';
 
@@ -17,6 +20,7 @@ if (isset($_SESSION['fname'])){
         <button type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" class="navbar-toggler"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse mx-1" id="navbar-menu">
             <ul class="navbar-nav nav-underline">
+                <?php if (!isset($_SESSION['user_id'])) showAnonNav() ?>
                 <?php if ($permission === '0') showUserNav(); ?>
                 <?php if ($permission === '1') showAdminNav(); ?>
                 <li class="d-flex justify-content-end" id="dark-mode-list-item">
@@ -26,7 +30,16 @@ if (isset($_SESSION['fname'])){
             </ul>
         </div>
     </div>
-    <?php showWelcome() ?>
+    <div class='welcome-outer text-center d-flex' >
+        <?php if (isset($_SESSION['user_id'])) {
+            showWelcome();
+            }else{
+                if (!$isLogin) {
+                    showLoginButton();
+                }
+            }
+        ?>
+    </div>
 </nav>
 
 <div class='modal fade' id='logout-modal' tabindex='-1' role='dialog' aria-labelledby='make-admin-message' aria-hidden='true'>
@@ -66,31 +79,47 @@ function showUserNav(){
             <li><a href='{$location}contact_form.php' class='nav-link'>Contact</a></li>";
 }
 
+function showAnonNav(){
+    global $location;
+
+    echo "
+          <li><a href='$location signup_form.php' class='nav-link'>Sign-up</a></li>
+          <li><a href='$location contact_form.php' class='nav-link'>Contact</a></li>";
+}
+
 function showWelcome(){
     global $firstName;
-    echo "<div class='welcome-outer text-center d-flex' >
-                <div class='dropdown'>
-                    <button class='btn dropdown-toggle' id='user-dropdown' type='button' data-bs-toggle='dropdown' aria-expanded='false'>
-                        Welcome, {$firstName}!
-                    </button>
+    echo "
+        <div class='dropdown'>
+            <button class='btn dropdown-toggle' id='user-dropdown' type='button' data-bs-toggle='dropdown' aria-expanded='false'>
+                Welcome, {$firstName}!
+            </button>
+            
+             <ul class='dropdown-menu text-end'>
+                <li class='py-1'><button class='dropdown-item btn-log-in-out m-auto pb-1' type='button' data-bs-toggle='modal' data-bs-target='#logout-modal'>Logout</button></li>
+                <li class='py-1'>
+                    <div class='d-flex align-items-center'>
+                        <span class='user-menu-label ps-3'>THEME</span>
+                        <div class='dropdown-item dark-switch-outer text-center' id='dark-mode-list-item'>
+                            <input type='checkbox' id='dark-mode-switch'>
+                            <label for='dark-mode-switch'>
+                                <i class='fas fa-sun'></i>
+                                <i class='fas fa-moon'></i>
+                            </label>
+                        </div>
+                    </div>
                     
-                     <ul class='dropdown-menu text-end'>
-                        <li class='py-1'><button class='dropdown-item btn-logout m-auto pb-1' type='button' data-bs-toggle='modal' data-bs-target='#logout-modal'>Logout</button></li>
-                        <li class='py-1'>
-                            <div class='d-flex align-items-center'>
-                                <span class='user-menu-label ps-3'>THEME</span>
-                                <div class='dropdown-item dark-switch-outer text-center' id='dark-mode-list-item'>
-                                    <input type='checkbox' id='dark-mode-switch'>
-                                    <label for='dark-mode-switch'>
-                                        <i class='fas fa-sun'></i>
-                                        <i class='fas fa-moon'></i>
-                                    </label>
-                                </div>
-                            </div>
-                            
-                        </li>
-                     </ul>
-                </div>
-          </div>";
+                </li>
+             </ul>
+        </div>
+    ";
 }
+
+function showLoginButton(){
+    global $location;
+    echo "
+        <button class='btn-log-in-out m-auto pb-1' type='button'><a href='$location login.php'>Login</a></button>      
+    ";
+}
+
 ?>
