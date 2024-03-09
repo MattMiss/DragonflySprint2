@@ -25,6 +25,7 @@ include $db_location;
 $email = "";
 $pass = "";
 $failedMsg = "";
+$isLogin = true;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && ! empty($_POST)) {
     $email = $_POST['email'];
@@ -73,31 +74,11 @@ echo "
         <!-- Latest compiled JavaScript -->
         <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js'></script>
     </head>
-    <body>
-        <nav class='navbar navbar-expand-md sticky-top py-1 '>
-            <div class='container-fluid'>
-                <img src='$location images/GRC_Logo-Rich-Black.png' alt='GreenRiver College logo' id='grc-logo'>
-                <button type='button' data-bs-toggle='collapse' data-bs-target='#navbar-menu' class='navbar-toggler'><span class='navbar-toggler-icon'></span></button>
-                <div class='collapse navbar-collapse mx-1' id='navbar-menu'>
-                    <ul class='navbar-nav nav-underline'>
-                        <!-- <li><a href='$location index.php' class='nav-link'>User Dashboard</a></li> -->
-                        <li><a href='$location signup_form.php' class='nav-link'>Sign-up</a></li>
-                        <!-- <li><a href='$location application_form.php' class='nav-link'>New Application</a></li> -->
-                        <li><a href='$location contact_form.php' class='nav-link'>Contact</a></li>
-                        <!--<li class='d-flex justify-content-end' id='dark-mode-list-item'>
-                            <div class='dark-switch-outer'>
-                                <input type='checkbox' id='dark-mode-switch'>
-                                <label for='dark-mode-switch'>
-                                    <i class='fas fa-sun'></i>
-                                    <i class='fas fa-moon'></i>
-                                </label>
-                            </div>
-                        </li>-->
-                    </ul>
-                </div>
-            </div>
-        </nav>   
-    <main>
+    <body>";
+
+include 'php/nav_bar.php';
+
+echo "<main>
         <div class='container p-3' id='main-container'>
             <h3 class='form-header'>Login</h3>
             <div class='form-container'>
@@ -114,7 +95,7 @@ echo "
                     <input type='password' class='form-control' id='input-password' name='password' minlength='8' maxlength='16' required>
                 </div>
                 
-                <button type='submit' class='submit-btn'>Submit</button>
+                <button type='submit' class='submit-btn'>Login</button>
             </form>
         </div>
     </main>";

@@ -159,14 +159,14 @@ footer{
 
 nav {
     background-color:  var(--nav-color);
-    a {
+    .nav-link {
         border-bottom: solid 4px  var(--nav-color) !important;
         font-family: BigNoodle, serif;
         font-size: 1.7rem !important;
     }
 }
 
-nav a:hover {
+nav .nav-link:hover {
     background-color: var(--nav-hover-color);
     border-bottom: solid 4px  #D14900 !important;
 }
@@ -212,24 +212,11 @@ nav a:hover {
 .dropdown-item:hover {
     border-bottom: none !important;
 }
-/*
-.dark-switch-outer{
-    position: relative;
-    width: 300px;
-}
-*/
+
 .dark-switch-outer{
     position: relative;
     width: 100%;
 }
-
-/*
-.welcome-outer{
-    position: absolute;
-    right: 100px;
-    top: 24px;
-}
-*/
 
 .welcome-outer{
     position: absolute;
@@ -256,20 +243,24 @@ nav a:hover {
     color: var(--font-color);
 }
 
-.btn-logout{
+.btn-log-in-out{
     background-color: var(--submit-color);
     border: 1px solid var(--submit-border-color) !important;
     border-radius: 2px;
-    color: var(--submit-text-color);
+    color: var(--submit-text-color) !important;
     font-weight: 600;
-
 }
-.btn-logout:hover{
+
+.btn-log-in-out:hover{
     background-color: var(--submit-hover-color);
     text-decoration: none;
     border: 1px solid var(--submit-border-hover-color) !important;
-    color: var(--submit-text-hover-color);
+    color: var(--submit-text-hover-color) !important;
     transition: .75s;
+}
+
+.btn-log-in-out a:visited{
+    color: var(--submit-text-color);
 }
 
 

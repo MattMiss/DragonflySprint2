@@ -73,7 +73,7 @@ $role = 1;
 $sqlApps = "SELECT * FROM `applications` JOIN `users` WHERE `applications`.`user_id` = `users`.`user_id` AND 
                                         `applications`.is_deleted = 0 AND `users`.is_deleted = 0";
 $sqlAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY date_created DESC LIMIT 5"; // 5 most recent announcements
-$sqlUsers = "SELECT * FROM users"; // 5 users (deleted users get filtered out in dashboard.js so admin can see deleted too)
+$sqlUsers = "SELECT * FROM users"; // 5 users (deleted users get filtered out in dash-users.js so admin can see deleted too)
 $appsResult = @mysqli_query($cnxn, $sqlApps);
 $announceResult = @mysqli_query($cnxn, $sqlAnnounce);
 $usersResult = @mysqli_query($cnxn, $sqlUsers);
@@ -250,7 +250,7 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                     </tr>
                     </thead>
                     <tbody class="table-body" id="dash-apps-list">
-                    <!-- List gets populated with applications from the database here with dashboard.js -->
+                    <!-- List gets populated with applications from the database here with dash-apps.js -->
                     </tbody>
                 </table>
                 <div class="col text-center pt-2 pb-2" id="more-apps">
@@ -395,7 +395,7 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                     </tr>
                     </thead>
                     <tbody id="dash-users-list">
-                        <!-- List gets populated with users from the database here with dashboard.js -->
+                        <!-- List gets populated with users from the database here with dash-users.js -->
                     </tbody>
                 </table>
 <!--                <p class="title mx-auto" style="display: block; width:100px; color: green">More</p>-->
