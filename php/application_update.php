@@ -143,11 +143,8 @@ include '../php/nav_bar.php' ?>
 
             }
         }else {
-            echo "<div class='content'>
-              <h2>Please fill out the form.</h2>
-              <a class='link' href='../index.php'>Go home</a>
-          </div>
-          ";
+            $formLocation = '../index.php';
+            include 'empty_form_msg.php';
         }
         ?>
     </div>
