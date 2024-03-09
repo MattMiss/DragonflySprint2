@@ -141,11 +141,8 @@ if(! empty($_POST)) {
 
     }
 }else {
-    echo "<div class='content'>
-              <h2>Please fill out the form.</h2>
-              <a class='link' href='../application_form.php'>Go back</a>
-          </div>
-          ";
+    $formLocation = '../application_form.php';
+    include 'empty_form_msg.php';
 }
 ?>
     </div>
