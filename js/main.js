@@ -16,6 +16,7 @@ window.addEventListener('load', function() {
 
 function setupCookieDarkMode(){
     darkModeSwitch = document.getElementById("dark-mode-switch");
+    if (!darkModeSwitch) return;
     darkModeSwitch.addEventListener("change", () => {
         theme === 'light' ? setCookieDarkMode('dark') : setCookieDarkMode('light');
     });
