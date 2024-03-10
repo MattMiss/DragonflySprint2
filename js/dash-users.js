@@ -207,15 +207,19 @@ function createUserFromData(userData) {
     })
      */
 
-    const adminBtnText = (userData.permission === '0' ? 'Make' : 'Remove');
+    const isUserAdmin = userData.permission === '1';
 
     // Create an edit button and add an onclick listener to Open User Modal when edit button is clicked
-    const makeAdminBtn = $(`<button class="app-button-inner btn btn-make-admin">${adminBtnText} Admin</button>`);
+    const makeAdminBtn = $(`<button class="app-button-inner btn btn-make-admin">${isUserAdmin ? 'Remove' : 'Make'} Admin</button>`);
     if (userID == userData.user_id){
         makeAdminBtn.attr('disabled', true);
     }
     makeAdminBtn.on('click', () => {
-        askToMakeUserAdmin(userData.user_id, userData.fname, userData.lname);
+        if (isUserAdmin){
+            askToRemoveAdmin(userData.user_id, userData.fname, userData.lname);
+        }else{
+            askToMakeUserAdmin(userData.user_id, userData.fname, userData.lname);
+        }
     })
 
     // Create an edit button and add an onclick listener to Open User Modal when edit button is clicked
@@ -281,16 +285,34 @@ function askToDeleteUser(userID, userFName, userLName){
     $('#delete-user-id').val(userID);
 }
 
-// Open dmake user admin modal and fill in user info
+// Open make user admin modal and fill in user info
 function askToMakeUserAdmin(userID, userFName, userLName){
     // Open the user delete modal
-    $('#make-admin-modal').modal('show');
+    $('#toggle-admin-modal').modal('show');
 
-    $('#make-admin-modal-name').text(`${userFName} ${userLName}`)
+    $('#toggle-admin-title').text('Make Admin?');
+    $('#toggle-admin-btn').html('Make Admin');
+    $('#toggle-admin-modal-name').text(`Give Admin Permission to ${userFName} ${userLName}?`)
 
     // Set the value of the hidden input for delete-user-id
     // THis will be sent to POST as the userID to delete
-    $('#make-admin-user-id').val(userID);
+    $('#toggle-admin-user-id').val(userID);
+    $('#toggle-admin-user-perm').val(1);
+}
+
+// Open make user admin modal and fill in user info
+function askToRemoveAdmin(userID, userFName, userLName){
+    // Open the user delete modal
+    $('#toggle-admin-modal').modal('show');
+
+    $('#toggle-admin-title').text('Remove Admin?');
+    $('#toggle-admin-btn').text('Remove Admin');
+    $('#toggle-admin-modal-name').text(`Remove Admin Permission from ${userFName} ${userLName}?`)
+
+    // Set the value of the hidden input for delete-user-id
+    // THis will be sent to POST as the userID to delete
+    $('#toggle-admin-user-id').val(userID);
+    $('#toggle-admin-user-perm').val(0);
 }
 
 // Toggle the eye and eye-slash icon on and off

@@ -50,16 +50,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $deleteAppResult = @mysqli_query($cnxn, $sqlDeleteApp);
     } elseif ($_POST["submit-from"] == 2) {
         $id = $_POST["id"];
+
+        // Ensure a user is logged in
+        include 'php/roles/user_check.php';
+        // Ensure an admin is logged in
+        include 'php/roles/admin_check.php';
+
         $sqlDeleteUser = "UPDATE users SET is_deleted = 1 WHERE user_id = $id";
         $userWasDeleted = true;
         //echo $sql4;
         $deleteUserResult = @mysqli_query($cnxn, $sqlDeleteUser);
     }else if($_POST["submit-from"] == 3) {
         $id = $_POST["id"];
-        $sqlMakeUserAdmin = "UPDATE users SET permission = 1 WHERE user_id = $id";
+        $perm = $_POST["perm"];
+
+        // Ensure a user is logged in
+        include 'php/roles/user_check.php';
+        // Ensure an admin is logged in
+        include 'php/roles/admin_check.php';
+
+        $sqlMakeUserAdmin = "UPDATE users SET permission = $perm WHERE user_id = $id";
         $makeAdminResult = @mysqli_query($cnxn, $sqlMakeUserAdmin);
+
     }else if($_POST["submit-from"] == 4) {
         $id = $_POST["id"];
+
+        // Ensure a user is logged in
+        include 'php/roles/user_check.php';
+        // Ensure an admin is logged in
+        include 'php/roles/admin_check.php';
+
         $sqlDeleteAnnouncement = "UPDATE announcements SET is_deleted = 1 WHERE id = $id";
         $deletedAnnouncementResult = @mysqli_query($cnxn, $sqlDeleteAnnouncement);
         $announcementWasDeleted = true;
@@ -509,22 +529,23 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
             </div>
         </div>
 
-        <!-- Make User Admin Modal -->
-        <div class='modal fade' id='make-admin-modal' tabindex='-1' role='dialog' aria-labelledby='make-admin-message' aria-hidden='true'>
+        <!-- Toggle User Admin Modal -->
+        <div class='modal fade' id='toggle-admin-modal' tabindex='-1' role='dialog' aria-labelledby='make-admin-message' aria-hidden='true'>
             <div class='modal-dialog modal-dialog-centered' role='document'>
                 <div class='modal-content'>
                     <div class='modal-header'>
-                        <h4 class='modal-title' id='delete-warning'>Make Admin?</h4>
+                        <h4 class='modal-title' id='toggle-admin-title'>Make Admin?</h4>
                     </div>
                     <div class='modal-body'>
-                        <p>Make <span id="make-admin-modal-name"></span> an admin?</p>
+                        <p><span id="toggle-admin-modal-name"></span></p>
                     </div>
                     <div class='modal-footer'>
                         <form method='POST' action='#'>
                             <input type='hidden' value='3' name='submit-from'>
-                            <input type='hidden' id="make-admin-user-id" value='' name='id'>
+                            <input type='hidden' id="toggle-admin-user-id" value='' name='id'>
+                            <input type='hidden' id="toggle-admin-user-perm" value='' name='perm'>
                             <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Cancel</button>
-                            <button type='submit' class='modal-delete'>Make Admin</button>
+                            <button type='submit' class='modal-delete' id='toggle-admin-btn'>Make Admin</button>
                         </form>
                     </div>
                 </div>
