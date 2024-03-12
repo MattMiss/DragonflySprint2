@@ -66,7 +66,7 @@ $date_created =
 
 $sqlRecentAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 AND (date_created BETWEEN '$start' AND '$date')
         ORDER BY announcement_id DESC LIMIT 5"; // announcements from last 5 days
-$sqlRecentApps = "SELECT * FROM applications WHERE is_deleted = 0 AND (followupdate BETWEEN '$start' AND '$finish')
+$sqlRecentApps = "SELECT * FROM applications WHERE is_deleted = 0 AND user_id = $viewingID AND (followupdate BETWEEN '$start' AND '$finish')
         ORDER BY application_id DESC";
 
 
