@@ -284,7 +284,7 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
                         </li>
                         <li class='list-group-item pb-1'>
                             <span class='form-label'>URL:</span>
-                            <a id="edit-modal-url" href="" target="_blank" rel="noopener noreferrer"></a>
+                            <a id="edit-modal-url" href="" target="_blank" rel="noopener noreferrer">Apply Now!</a>
                         </li>
                         <li class='list-group-item'>
                             <span class='form-label'>Job Description: </span>
@@ -320,9 +320,6 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
                 </div>
             </div>
         </div>
-    </div>
-    <div class="text-center">
-        <a href='index.php?logout=true'>Logout</a>
     </div>
 </main>
 <?php include 'php/footer.php'?>
@@ -375,7 +372,7 @@ function createAppAnnouncements($info) {
                                 </li>
                                 <li class='list-group-item pb-1'>
                                     <span class='form-label'>URL:</span>
-                                    <a href='$jurl'>$jurl</a>
+                                    <a href='$jurl' target='_blank'>Apply Here</a>
                                 </li>
                                 <li class='list-group-item'>
                                     <span class='form-label'>More Information:</span>
@@ -435,7 +432,7 @@ function createAppReminders($info) {
                         </li>
                         <li class='list-group-item pb-1'>
                             <span class='form-label'>URL:</span>
-                            <a href='' target='_blank' rel='noopener noreferrer'>$jurl</a>
+                            <a href='$jurl' target='_blank' rel='noopener noreferrer'>Apply Here</a>
                         </li>
                         <li class='list-group-item'>
                             <span class='form-label'>Job Description: </span>

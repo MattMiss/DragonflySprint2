@@ -107,19 +107,6 @@ function toggleUserFieldOrder(clickedFieldIconName, clickedField){
     emptySortAndPopulateUsersList(true, selectedFieldIndex, clickedFieldIconName, clickedField);
 }
 
-// Sort a provided list depending on which field is chosen
-function sortListByField(targetList, direction, field){
-    targetList.sort((a,b) => {
-        if (a[field].toLowerCase() < b[field].toLowerCase() ){
-            return direction === 'asc' ? -1 : 1;
-        }
-        if (a[field].toLowerCase()  > b[field].toLowerCase() ){
-            return direction === 'dsc' ? -1 : 1;
-        }
-        return 0;
-    });
-}
-
 // Loop through each application in sortedApps and create a <tr> with all the fields filled in
 function populateUsersList(){
     if (sortedUsers.length === 0){

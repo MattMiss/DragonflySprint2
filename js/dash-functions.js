@@ -18,3 +18,16 @@ function showToast(message, length) {
         toastContainer.addClass('alert-hide');
     }, length)
 }
+
+// Sort a provided list depending on which field is chosen
+function sortListByField(targetList, direction, field){
+    targetList.sort((a,b) => {
+        if (a[field].toLowerCase() < b[field].toLowerCase() ){
+            return direction === 'asc' ? -1 : 1;
+        }
+        if (a[field].toLowerCase()  > b[field].toLowerCase() ){
+            return direction === 'dsc' ? -1 : 1;
+        }
+        return 0;
+    });
+}
