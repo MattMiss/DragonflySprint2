@@ -469,7 +469,7 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                                 </li>
                             <li class='list-group-item pb-1'>
                                 <span class='form-label'>URL:</span>
-                                <a id="edit-modal-url" href="" target="_blank" rel="noopener noreferrer"></a>
+                                <a id="edit-modal-url" href="" target="_blank" rel="noopener noreferrer">Apply Here</a>
                                 </li>
                             <li class='list-group-item'>
                                 <span class='form-label'>Job Description: </span>
@@ -551,9 +551,6 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                 </div>
             </div>
         </div>
-        <div class="text-center">
-            <a href='admin_dashboard.php?logout=true'>Logout</a>
-        </div>
 </main>
 
 <?php include 'php/footer.php' ?>
@@ -594,7 +591,7 @@ function createReminders($info) {
                 <td>$date</td>
                 <td>$title $jtype</td>
                 <td>$ename</td>
-                <td class='job-url'>$jurl</td>
+                <td class='job-url'><a href='$jurl' target='_blank'>Apply Link</a></td>
                 <td class='app-button-outer'>
                         <button class='app-button-inner btn btn-sm btn-update' type='button' data-bs-toggle='modal' data-bs-target='#announcement-modal-$id'><i class='fa-solid fa-pen'></i></button>
                         <button class='app-button-inner btn btn-sm btn-delete' type='button' data-bs-toggle='modal' data-bs-target='#announcement-delete-modal-$id'><i class='fa-solid fa-trash'></i></button>
@@ -620,7 +617,7 @@ function createReminders($info) {
                                     </li>
                                     <li class='list-group-item pb-1'>
                                         <span class='form-label'>URL:</span>
-                                        <a href='$jurl'>$jurl</a>
+                                        <a href='$jurl' target='_blank'>Apply Here</a>
                                     </li>
                                     <li class='list-group-item'>
                                         <span class='form-label'>More Information:</span>

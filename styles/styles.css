@@ -222,12 +222,15 @@ nav .nav-link:hover {
     position: absolute;
     right: 30px;
     top: 20px;
+    min-width: 200px;
 
-    .dark-switch-outer:hover{
+    .dropdown-item:hover{
         background-color: transparent;
+        text-decoration: none;
     }
     .dropdown-item{
         width: auto;
+
     }
 }
 
@@ -241,6 +244,8 @@ nav .nav-link:hover {
 
 .user-menu-label{
     color: var(--font-color);
+    font-family: BigNoodle, sans-serif;
+    font-size: 1.4rem;
 }
 
 .btn-log-in-out{
@@ -249,6 +254,9 @@ nav .nav-link:hover {
     border-radius: 2px;
     color: var(--submit-text-color) !important;
     font-weight: 600;
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    width: 80px;
 }
 
 .btn-log-in-out:hover{
@@ -261,6 +269,10 @@ nav .nav-link:hover {
 
 .btn-log-in-out a:visited{
     color: var(--submit-text-color);
+}
+
+.dropdown{
+    width: 200px;
 }
 
 
@@ -536,8 +548,10 @@ table td {
 
 .btn-delete, .modal-delete {
     background-color: #d24747;
+    a{
+        color: white;
+    }
 }
-
 .app-list-item .btn-delete:hover, .user-list-item .btn-delete:hover, .modal-delete:hover, .admin-announcement .btn-delete:hover{
     background-color: #b42c2c;
 }
@@ -1082,7 +1096,7 @@ a {
     }
 
     nav a {
-        width: 11rem !important;
+        width: 12rem !important;
         padding-left: 1rem !important;
     }
 
@@ -1147,7 +1161,7 @@ a {
     }
 
     .welcome-outer{
-        right: 100px;
+        right: 80px;
     }
 
 }

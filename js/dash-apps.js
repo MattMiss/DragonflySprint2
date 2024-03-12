@@ -128,19 +128,6 @@ function toggleAppFieldOrder(clickedFieldIconName, clickedField){
     emptySortAndPopulateAppList(true, selectedFieldIndex, clickedFieldIconName, clickedField);
 }
 
-// Sort a provided list depending on which field is chosen
-function sortListByField(targetList, direction, field){
-    targetList.sort((a,b) => {
-        if (a[field].toLowerCase() < b[field].toLowerCase() ){
-            return direction === 'asc' ? -1 : 1;
-        }
-        if (a[field].toLowerCase()  > b[field].toLowerCase() ){
-            return direction === 'dsc' ? -1 : 1;
-        }
-        return 0;
-    });
-}
-
 // Loop through each application in sortedApps and create a <tr> with all the fields filled in
 function populateAppList(){
 
@@ -241,6 +228,7 @@ function sortAppsByUserFilters(){
 
 // Create an application list item using the supplied appData
 function createAppFromData(appData){
+    console.log("hey");
     // Fix need-to-apply status by removing dashes and replacing them
     let statusReplace = `${appData.astatus}`;
     statusReplace = statusReplace.replace(/-/g, " ");
@@ -263,7 +251,7 @@ function createAppFromData(appData){
             `<td>${appData.adate}</td>\n` +
             `<td>${appData.jname}</td>\n` +
             `<td>${appData.ename}</td>\n` +
-            `<td>${appData.jurl}</td>\n` +
+            `<td><a href="${appData.jurl}" target="_blank" rel="noopener noreferrer">Apply Link</a></td>\n` +
             //`<td>${appData.fname} ${appData.lname}</td>\n` +
             //`<td>${appData.email}</td>\n` +
             //`<td class="status status-${appData.astatus}">\n` +
@@ -351,12 +339,13 @@ function loadMoreApps(){
 
 // Open the edit-modal and fill in the data from the appData
 function showAppModal(appData, status, formattedUrl){
-    console.log(appData.jname);
+    console.log(appData);
 
     $('#edit-modal').modal('show');
 
 
     // Fill in modal info
+    $('#edit-modal-adate').text(appData.adate);
     $('#edit-modal-jname').text(appData.jname);
     $('#edit-modal-ename').text(appData.ename);
     $('#edit-modal-description').text(appData.jdescription)
@@ -365,9 +354,7 @@ function showAppModal(appData, status, formattedUrl){
     $('#edit-modal-updates').text(appData.fupdates);
     $('#edit-modal-appid').val(appData.application_id);
 
-    const urlText = $('#edit-modal-url');
-    urlText.attr('href', appData.jurl);
-    urlText.text(formattedUrl);
+    $('#edit-modal-url').attr('href', formattedUrl);
 
     const statusIcon = $('#edit-modal-astatus-icon');
     statusIcon.removeClass();

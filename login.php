@@ -94,8 +94,11 @@ echo "<main>
                     <label for='input-password' class='form-label'>Password*</label>
                     <input type='password' class='form-control' id='input-password' name='password' minlength='8' maxlength='16' required>
                 </div>
-                
-                <button type='submit' class='submit-btn'>Login</button>
+                <div class='d-flex justify-content-end gap-2'>
+                    <span>Don't have an account? </span>
+                    <a href='signup_form.php'>Sign Up!</a>
+                </div>
+                <button type='submit' class='submit-btn pt-1'>Login</button>
             </form>
         </div>
     </main>";

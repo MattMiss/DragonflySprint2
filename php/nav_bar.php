@@ -23,14 +23,11 @@ if (isset($_SESSION['fname'])){
                 <?php if (!isset($_SESSION['user_id'])) showAnonNav() ?>
                 <?php if ($permission === '0') showUserNav(); ?>
                 <?php if ($permission === '1') showAdminNav(); ?>
-                <li class="d-flex justify-content-end" id="dark-mode-list-item">
-
-                </li>
 
             </ul>
         </div>
     </div>
-    <div class='welcome-outer text-center d-flex' >
+    <div class='welcome-outer text-end d-flex justify-content-end' >
         <?php if (isset($_SESSION['user_id'])) {
             showWelcome();
             }else{
@@ -96,9 +93,18 @@ function showWelcome(){
             </button>
             
              <ul class='dropdown-menu text-end'>
-                <li class='py-1'><button class='dropdown-item btn-log-in-out m-auto pb-1' type='button' data-bs-toggle='modal' data-bs-target='#logout-modal'>Logout</button></li>
-                <li class='py-1'>
-                    <div class='d-flex align-items-center'>
+                <li class='d-flex'>
+                    <div class='dropdown-item'>
+                        <button class='btn-log-in-out m-auto pb-1' type='button'>
+                            <i class='fa-solid fa-gear pe-1'></i>Account
+                        </button>
+                        <button class='btn-log-in-out m-auto pb-1' type='button' data-bs-toggle='modal' data-bs-target='#logout-modal'>
+                            <i class='fa-solid fa-arrow-right-from-bracket pe-1'></i>Logout
+                        </button>
+                    </div>  
+                </li>
+                <li class='p-1'>
+                    <div class='d-flex align-items-center pe-1'>
                         <span class='user-menu-label ps-3'>THEME</span>
                         <div class='dropdown-item dark-switch-outer text-center' id='dark-mode-list-item'>
                             <input type='checkbox' id='dark-mode-switch'>
@@ -107,8 +113,7 @@ function showWelcome(){
                                 <i class='fas fa-moon'></i>
                             </label>
                         </div>
-                    </div>
-                    
+                    </div>       
                 </li>
              </ul>
         </div>
