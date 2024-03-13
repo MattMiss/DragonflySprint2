@@ -95,9 +95,11 @@ function showWelcome(){
              <ul class='dropdown-menu text-end'>
                 <li class='d-flex'>
                     <div class='dropdown-item'>
-                        <button class='btn-log-in-out m-auto pb-1' type='button'>
-                            <i class='fa-solid fa-gear pe-1'></i>Account
-                        </button>
+                        <form method='post' action='user_edit.php' target='_blank'>
+                            <button class='btn-log-in-out m-auto pb-1' class='submit-btn'>
+                                <i class='fa-solid fa-gear pe-1'></i>Account
+                            </button>
+                        </form>
                         <button class='btn-log-in-out m-auto pb-1' type='button' data-bs-toggle='modal' data-bs-target='#logout-modal'>
                             <i class='fa-solid fa-arrow-right-from-bracket pe-1'></i>Logout
                         </button>
