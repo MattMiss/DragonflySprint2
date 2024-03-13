@@ -70,7 +70,6 @@ include 'php/nav_bar.php' ?>
         <h3 class="form-header p-3 mb-0">Edit User</h3>
         <div class="form-container mb-5">
             <div class="form-body">
-                <!--TODO Edit page php -->
                 <form method="post" action="php/edit_account_update.php" onsubmit="return validateForm()" class="my-3">
                     <div class="mb-3">
                         <label for="name" class="form-label">Name*</label>
