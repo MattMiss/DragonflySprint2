@@ -212,7 +212,7 @@ function createUserFromData(userData) {
     // Create an edit button and add an onclick listener to Open User Modal when edit button is clicked
     const editBtn = $(`<button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>`);
     editBtn.on('click', () => {
-
+        showUserModal(userData, isUserAdmin);
     })
 
     // Create a delete button and add an onclick listener to ask to Delete App when delete button is clicked
@@ -258,6 +258,55 @@ function emptySortAndPopulateUsersList(sortBySpecificField = false, selectedFiel
         }
     }
     populateUsersList();
+}
+
+function showUserModal(userData, isUserAdmin) {
+    //console.log(userData);
+    // Open user edit modal
+    $('#user-edit-modal').modal('show');
+
+    // Fill in user information
+    $('#user-edit-modal-fname').text(userData.fname);
+    $('#user-edit-modal-lname').text(userData.lname);
+    $('#user-edit-modal-email').text(userData.email);
+    $('#user-edit-modal-password').text("****************");
+    $('#user-edit-modal-cohort').text(userData.cohortNum);
+    $('#user-edit-modal-job-status').text(userData.status);
+    $('#user-edit-modal-roles').text(userData.roles);
+
+    // Fill in hidden ID
+    $('#edit-modal-user-id').val(userData.user_id);
+
+    // Fill in deleted or not value
+    if (userData.is_deleted == 0) {
+        $('#user-edit-modal-deleted').text("Not Deleted");
+    } else {
+        $('#user-edit-modal-deleted').text("Deleted");
+    }
+
+    // Fill in admin or user values
+    if (isUserAdmin === true) {
+        $('#user-edit-modal-permission').text("Admin");
+        $('#user-edit-modal-admin').text("Remove Admin");
+    } else {
+        $('#user-edit-modal-permission').text("User");
+        $('#user-edit-modal-admin').text("Make Admin");
+    }
+
+    $('#user-edit-modal-admin').on('click', () => {
+        if (isUserAdmin) {
+            askToRemoveAdmin(userData.user_id, userData.fname, userData.lname);
+        } else {
+            askToMakeUserAdmin(userData.user_id, userData.fname, userData.lname);
+        }
+    })
+
+    // Self check, cannot remove admin from self
+    if (userID == userData.user_id){
+        $('#user-edit-modal-admin').attr('disabled', true);
+    } else {
+        $('#user-edit-modal-admin').attr('disabled', false);
+    }
 }
 
 // Open delete user modal and set the value for user id to delete
