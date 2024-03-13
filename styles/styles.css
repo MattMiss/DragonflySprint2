@@ -661,6 +661,17 @@ table td {
     background: var(--secondary-close-hover-color);
 }
 
+#user-edit-modal-admin {
+    font-size: inherit;
+    width: 145px !important;
+    height: 38px;
+    border: none;
+    border-radius: 2px;
+    color: var(--font-color);
+    font-weight: 600;
+    padding: 7px 10px 7px 10px;
+}
+
 .modal-edit {
     background: var(--modal-edit-bg-color);
     border: none;

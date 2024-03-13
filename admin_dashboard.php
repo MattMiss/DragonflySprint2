@@ -507,6 +507,66 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
             </div>
         </div>
 
+        <!-- Edit User Modal -->
+        <div class='modal fade' id='user-edit-modal' tabIndex='-1' role='dialog' aria-labelledby='job-title' aria-hidden='true'>
+            <div class='modal-dialog modal-dialog-centered' role='document'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        <h3 class='modal-title' id='job-title'>User Details</h3>
+                        <button type='button' class='modal-close-primary close' data-bs-dismiss='modal' aria-label='Close'>
+                            <span aria-hidden='true'>&times;</span>
+                    </div>
+                    <div class='modal-body'>
+                        <ul class='list-group-item'>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>Permission: </span>
+                                <span id="user-edit-modal-permission"></span>
+                            </li>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>Deleted: </span>
+                                <span id="user-edit-modal-deleted"></span>
+                            </li>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>First Name: </span>
+                                <span id="user-edit-modal-fname"></span>
+                            </li>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>Last Name: </span>
+                                <span id="user-edit-modal-lname"></span>
+                            </li>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>Email: </span>
+                                <span id="user-edit-modal-email"></span>
+                            </li>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>Password: </span>
+                                <span id="user-edit-modal-password"></span>
+                            </li>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>Cohort Number: </span>
+                                <span id="user-edit-modal-cohort"></span>
+                            </li>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>Job Status: </span>
+                                <span id="user-edit-modal-job-status"></span>
+                            </li>
+                            <li class='list-group-item'>
+                                <span class='form-label'>Desired Roles: </span>
+                                <p id="user-edit-modal-roles" style="margin: 0"></p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class='modal-footer'>
+                        <button type='button' id="user-edit-modal-admin" class="btn btn-make-admin" data-bs-dismiss='modal'></button>
+                        <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Close</button>
+                        <form method="post" action="user_edit.php" target="_blank">
+                            <input id="edit-modal-user-id" type="hidden" name="user-id" value="">
+                            <button type="submit" class="modal-edit">Edit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- User Delete Modal -->
         <div class='modal fade' id='user-delete-modal' tabindex='-1' role='dialog' aria-labelledby='delete-app-message' aria-hidden='true'>
             <div class='modal-dialog modal-dialog-centered' role='document'>
