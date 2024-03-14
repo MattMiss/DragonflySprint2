@@ -37,7 +37,6 @@ include 'db_picker.php';
 include $db_location;
 
 $appWasDeleted = false;
-$userWasDeleted = false;
 
 $viewingUser = "SELECT permission FROM users WHERE user_id = $viewingID";
 $viewingUserResult = @mysqli_query($cnxn, $viewingUser);
@@ -94,19 +93,19 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
                     <div class="col-md-4 pt-2">
                         <div class="input-group input-group-sm">
                             <span class="input-group-text">Start Date</span>
-                            <input type="date" class="form-control" id="app-start-date" name="search-start-date">
+                            <input type="date" class="form-control date-input" id="app-start-date" name="search-start-date">
                         </div>
                     </div>
                     <div class="col-md-4 pt-2">
                         <div class="input-group input-group-sm">
                             <span class="input-group-text">End Date</span>
-                            <input type="date" class="form-control" id="app-end-date" name="search-end-date">
+                            <input type="date" class="form-control date-input" id="app-end-date" name="search-end-date">
                         </div>
                     </div>
                     <div class="col-md-4 text-end pt-2">
                         <div class="input-group input-group-sm">
                             <span class="input-group-text">Status</span>
-                            <select class="form-select" id="app-status-select">
+                            <select class="form-select status-select" id="app-status-select">
                                 <option selected value="any">Any</option>
                                 <option value="accepted">Accepted</option>
                                 <option value="applied">Applied</option>
@@ -356,7 +355,14 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
 <?php include 'php/footer.php'?>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="js/contactscript.js"></script>
-<script>let apps = <?php echo json_encode($apps) ?>; let role = <?php echo $role ?>; users=''; let appWasDeleted = <?php echo json_encode($appWasDeleted) ?>; let userWasDeleted = <?php echo json_encode($userWasDeleted) ?>;</script>
+<script>
+    let apps = <?php echo json_encode($apps) ?>;
+    let announcements = [];
+    let role = <?php echo $role ?>; users='';
+    let appWasDeleted = <?php echo json_encode($appWasDeleted) ?>;
+    let userWasDeleted = false;
+    let announceWasDeleted = false;
+</script>
 <script src="js/main.js"></script>
 <script src="js/dash-functions.js"></script>
 <script src="js/dash-apps.js"></script>

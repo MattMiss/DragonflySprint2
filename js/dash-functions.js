@@ -1,9 +1,34 @@
 const ADMIN = 1;
 let viewRole = role;
+let dateFormat = 'yy-mm-dd';
+
+$(window).on('load', () => {
+    // Check if there is a date format saved in cookies
+    setupDateFormat();
+    dateFormatSelect.val(dateFormat);
+});
 
 // Returns the viewRole set by server
 function isAdmin(){
     return viewRole === ADMIN;
+}
+
+function setupDateFormat(){
+    // Get cookies string and separate items by ';'
+    const cookies = document.cookie.split('; ');
+    // Set default theme to light
+    dateFormat = 'mm-dd-yy';
+    // Check cookies for a previously set theme value
+    for(let i =0; i < cookies.length; i++){
+        const name = cookies[i].split('=')[0];
+        const value = cookies[i].split('=')[1];
+        // Set the theme if one exists
+        if (name === 'date-format'){
+            dateFormat = value;
+            console.log("Found cookies");
+            console.log(dateFormat);
+        }
+    }
 }
 
 // Shows a div with a message at the top of the screen. Removes the div after supplied timeout time
@@ -48,4 +73,24 @@ function getFormattedURL(url){
         }
     }
     return clickableUrl;
+}
+
+function getFormattedDate(date, format){
+    const d = new Date(date);
+    const parts = date.split('-');
+    let dateString = '';
+
+    switch(format){
+        case 'dd-mm-yy':
+            dateString = parts[2] + '-' + parts[1] + '-' + parts[0][2] + parts[0][3];
+            break;
+        case 'yy-mm-dd':
+            dateString = parts[0][2] + parts[0][3] + '-' + parts[1] + '-' +parts[2];
+            break;
+        case 'mm-dd-yy':
+            dateString = parts[1] + '-' + parts[2] + '-' + parts[0][2] + parts[0][3];
+            break;
+    }
+    console.log(dateString);
+    return dateString;
 }
