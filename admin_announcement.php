@@ -2,7 +2,7 @@
 
 <?php
 session_start();
-$_SESSION['location'] = '';
+$location = '';
 
 global $db_location;
 global $cnxn;

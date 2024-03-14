@@ -1,6 +1,6 @@
 <?php
 session_start();
-$_SESSION['location'] = '';
+$location = '';
 
 global $cnxn;
 global $viewingID;
@@ -60,7 +60,6 @@ $role = 0;
 $date = date('Y-m-d', time());
 $start = date('Y-m-d', strtotime($date . '-5days'));
 $finish = date('Y-m-d', strtotime($date . '+5days'));
-$date_created =
 
 $sqlRecentAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 AND (date_created BETWEEN '$start' AND '$date')
         ORDER BY announcement_id DESC LIMIT 5"; // announcements from last 5 days

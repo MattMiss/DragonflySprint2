@@ -1,6 +1,6 @@
 <?php
 session_start();
-$_SESSION['location'] = '../';
+$location = '../';
 
 // Logout and return to login.php if ?logout=true
 include '../php/roles/logout_check.php';
