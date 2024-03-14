@@ -101,6 +101,7 @@ $usersResult = @mysqli_query($cnxn, $sqlUsers);
 // Fill in apps array
 $apps[] = array();
 $users[] = array();
+$announcements[] = array();
 
 $appCount = 0;
 while ($row = mysqli_fetch_assoc($appsResult)) {
@@ -112,6 +113,12 @@ $userCount = 0;
 while ($row = mysqli_fetch_assoc($usersResult)) {
     $users[$userCount] = $row;
     $userCount++;
+}
+
+$announceCount = 0;
+while ($row = mysqli_fetch_assoc($announceResult)){
+    $announcements[$announceCount] = $row;
+    $announceCount++;
 }
 
 ?>
@@ -129,19 +136,19 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                     <div class="col-md-4 pt-2">
                         <div class="input-group input-group-sm">
                             <span class="input-group-text">Start Date</span>
-                            <input type="date" class="form-control" id="app-start-date" name="search-start-date">
+                            <input type="date" class="form-control date-input" id="app-start-date" name="search-start-date">
                         </div>
                     </div>
                     <div class="col-md-4 pt-2">
                         <div class="input-group input-group-sm">
                             <span class="input-group-text">End Date</span>
-                            <input type="date" class="form-control" id="app-end-date" name="search-end-date">
+                            <input type="date" class="form-control date-input" id="app-end-date" name="search-end-date">
                         </div>
                     </div>
                     <div class="col-md-4 text-end pt-2">
                         <div class="input-group input-group-sm">
                             <span class="input-group-text">Status</span>
-                            <select class="form-select" id="app-status-select">
+                            <select class="form-select status-select" id="app-status-select">
                                 <option selected value="any">Any</option>
                                 <option value="accepted">Accepted</option>
                                 <option value="applied">Applied</option>
@@ -247,8 +254,8 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                             <th scope="col" class="w-btn"></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <?php createAdminAnnouncements($announceResult);?>
+                    <tbody id="dash-announcements-list">
+                    <!-- List gets populated with announcements from the database here with dash-announcements.js -->
                     </tbody>
                 </table>
             </div>
@@ -584,11 +591,7 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                         </ul>
                     </div>
                     <div class='modal-footer'>
-                        <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Close</button>
-                        <form method="post" action="announcement_edit.php" target="_blank">
-                            <input id="edit-announce-modal-id" type="hidden" name="announce-id" value="">
-                            <button type="submit" class="modal-edit">Edit</button>
-                        </form>
+                        <button type='button' class='modal-delete' data-bs-dismiss='modal'>Close</button>
                     </div>
                 </div>
             </div>
@@ -622,6 +625,7 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
 <script>
     let apps = <?php echo json_encode($apps) ?>;
     let users = <?php echo json_encode($users) ?>;
+    let announcements = <?php echo json_encode($announcements) ?>;
     let role = <?php echo $role ?>;
     let userID = <?php echo $viewingID ?>;
     let appWasDeleted = <?php echo json_encode($appWasDeleted) ?>;
@@ -636,50 +640,5 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
 <script src="js/dash-announcements.js"></script>
 </body>
 </html>
-
-
-
-<?php
-
-function createAdminAnnouncements($info) {
-    $isEmpty = true;
-    while ($row = mysqli_fetch_assoc($info)) {
-        $id = $row["announcement_id"];
-        $title = $row["title"];
-        $jtype = $row["job_type"];
-        $location = $row["location"];
-        $ename = $row["ename"];
-        $jobInfo = $row["additional_info"];
-        $jurl = $row["jurl"];
-        $recipient = $row["sent_to"];
-        $date = $row["date_created"];
-        $announce = json_encode($row);
-        $isEmpty = false;
-
-        echo "
-            <tr id='$id'>
-                <td>$date</td>
-                <td>$title $jtype</td>
-                <td>$ename</td>
-                <td class='job-url'><a href='$jurl' target='_blank'>Apply Link</a></td>
-                <td class='app-button-outer'>
-                        <button class='app-button-inner btn btn-sm btn-update' type='button' onclick='showViewAnnouncementModal($announce)'><i class='fa-solid fa-pen'></i></button>
-                        <button class='app-button-inner btn btn-sm btn-delete' type='button' onclick='showDeleteAnnouncementModal($announce)'><i class='fa-solid fa-trash'></i></button>
-                </td>
-            </tr>
-            ";
-    }
-    if ($isEmpty){
-        echo "
-            <tr>
-                <td></td>
-                <td></td>
-                <td>No Announcements</td>
-                <td></td>
-                <td></td>
-            </tr>";
-    }
-}
-?>
 
 

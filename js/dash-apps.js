@@ -21,6 +21,12 @@ const appListDiv = $('#dash-apps-list');
 $(window).on('load', () => {
     appCntToLoad = APP_MAX_LOAD_CNT;
 
+    document.addEventListener('dateFormatChanged', (e)=>{
+        console.log("Date Changed");
+        emptySortAndPopulateAppList(false);
+    }, true)
+
+
     // Setup App Input change Listeners
     setAppSearchListeners();
     setAppFieldBtnListeners();
@@ -29,9 +35,9 @@ $(window).on('load', () => {
     toggleAppFieldOrder('#date-field-icon', 'adate');
     toggleAppFieldOrder('#date-field-icon', 'adate');
 
-   if (appWasDeleted){
+    if (appWasDeleted){
         showToast("Application was deleted!", 2000);
-   }
+    }
 });
 
 
@@ -229,17 +235,19 @@ function sortAppsByUserFilters(){
 // Create an application list item using the supplied appData
 function createAppFromData(appData){
     // Fix need-to-apply status by removing dashes and replacing them
-    let statusReplace = getFormattedStatus(`${appData.astatus}`);
+    const statusReplace = getFormattedStatus(`${appData.astatus}`);
 
     // Fix the URL to make it clickable
-    let clickableUrl = getFormattedURL(`${appData.jurl}`);
+    const clickableUrl = getFormattedURL(`${appData.jurl}`);
+
+    const appDate = getFormattedDate(appData.adate, dateFormat);
 
     let app;
 
     if (isAdmin()){
         // Create a list item with the application data filled in for an ADMIN
         app = $(`<tr class="app-list-item" id="app-${appData.application_id}">\n` +
-            `<td>${appData.adate}</td>\n` +
+            `<td>${appDate}</td>\n` +
             `<td>${appData.jname}</td>\n` +
             `<td>${appData.ename}</td>\n` +
             `<td><a href="${appData.jurl}" target="_blank" rel="noopener noreferrer">Apply Link</a></td>\n` +
@@ -253,7 +261,7 @@ function createAppFromData(appData){
     }else{
         // Create a list item with the application data filled in for a USER
         app = $(`<tr class="app-list-item" id="app-${appData.application_id}">\n` +
-            `<td>${appData.adate}</td>\n` +
+            `<td>${appDate}</td>\n` +
             `<td>${appData.jname}</td>\n` +
             `<td>${appData.ename}</td>\n` +
             `<td class="status status-${appData.astatus}">\n` +
