@@ -186,8 +186,6 @@ function createUserFromData(userData) {
             `</td>\n` +
             `</tr>`);
 
-
-
     /*
     user.on('click', () => {
         //TODO: show user info
@@ -222,15 +220,66 @@ function createUserFromData(userData) {
     })
 
     // Show edit and delete btn div is viewRole is a USER and nothing is viewRole is ADMIN
-    const btnDiv = $('<td class="app-button-outer "></td>');
+    const btnDiv = $('<td class="app-button-outer"></td>');
     btnDiv.append(makeAdminBtn);
     btnDiv.append(editBtn);
     btnDiv.append(deleteBtn);
     // Add button div to app
     user.append(btnDiv);
+    userListDiv.append(user);
+
+
+    /*---------------------  TESTING A DROPDOWN MENU HERE -------------------------------------
+    const isUserAdmin = userData.permission === '1';
+
+    // Create an edit button and add an onclick listener to Open User Modal when edit button is clicked
+    const makeAdminBtn = $(`<button class="admin-btn dropdown-item"><i class="fa-solid fa-user-tie pe-2"></i>${isUserAdmin ? 'Remove' : 'Make'} Admin</button>`);
+    if (userID == userData.user_id){
+        makeAdminBtn.attr('disabled', true);
+    }
+    makeAdminBtn.on('click', () => {
+        if (isUserAdmin){
+            askToRemoveAdmin(userData.user_id, userData.fname, userData.lname);
+        }else{
+            askToMakeUserAdmin(userData.user_id, userData.fname, userData.lname);
+        }
+    })
+
+    // Create an edit button and add an onclick listener to Open User Modal when edit button is clicked
+    const editBtn = $(`<li><button class="dropdown-item" href="#"><i class="fa-solid fa-pen pe-2"></i>Edit User</button></li>`);
+    editBtn.on('click', () => {
+        showUserModal(userData, isUserAdmin);
+    })
+
+    // Create a delete button and add an onclick listener to ask to Delete App when delete button is clicked
+    const deleteBtn = $(`<li><button class="dropdown-item" href="#"><i class="fa-solid fa-trash pe-2"></i>Delete User</button></li>`);
+    deleteBtn.on('click', () => {
+        askToDeleteUser(userData.user_id, userData.fname, userData.lname);
+    })
+
+    // Show edit and delete btn div is viewRole is a USER and nothing is viewRole is ADMIN
+    const btnDiv = $('<td class="app-button-outer "></td>');
+    btnDiv.append(makeAdminBtn);
+    btnDiv.append(editBtn);
+    btnDiv.append(deleteBtn);
+    // Add button div to app
+    //user.append(btnDiv);
+
+    const tableDropdownDiv = $('<td class="text-end"></td>');
+    const dropdownDiv = $('<div class="dropstart user-dropdown"></div>');
+    const dropdownBtn = $('<button class="user-dropdown-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-ellipsis-vertical"></i></button>');
+    const dropdownMenu = $('<ul class="dropdown-menu"></ul>');
+    tableDropdownDiv.append(dropdownDiv);
+    dropdownDiv.append(dropdownBtn);
+    dropdownDiv.append(dropdownMenu);
+    dropdownMenu.append(makeAdminBtn);
+    dropdownMenu.append(editBtn);
+    dropdownMenu.append(deleteBtn);
 
     //console.log(user);
+    user.append(tableDropdownDiv);
     userListDiv.append(user);
+     */
 }
 
 // Empty the user-list, Sort by clickedField, then populate the user-list

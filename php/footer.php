@@ -1,3 +1,7 @@
+<?php
+global $location;
+?>
+
 <footer>
     <div class="container footer-div p-3">
         <div class="row justify-content-center">

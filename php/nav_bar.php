@@ -1,6 +1,5 @@
 <?php
-$location = $_SESSION['location'];
-
+global $location;
 global $isLogin;
 
 $permission = 0;
@@ -28,14 +27,7 @@ if (isset($_SESSION['fname'])){
         </div>
     </div>
     <div class='welcome-outer text-end d-flex justify-content-end' >
-        <?php if (isset($_SESSION['user_id'])) {
-            showWelcome();
-            }else{
-                if (!$isLogin) {
-                    showLoginButton();
-                }
-            }
-        ?>
+        <?php showWelcome(); ?>
     </div>
 </nav>
 
@@ -86,23 +78,38 @@ function showAnonNav(){
 
 function showWelcome(){
     global $firstName;
+    global $location;
+    $loggedIn = isset($_SESSION['user_id']);
+
+    // Set welcome message to user first name if logged in
+    $welcomeMsg = $loggedIn ? 'Welcome, ' . $firstName . '!' : 'User';
+
+    $logInOrOutBtn = $loggedIn ? "<button class='btn-log-in-out m-auto pb-1' type='button' data-bs-toggle='modal' data-bs-target='#logout-modal'>
+                                      <i class='fa-solid fa-arrow-right-from-bracket pe-1'></i>Logout
+                                  </button>" :
+                                  "<button class='btn-log-in-out m-auto pb-1' type='button'>
+                                      <i class='fa-solid fa-arrow-right-from-bracket pe-1'></i><a href='$location login.php'>Login</a>
+                                  </button>";
+    $accountBtn = $loggedIn ? "<form method='post' action='user_edit.php' target='_blank'>  
+                                   <button class='btn-log-in-out'>
+                                       <i class='fa-solid fa-gear pe-1'></i>Account
+                                   </button>
+                               </form>" :
+                               "<button class='btn-log-in-out m-auto pb-1' type='button' disabled>
+                                   <i class='fa-solid fa-gear pe-1'></i>Account
+                               </button>";
+
     echo "
         <div class='dropdown'>
             <button class='btn dropdown-toggle' id='user-dropdown' type='button' data-bs-toggle='dropdown' aria-expanded='false'>
-                Welcome, {$firstName}!
+                {$welcomeMsg}
             </button>
             
              <ul class='dropdown-menu text-end'>
-                <li class='d-flex'>
-                    <div class='dropdown-item'>
-                        <form method='post' action='user_edit.php' target='_blank'>
-                            <button class='btn-log-in-out m-auto pb-1' class='submit-btn'>
-                                <i class='fa-solid fa-gear pe-1'></i>Account
-                            </button>
-                        </form>
-                        <button class='btn-log-in-out m-auto pb-1' type='button' data-bs-toggle='modal' data-bs-target='#logout-modal'>
-                            <i class='fa-solid fa-arrow-right-from-bracket pe-1'></i>Logout
-                        </button>
+                <li>
+                    <div class='dropdown-item d-flex gap-2'>
+                        {$accountBtn}
+                        {$logInOrOutBtn}
                     </div>  
                 </li>
                 <li class='p-1'>

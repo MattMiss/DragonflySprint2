@@ -1,7 +1,6 @@
 <?php
 session_start();
-$_SESSION['location'] = '';
-$location = $_SESSION['location'];
+$location = '';
 
 $indexLocation =  'http://localhost:63342/Sprint4/index.php'; // local (may need to change port number)
 //$indexLocation =  'https://dragonfly.greenriverdev.com/sprint5/index.php'; //cpanel
@@ -106,5 +105,6 @@ echo "<main>
 
 <?php include 'php/footer.php'?>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="js/main.js"></script>
 </body>
 </html>
