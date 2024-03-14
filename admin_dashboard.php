@@ -92,7 +92,7 @@ $role = 1;
 // $sqlApps = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC";
 $sqlApps = "SELECT * FROM `applications` JOIN `users` WHERE `applications`.`user_id` = `users`.`user_id` AND 
                                         `applications`.is_deleted = 0 AND `users`.is_deleted = 0";
-$sqlAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY date_created DESC LIMIT 5"; // 5 most recent announcements
+$sqlAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY date_created DESC"; // 5 most recent announcements
 $sqlUsers = "SELECT * FROM users"; // 5 users (deleted users get filtered out in dash-users.js so admin can see deleted too)
 $appsResult = @mysqli_query($cnxn, $sqlApps);
 $announceResult = @mysqli_query($cnxn, $sqlAnnounce);
@@ -300,7 +300,7 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php createReminders($announceResult);?>
+                        <?php createAdminAnnouncements($announceResult);?>
                     </tbody>
                 </table>
             </div>
@@ -634,7 +634,8 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
 
 <?php
 
-function createReminders($info) {
+function createAdminAnnouncements($info) {
+    $isEmpty = true;
     while ($row = mysqli_fetch_assoc($info)) {
         $id = $row["announcement_id"];
         $title = $row["title"];
@@ -645,6 +646,7 @@ function createReminders($info) {
         $jurl = $row["jurl"];
         $recipient = $row["sent_to"];
         $date = $row["date_created"];
+        $isEmpty = false;
 
         echo "
             <tr id='$id'>
@@ -658,90 +660,75 @@ function createReminders($info) {
                 </td>
             </tr>
 
-                <div class='modal fade' id='announcement-modal-$id' tabindex='-1' role='dialog' aria-labelledby='job-title' aria-hidden='true'>
-                    <div class='modal-dialog' role='document'>
-                        <div class='modal-content'>
-                            <div class='modal-header'>
-                                <h5 class='modal-title' id='job-title'>$title</h5>
-                                <button type='button' class='modal-close-primary close' data-bs-dismiss='modal' aria-label='Close'>
-                                    <span aria-hidden='true'>&times;</span>
-                                </button>
-                            </div>
-                            <div class='modal-body'>
-                                <ul class='list-group-item'>
-                                    <li class='list-group-item pb-1'>
-                                        <span class='form-label'>Company:</span> $ename
-                                    </li>
-                                    <li class='list-group-item pb-1'>
-                                        <span class='form-label'>Address:</span> $location
-                                    </li>
-                                    <li class='list-group-item pb-1'>
-                                        <span class='form-label'>URL:</span>
-                                        <a href='$jurl' target='_blank'>Apply Here</a>
-                                    </li>
-                                    <li class='list-group-item'>
-                                        <span class='form-label'>More Information:</span>
-                                        <p>$jobInfo</p>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class='modal-footer'>
-                                <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Close</button>
-                                <button type='button' class='modal-edit'>Edit</button>
-                            </div>
+            <div class='modal fade' id='announcement-modal-$id' tabindex='-1' role='dialog' aria-labelledby='job-title' aria-hidden='true'>
+                <div class='modal-dialog' role='document'>
+                    <div class='modal-content'>
+                        <div class='modal-header'>
+                            <h5 class='modal-title' id='job-title'>$title</h5>
+                            <button type='button' class='modal-close-primary close' data-bs-dismiss='modal' aria-label='Close'>
+                                <span aria-hidden='true'>&times;</span>
+                            </button>
+                        </div>
+                        <div class='modal-body'>
+                            <ul class='list-group-item'>
+                                <li class='list-group-item pb-1'>
+                                    <span class='form-label'>Company:</span> $ename
+                                </li>
+                                <li class='list-group-item pb-1'>
+                                    <span class='form-label'>Address:</span> $location
+                                </li>
+                                <li class='list-group-item pb-1'>
+                                    <span class='form-label'>URL:</span>
+                                    <a href='$jurl' target='_blank'>Apply Here</a>
+                                </li>
+                                <li class='list-group-item'>
+                                    <span class='form-label'>More Information:</span>
+                                    <p>$jobInfo</p>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class='modal-footer'>
+                            <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Close</button>
+                            <button type='button' class='modal-edit'>Edit</button>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Announcement Delete Modal -->
-                <div class='modal fade' id='announcement-delete-modal-$id' tabindex='-1' role='dialog' aria-labelledby='delete-announce' aria-hidden='true'>
-                    <div class='modal-dialog modal-dialog-centered' role='document'>
-                        <div class='modal-content'>
-                            <div class='modal-header'>
-                                <h4 class='modal-title' id='delete-warning'>Delete Announcement?</h4>
-                            </div>
-                            <div class='modal-body'>
-                                <p>Are you sure you want to delete announcement for $ename?</p>
-                            </div>
-                            <div class='modal-footer'>
-                                <form method='POST' action='#'>
-                                    <input type='hidden' value='4' name='submit-from'>
-                                    <input type='hidden' id='delete-announcement-id' value=$id name='id'>
-                                    <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Cancel</button>
-                                    <button type='submit' class='modal-delete'>Delete</button>
-                                </form>
-                            </div>
+            </div>
+            
+            <!-- Announcement Delete Modal -->
+            <div class='modal fade' id='announcement-delete-modal-$id' tabindex='-1' role='dialog' aria-labelledby='delete-announce' aria-hidden='true'>
+                <div class='modal-dialog modal-dialog-centered' role='document'>
+                    <div class='modal-content'>
+                        <div class='modal-header'>
+                            <h4 class='modal-title' id='delete-warning'>Delete Announcement?</h4>
+                        </div>
+                        <div class='modal-body'>
+                            <p>Are you sure you want to delete announcement for $ename?</p>
+                        </div>
+                        <div class='modal-footer'>
+                            <form method='POST' action='#'>
+                                <input type='hidden' value='4' name='submit-from'>
+                                <input type='hidden' id='delete-announcement-id' value=$id name='id'>
+                                <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Cancel</button>
+                                <button type='submit' class='modal-delete'>Delete</button>
+                            </form>
                         </div>
                     </div>
                 </div>
-                ";
+            </div>
+            ";
+    }
+    if ($isEmpty){
+        echo "
+            <tr>
+                <td></td>
+                <td></td>
+                <td>No Announcements</td>
+                <td></td>
+                <td></td>
+            </tr>";
     }
 }
 ?>
-<?php
-    function createUserTable($info) {
-        while ($row = mysqli_fetch_assoc($info)) {
-            $id = $row["user_id"];
-            $fname = $row["fname"];
-            $lname = $row["lname"];
-            $email = $row["email"];
-            $status = $row["status"];
 
-            $userInfo = json_encode($row);
-
-            echo "
-                <tr id='user-$id' class='user-list-item'>
-                    <td>$fname $lname</td>
-                    <td>$email</td>
-                    <td>$status</td>
-                    <td class='app-button-outer'>
-                        <button class='app-button-inner btn btn-sm btn-update'><i class='fa-solid fa-pen'></i></button>
-                        <button class='app-button-inner btn btn-sm btn-delete' type='button' data-bs-toggle='modal' 
-                        data-bs-target='#user-delete-modal' onclick='deleteUserClicked($userInfo)'><i class='fa-solid fa-trash'></i></button>
-                    </td>
-                </tr>
-            ";
-        }
-    }
-?>
 
