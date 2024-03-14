@@ -228,20 +228,11 @@ function sortAppsByUserFilters(){
 
 // Create an application list item using the supplied appData
 function createAppFromData(appData){
-    console.log("hey");
     // Fix need-to-apply status by removing dashes and replacing them
-    let statusReplace = `${appData.astatus}`;
-    statusReplace = statusReplace.replace(/-/g, " ");
+    let statusReplace = getFormattedStatus(`${appData.astatus}`);
 
     // Fix the URL to make it clickable
-    let clickableUrl = `${appData.jurl}`;
-    if (!clickableUrl.startsWith("http")) {
-        if (!clickableUrl.startsWith("www.")) {
-            clickableUrl = `https://www.${appData.jurl}`;
-        } else {
-            clickableUrl = `https://${appData.jurl}`;
-        }
-    }
+    let clickableUrl = getFormattedURL(`${appData.jurl}`);
 
     let app;
 
@@ -337,12 +328,20 @@ function loadMoreApps(){
     populateAppList();
 }
 
+
+function showFollowUpApp(appData){
+    // Use the App Modal to show this follow-up application
+    showAppModal(appData, getFormattedStatus(appData.astatus), getFormattedURL(appData.jurl));
+}
+
 // Open the edit-modal and fill in the data from the appData
 function showAppModal(appData, status, formattedUrl){
     console.log(appData);
 
     $('#edit-modal').modal('show');
 
+    console.log(status);
+    console.log(formattedUrl);
 
     // Fill in modal info
     $('#edit-modal-adate').text(appData.adate);

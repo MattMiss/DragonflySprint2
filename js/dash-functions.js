@@ -31,3 +31,21 @@ function sortListByField(targetList, direction, field){
         return 0;
     });
 }
+
+// Fix need-to-apply status by removing dashes and replacing them
+function getFormattedStatus(status){
+    return status.replace(/-/g, " ");
+}
+
+function getFormattedURL(url){
+    // Fix the URL to make it clickable
+    let clickableUrl = url;
+    if (!clickableUrl.startsWith("http")) {
+        if (!clickableUrl.startsWith("www.")) {
+            clickableUrl = `https://www.${url}`;
+        } else {
+            clickableUrl = `https://${url}`;
+        }
+    }
+    return clickableUrl;
+}

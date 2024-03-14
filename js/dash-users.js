@@ -13,7 +13,6 @@ const userListDiv = $('#dash-users-list');
 
 $(window).on('load', () => {
 
-    console.log(userID);
     // If admin is logged in, Setup Users Input change listeners and show the users
     if (isAdmin()){
 
@@ -139,7 +138,6 @@ function sortUsersByFilters(){
         if (singleUser.length === 0) return;
         // Only show items that match the dropdown status or if the "any" status is selected
         if (userStatus === 'any' || userStatus === singleUser.status){
-            console.log(singleUser.is_deleted);
             if (!showDeletedUsers && singleUser.is_deleted === '1'){
                 return;
             }
