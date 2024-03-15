@@ -70,8 +70,8 @@ if(! empty($_POST)) {
     $RADIO_VALUES = array("Seeking Internship", "Seeking Job", "Not Actively Searching");
     $MIN_COHORT_NUM = 1;
     $MAX_COHORT_NUM = 100;
-    $MIN_ROLES = 5;
-    $MAX_ROLES = 250;
+    $MIN_ROLES = 0;
+    $MAX_ROLES = 500;
     $MIN_PASSWORD = 8;
     $MAX_PASSWORD = 16;
     $MIN_NAME = 1;
