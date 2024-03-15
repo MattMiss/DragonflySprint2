@@ -60,14 +60,24 @@ function validateName() {
 // validates email
 function validateEmail() {
     let re = /[^\s@]+@[^\s@]+\.[^\s@]+/;
-    let isValid = re.test(email.value);
+    let isValidFormat = re.test(email.value);
+    let isEmpty = email.value.length === 0;
+    let isValid = isEmpty === false && isValidFormat === true;
 
     const emailError = document.getElementById("email-error");
+    const emailEmptyMessage = "Please enter your email";
+    const invalidFormatMessage = "Please enter a valid email";
 
-    if(isValid === false) {
-        emailError.style.visibility = "visible";
-    } else {
+    if(isValid === true) {
         emailError.style.visibility = "hidden";
+    } else {
+        if(isEmpty === true) {
+            emailError.innerText = emailEmptyMessage;
+        } else {
+            emailError.innerText = invalidFormatMessage;
+        }
+
+        emailError.style.visibility = "visible";
     }
 
     return isValid;
@@ -105,18 +115,48 @@ function validateCohortNum() {
 
 // validate status
 function validateStatus() {
-    let isValid;
+    let isValid = false
+    let isValidStatus = false;
     let checked = 0;
 
-    // checks that 1 button is checked
-    for(const radioButton in status) {
-        if(radioButton.checked === true) {
-            isValid = STATUS.contains(radioButton.value) === true;
-            checked++;
+    const notSearching = document.getElementById("notSearching");
+    const seekingJob = document.getElementById("seekingJob");
+    const seekingInternship = document.getElementById("seekingInternship");
+
+    if(notSearching.checked === true) {
+        checked++;
+
+        if(STATUS.includes(notSearching.value)) {
+            isValidStatus = true;
+        } else {
+            isValidStatus = false;
+            return isValidStatus;
         }
     }
 
-    isValid = isValid === true && checked === 1;
+    if(seekingJob.checked === true) {
+        checked++;
+
+        if(STATUS.includes(seekingJob.value)) {
+            isValidStatus = true;
+        } else {
+            isValidStatus = false;
+            return isValidStatus;
+        }
+    }
+
+    if(seekingInternship.checked === true) {
+        checked++;
+
+        if(STATUS.includes(seekingInternship.value)) {
+            isValidStatus = true;
+        } else {
+            isValidStatus = false;
+            return isValidStatus;
+        }
+    }
+
+    isValid = isValidStatus === true && checked === 1;
     const statusError = document.getElementById("status-error");
 
     if(isValid === false) {
