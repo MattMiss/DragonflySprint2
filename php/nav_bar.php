@@ -1,6 +1,5 @@
 <?php
-$location = $_SESSION['location'];
-
+global $location;
 global $isLogin;
 
 $permission = 0;
@@ -28,14 +27,7 @@ if (isset($_SESSION['fname'])){
         </div>
     </div>
     <div class='welcome-outer text-end d-flex justify-content-end' >
-        <?php if (isset($_SESSION['user_id'])) {
-            showWelcome();
-            }else{
-                if (!$isLogin) {
-                    showLoginButton();
-                }
-            }
-        ?>
+        <?php showWelcome(); ?>
     </div>
 </nav>
 
@@ -57,7 +49,7 @@ if (isset($_SESSION['fname'])){
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-<script src="/js/navbar.js"></script>
+<script src="../js/navbar.js"></script>
 
 <?php
 function showAdminNav(){
@@ -86,27 +78,62 @@ function showAnonNav(){
 
 function showWelcome(){
     global $firstName;
+    global $location;
+    $loggedIn = isset($_SESSION['user_id']);
+
+    // Set welcome message to user first name if logged in
+    $welcomeMsg = $loggedIn ? 'Welcome, ' . $firstName . '!' : 'User';
+
+    $loggedInDropdownItems = "<form method='post' action='user_edit.php'>  
+                                  <button class='btn-log-in-out'>
+                                      <i class='fa-solid fa-gear pe-1'></i>Account
+                                  </button>
+                              </form>
+                              <button class='btn-log-in-out pb-1' type='button' data-bs-toggle='modal' data-bs-target='#logout-modal'>
+                                  <i class='fa-solid fa-arrow-right-from-bracket pe-1'></i>Logout
+                              </button>";
+
+    $loggedOutDropdownItems = "<button class='btn-log-in-out m-auto pb-1' type='button' disabled>
+                                   <i class='fa-solid fa-gear pe-1'></i>Account
+                               </button>
+                               <button class='btn-log-in-out m-auto pb-1' type='button'>
+                                   <i class='fa-solid fa-arrow-right-from-bracket pe-1'></i><a href='$location login.php'>Login</a>
+                               </button>";
+    $dropdownItems = $loggedIn ? $loggedInDropdownItems : $loggedOutDropdownItems;
+
+    $dateFormatListItem = "<li class=''>
+                                <div class='d-flex justify-content-between date-list pe-3'>
+                                    <span class='user-menu-label ps-3'>DATE FORMAT</span>
+                                    <select class='form-select' id='date-format-select' aria-label='Date Format Select'>
+                                        <option selected value='mm-dd-yy'>MM-DD-YY</option>
+                                        <option value='dd-mm-yy'>DD-MM-YY</option>
+                                        <option value='yy-mm-dd'>YY-MM-DD</option>
+                                    </select>
+                                </div>       
+                           </li>";
+
     echo "
         <div class='dropdown'>
-            <button class='btn dropdown-toggle' id='user-dropdown' type='button' data-bs-toggle='dropdown' aria-expanded='false'>
-                Welcome, {$firstName}!
+            <button class='btn dropdown-toggle' id='user-dropdown' type='button' data-bs-toggle='dropdown' data-bs-auto-close='outside' aria-expanded='false'>
+                {$welcomeMsg}
             </button>
             
              <ul class='dropdown-menu text-end'>
-                <li class='d-flex'>
-                    <div class='dropdown-item'>
-                        <button class='btn-log-in-out m-auto pb-1' type='button'>
-                            <i class='fa-solid fa-gear pe-1'></i>Account
-                        </button>
-                        <button class='btn-log-in-out m-auto pb-1' type='button' data-bs-toggle='modal' data-bs-target='#logout-modal'>
-                            <i class='fa-solid fa-arrow-right-from-bracket pe-1'></i>Logout
-                        </button>
-                    </div>  
+                <li>
+                    <h6 class='text-center'>Account</h6>
                 </li>
-                <li class='p-1'>
+                <li class='pb-4'>
+                    <div class='dropdown-item d-flex justify-content-around'>
+                        {$dropdownItems}
+                    </div>       
+                </li>
+                <li>
+                    <h6 class='text-center'>Preferences</h6>
+                </li>
+                <li class='pb-2'>
                     <div class='d-flex align-items-center pe-1'>
                         <span class='user-menu-label ps-3'>THEME</span>
-                        <div class='dropdown-item dark-switch-outer text-center' id='dark-mode-list-item'>
+                        <div class='dropdown-item dark-switch-outer text-center d-flex flex-row' id='dark-mode-list-item'>
                             <input type='checkbox' id='dark-mode-switch'>
                             <label for='dark-mode-switch'>
                                 <i class='fas fa-sun'></i>
@@ -115,6 +142,7 @@ function showWelcome(){
                         </div>
                     </div>       
                 </li>
+                {$dateFormatListItem}
              </ul>
         </div>
     ";

@@ -1,6 +1,6 @@
 <?php
 session_start();
-$_SESSION['location'] = '';
+$location = '';
 
 global $db_location;
 global $cnxn;
@@ -145,7 +145,7 @@ include 'php/nav_bar.php' ?>
                            value = <?php echo $followupdate?>>
                 </div>
 
-                <input type="hidden" name="application-id" value="<?php echo $id; ?>" />
+                <input type="hidden" name="application-id" value="<?php echo $app_id; ?>" />
 
                 <button type="submit" class="submit-btn">Submit</button>
             </form>

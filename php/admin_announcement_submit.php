@@ -1,6 +1,6 @@
 <?php
 session_start();
-$_SESSION['location'] = '../';
+$location = '../';
 
 global $cnxn;
 global $db_location;

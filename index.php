@@ -1,8 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
 <?php
 session_start();
-$_SESSION['location'] = '';
+$location = '';
 
 global $cnxn;
 global $viewingID;
@@ -39,7 +37,6 @@ include 'db_picker.php';
 include $db_location;
 
 $appWasDeleted = false;
-$userWasDeleted = false;
 
 $viewingUser = "SELECT permission FROM users WHERE user_id = $viewingID";
 $viewingUserResult = @mysqli_query($cnxn, $viewingUser);
@@ -60,13 +57,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $role = 0;
 
 $date = date('Y-m-d', time());
-$start = date('Y-m-d', strtotime($date . '-5days'));
+$start = date('Y-m-d', strtotime($date . '-15days'));
 $finish = date('Y-m-d', strtotime($date . '+5days'));
-$date_created =
 
 $sqlRecentAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 AND (date_created BETWEEN '$start' AND '$date')
-        ORDER BY announcement_id DESC LIMIT 5"; // announcements from last 5 days
-$sqlRecentApps = "SELECT * FROM applications WHERE is_deleted = 0 AND (followupdate BETWEEN '$start' AND '$finish')
+        ORDER BY announcement_id DESC"; // announcements from last 5 days
+$sqlRecentApps = "SELECT * FROM applications WHERE is_deleted = 0 AND user_id = $viewingID AND (followupdate BETWEEN '$start' AND '$finish')
         ORDER BY application_id DESC";
 
 
@@ -97,19 +93,19 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
                     <div class="col-md-4 pt-2">
                         <div class="input-group input-group-sm">
                             <span class="input-group-text">Start Date</span>
-                            <input type="date" class="form-control" id="app-start-date" name="search-start-date">
+                            <input type="date" class="form-control date-input" id="app-start-date" name="search-start-date">
                         </div>
                     </div>
                     <div class="col-md-4 pt-2">
                         <div class="input-group input-group-sm">
                             <span class="input-group-text">End Date</span>
-                            <input type="date" class="form-control" id="app-end-date" name="search-end-date">
+                            <input type="date" class="form-control date-input" id="app-end-date" name="search-end-date">
                         </div>
                     </div>
                     <div class="col-md-4 text-end pt-2">
                         <div class="input-group input-group-sm">
                             <span class="input-group-text">Status</span>
-                            <select class="form-select" id="app-status-select">
+                            <select class="form-select status-select" id="app-status-select">
                                 <option selected value="any">Any</option>
                                 <option value="accepted">Accepted</option>
                                 <option value="applied">Applied</option>
@@ -241,7 +237,6 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
 
     <!-----------------------------  MODALS  ----------------------------------->
     <!-- Delete App Modal -->
-
     <div class='modal fade' id='app-delete-modal' tabindex='-1' role='dialog' aria-labelledby='delete-app-message' aria-hidden='true'>
         <div class='modal-dialog modal-dialog-centered' role='document'>
             <div class='modal-content'>
@@ -321,19 +316,63 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
             </div>
         </div>
     </div>
+
+    <!-- View Announcement Modal -->
+    <div class='modal fade' id='view-announcement-modal' tabindex='-1' role='dialog' aria-labelledby='view-announcement' aria-hidden='true'>
+        <div class='modal-dialog' role='document'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <h5 class='modal-title' id='view-announce-title'>$title</h5>
+                    <button type='button' class='modal-close-primary close' data-bs-dismiss='modal' aria-label='Close'>
+                        <span aria-hidden='true'>&times;</span>
+                    </button>
+                </div>
+                <div class='modal-body'>
+                    <ul class='list-group-item'>
+                        <li class='list-group-item pb-1'>
+                            <span class='form-label'>Company: </span><span id="view-announce-employer"></span>
+                        </li>
+                        <li class='list-group-item pb-1'>
+                            <span class='form-label'>Address: </span><span id="view-announce-address"></span>
+                        </li>
+                        <li class='list-group-item pb-1'>
+                            <span class='form-label'>URL: </span>
+                            <a id="view-announce-jurl" href='' target='_blank'>Apply Here</a>
+                        </li>
+                        <li class='list-group-item'>
+                            <span class='form-label'>More Information: </span><span id="view-announce-info"></span>
+                        </li>
+                    </ul>
+                </div>
+                <div class='modal-footer'>
+                    <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </main>
 <?php include 'php/footer.php'?>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="js/contactscript.js"></script>
-<script>let apps = <?php echo json_encode($apps) ?>; let role = <?php echo $role ?>; users=''; let appWasDeleted = <?php echo json_encode($appWasDeleted) ?>; let userWasDeleted = <?php echo json_encode($userWasDeleted) ?>;</script>
+<script>
+    let apps = <?php echo json_encode($apps) ?>;
+    let announcements = [];
+    let role = <?php echo $role ?>; users='';
+    let appWasDeleted = <?php echo json_encode($appWasDeleted) ?>;
+    let userWasDeleted = false;
+    let announceWasDeleted = false;
+</script>
 <script src="js/main.js"></script>
 <script src="js/dash-functions.js"></script>
 <script src="js/dash-apps.js"></script>
+<script src="js/dash-announcements.js"></script>
 </body>
 </html>
 
 <?php
 function createAppAnnouncements($info) {
+    $isEmpty = true;
     while ($row = mysqli_fetch_assoc($info)) {
         $id = $row["announcement_id"];
         $title = $row["title"];
@@ -344,54 +383,30 @@ function createAppAnnouncements($info) {
         $jurl = $row["jurl"];
         $recipient = $row["sent_to"];
         $date = $row["date_created"];
+        $announce = json_encode($row);
+        $isEmpty = false;
         //            $app_info = json_encode($row);
 
         echo "
             <div class='reminder'>
                 <i class='fa-regular fa-comment'></i>
-                <button class='announcement-modal-btn text-start' type='button' data-bs-toggle='modal' data-bs-target='#announcement-modal-$id'>$title $jtype at <span>$ename</span></button>
+                <button class='announcement-modal-btn text-start' type='button' onclick='showViewAnnouncementModal($announce)' >$title $jtype at <span>$ename</span></button>
                 <p>Date Created: <span>$date</span></p>
             </div>
-            
-            <div class='modal fade' id='announcement-modal-$id' tabindex='-1' role='dialog' aria-labelledby='job-title' aria-hidden='true'>
-                <div class='modal-dialog' role='document'>
-                    <div class='modal-content'>
-                        <div class='modal-header'>
-                            <h5 class='modal-title' id='job-title'>$title</h5>
-                            <button type='button' class='modal-close-primary close' data-bs-dismiss='modal' aria-label='Close'>
-                                <span aria-hidden='true'>&times;</span>
-                            </button>
-                        </div>
-                        <div class='modal-body'>
-                            <ul class='list-group-item'>
-                                <li class='list-group-item pb-1'>
-                                    <span class='form-label'>Company:</span> $ename
-                                </li>
-                                <li class='list-group-item pb-1'>
-                                    <span class='form-label'>Address:</span> $location
-                                </li>
-                                <li class='list-group-item pb-1'>
-                                    <span class='form-label'>URL:</span>
-                                    <a href='$jurl' target='_blank'>Apply Here</a>
-                                </li>
-                                <li class='list-group-item'>
-                                    <span class='form-label'>More Information:</span>
-                                    <p>$jobInfo</p>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class='modal-footer'>
-                            <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
             ";
+    }
+    // Show text is no announcements
+    if ($isEmpty){
+        echo "
+            <div class='reminder'>  
+                <p>No Recent Announcements</p>
+            </div>
+        ";
     }
 }
 
 function createAppReminders($info) {
+    $isEmpty = true;
     while ($row = mysqli_fetch_assoc($info)) {
         $id = $row["application_id"];
         $jobName = $row["jname"];
@@ -402,75 +417,25 @@ function createAppReminders($info) {
         $astatus = $row['astatus'];
         $jdescription = $row['jdescription'];
         $fupdates = $row['fupdates'];
-
+        $data = json_encode($row);
+        $isEmpty = false;
         //$app_info = json_encode($row);
 
         echo "
             <div class='reminder'>
                 <i class='fa-regular fa-comment'></i>
-                <button class='reminder-modal-btn text-start' type='button' data-bs-toggle='modal' data-bs-target='#view-app-modal-$id'>$jobName at <span>$ename</span></button>
+                <button class='reminder-modal-btn text-start' type='button' onclick='showFollowUpApp($data)'>$jobName at <span>$ename</span></button>
                 <p>Follow-up Date: <span>$followupdate</span></p>
             </div>
-            
-            <div class='modal fade' id='view-app-modal-$id' tabIndex='-1' role='dialog' aria-labelledby='job-title' aria-hidden='true'>
-        <div class='modal-dialog modal-dialog-centered' role='document'>
-            <div class='modal-content'>
-                <div class='modal-header'>
-                    <h3 class='modal-title' id='job-title'>Application Details</h3>
-                    <button type='button' class='modal-close-primary close' data-bs-dismiss='modal' aria-label='Close'>
-                        <span aria-hidden='true'>&times;</span>
-                </div>
-                <div class='modal-body'>
-                    <ul class='list-group-item'>
-                        <li class='list-group-item pb-1'>
-                            <span class='form-label'>Job Name: </span>
-                            <span>$jobName</span>
-                        </li>
-                        <li class='list-group-item pb-1'>
-                            <span class='form-label'>Employer Name:</span>
-                            <span>$ename</span>
-                        </li>
-                        <li class='list-group-item pb-1'>
-                            <span class='form-label'>URL:</span>
-                            <a href='$jurl' target='_blank' rel='noopener noreferrer'>Apply Here</a>
-                        </li>
-                        <li class='list-group-item'>
-                            <span class='form-label'>Job Description: </span>
-                            <p style='margin: 0'>$jdescription</p>
-                        </li>
-                        <li class='list-group-item pb-1'>
-                            <span class='form-label'>Application date: </span>
-                            <span>$adate</span>
-                        </li>
-                        <li class='list-group-item pb-1'>
-                            <span class='form-label'>Status: </span>
-                            <span class='status status-$astatus'>
-                                            <i class='fa-solid fa-circle'></i>
-                                        </span>
-                            <span style='text-transform: capitalize'>$astatus</span>
-                        </li>
-                        <li class='list-group-item'>
-                            <span class='form-label'>Followup date: </span>
-                            <span>$followupdate</span>
-                        </li>
-                        <li class='list-group-item pb-1'>
-                            <span class='form-label'>Followup updates: </span>
-                            <p style='margin: 0'>$fupdates</p>
-                        </li>
-                    </ul>
-                </div>
-                <div class='modal-footer'>
-                    <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Close</button>
-                    <form method='post' action='application_edit.php' target='_blank'>
-                        <input type='hidden' name='application-id' value=$id>
-                        <button type='submit' class='modal-edit'>Edit</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-            
             ";
+    }
+    // Show text is no announcements
+    if ($isEmpty){
+        echo "
+            <div class='reminder'>  
+                <p>No Follow-ups Needed</p>
+            </div>
+        ";
     }
 }
 ?>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-$_SESSION['location'] = '';
+$location = '';
 
 global $db_location;
 global $cnxn;
@@ -38,7 +38,7 @@ include $db_location;
 
 $appWasDeleted = false;
 $userWasDeleted = false;
-$announcementWasDeleted = false;
+$announceWasDeleted = false;
 
 // soft deletes a database entry
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -73,16 +73,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $makeAdminResult = @mysqli_query($cnxn, $sqlMakeUserAdmin);
 
     }else if($_POST["submit-from"] == 4) {
-        $id = $_POST["id"];
+        $announceID = $_POST["announcement-id"];
 
         // Ensure a user is logged in
         include 'php/roles/user_check.php';
         // Ensure an admin is logged in
         include 'php/roles/admin_check.php';
 
-        $sqlDeleteAnnouncement = "UPDATE announcements SET is_deleted = 1 WHERE id = $id";
+        $sqlDeleteAnnouncement = "UPDATE announcements SET is_deleted = 1 WHERE announcement_id = $announceID";
         $deletedAnnouncementResult = @mysqli_query($cnxn, $sqlDeleteAnnouncement);
-        $announcementWasDeleted = true;
+        $announceWasDeleted = true;
     }
 }
 
@@ -92,7 +92,7 @@ $role = 1;
 // $sqlApps = "SELECT * FROM applications WHERE is_deleted = 0 ORDER BY application_id DESC";
 $sqlApps = "SELECT * FROM `applications` JOIN `users` WHERE `applications`.`user_id` = `users`.`user_id` AND 
                                         `applications`.is_deleted = 0 AND `users`.is_deleted = 0";
-$sqlAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY date_created DESC LIMIT 5"; // 5 most recent announcements
+$sqlAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 ORDER BY date_created DESC"; // 5 most recent announcements
 $sqlUsers = "SELECT * FROM users"; // 5 users (deleted users get filtered out in dash-users.js so admin can see deleted too)
 $appsResult = @mysqli_query($cnxn, $sqlApps);
 $announceResult = @mysqli_query($cnxn, $sqlAnnounce);
@@ -101,6 +101,7 @@ $usersResult = @mysqli_query($cnxn, $sqlUsers);
 // Fill in apps array
 $apps[] = array();
 $users[] = array();
+$announcements[] = array();
 
 $appCount = 0;
 while ($row = mysqli_fetch_assoc($appsResult)) {
@@ -112,6 +113,12 @@ $userCount = 0;
 while ($row = mysqli_fetch_assoc($usersResult)) {
     $users[$userCount] = $row;
     $userCount++;
+}
+
+$announceCount = 0;
+while ($row = mysqli_fetch_assoc($announceResult)){
+    $announcements[$announceCount] = $row;
+    $announceCount++;
 }
 
 ?>
@@ -129,19 +136,19 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                     <div class="col-md-4 pt-2">
                         <div class="input-group input-group-sm">
                             <span class="input-group-text">Start Date</span>
-                            <input type="date" class="form-control" id="app-start-date" name="search-start-date">
+                            <input type="date" class="form-control date-input" id="app-start-date" name="search-start-date">
                         </div>
                     </div>
                     <div class="col-md-4 pt-2">
                         <div class="input-group input-group-sm">
                             <span class="input-group-text">End Date</span>
-                            <input type="date" class="form-control" id="app-end-date" name="search-end-date">
+                            <input type="date" class="form-control date-input" id="app-end-date" name="search-end-date">
                         </div>
                     </div>
                     <div class="col-md-4 text-end pt-2">
                         <div class="input-group input-group-sm">
                             <span class="input-group-text">Status</span>
-                            <select class="form-select" id="app-status-select">
+                            <select class="form-select status-select" id="app-status-select">
                                 <option selected value="any">Any</option>
                                 <option value="accepted">Accepted</option>
                                 <option value="applied">Applied</option>
@@ -208,51 +215,6 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                                 </div>
                             </div>
                         </th>
-                        <!--
-                        <th scope="col" class="app-user-col">
-                            <div class="row clickable" id="user-order-btn">
-                                <div class="col-auto pe-0 my-auto">
-                                    User
-                                </div>
-                                <div class="col-auto ps-2 my-auto">
-                                    <div class="order-icons">
-                                        <div class="order-icons">
-                                            <i class="fa-solid fa-sort" id="user-field-icon"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </th>
-                        <th scope="col" class="app-email-col" id="email-order-btn">
-                            <div class="row clickable">
-                                <div class="col-auto pe-0 my-auto">
-                                    Email
-                                </div>
-                                <div class="col-auto ps-2 my-auto">
-                                    <div class="order-icons">
-                                        <div class="order-icons">
-                                            <i class="fa-solid fa-sort" id="email-field-icon"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </th>
-                        <th scope="col" class="app-status-col" id="status-order-btn">
-                            <div class="row clickable">
-                                <div class="col-auto pe-0 my-auto">
-                                    Status
-                                </div>
-                                <div class="col-auto ps-2 my-auto">
-                                    <div class="order-icons">
-                                        <div class="order-icons">
-                                            <i class="fa-solid fa-sort" id="status-field-icon"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </th>
-                        <th scope="col" class="w-btn" id="dash-app-btn-header"></th>
-                        -->
                         <th scope="col" class="app-status-col" id="status-order-btn">
                             <div class="row clickable">
                                 <div class="col-auto pe-0 my-auto">
@@ -277,13 +239,6 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                     <button type="button" class="submit-btn"  onclick="loadMoreApps()">More</button>
                 </div>
             </div>
-            <!--  Possibly remove this
-            <div class="row py-3">
-                <div class="col-3 d-flex justify-content-center" id="update-account-container">
-                    <button id="update-acc-btn" class="submit-btn"><i class="fa-solid fa-gear px-1"></i>Update Account</button>
-                </div>
-            </div>
-            -->
         </div>
 
         <div class="row dashboard-top">
@@ -299,8 +254,8 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                             <th scope="col" class="w-btn"></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <?php createReminders($announceResult);?>
+                    <tbody id="dash-announcements-list">
+                    <!-- List gets populated with announcements from the database here with dash-announcements.js -->
                     </tbody>
                 </table>
             </div>
@@ -347,11 +302,6 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                             </div>
                         </div>
                     </div>
-                    <!--
-                    <div class="col-auto text-end my-auto">
-                        <button type='button' class="btn btn-sm m-auto" id="show-deleted-users-btn" style="font-size: 0.7rem" onclick="showDeletedUsersClicked()"><i class="fa-regular fa-eye-slash"></i> Deleted Users</button>
-                    </div>
-                    -->
                 </div>
                 <table class="dash-table admin-user">
                     <thead>
@@ -439,7 +389,7 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
             </div>
         </div>
 
-        <!-----------------------------  MODALS  ----------------------------------->
+        <!---------------------------------------  MODALS  -------------------------------------------------->
         <!-- Edit App Modal -->
         <div class='modal fade' id='edit-modal' tabIndex='-1' role='dialog' aria-labelledby='job-title' aria-hidden='true'>
             <div class='modal-dialog modal-dialog-centered' role='document'>
@@ -507,6 +457,67 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
             </div>
         </div>
 
+        <!-- Edit User Modal -->
+        <div class='modal fade' id='user-edit-modal' tabIndex='-1' role='dialog' aria-labelledby='job-title' aria-hidden='true'>
+            <div class='modal-dialog modal-dialog-centered' role='document'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        <h3 class='modal-title' id='job-title'>User Details</h3>
+                        <button type='button' class='modal-close-primary close' data-bs-dismiss='modal' aria-label='Close'>
+                            <span aria-hidden='true'>&times;</span>
+                    </div>
+                    <div class='modal-body'>
+                        <ul class='list-group-item'>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>Permission: </span>
+                                <span id="user-edit-modal-permission"></span>
+                            </li>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>Deleted: </span>
+                                <span id="user-edit-modal-deleted"></span>
+                            </li>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>First Name: </span>
+                                <span id="user-edit-modal-fname"></span>
+                            </li>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>Last Name: </span>
+                                <span id="user-edit-modal-lname"></span>
+                            </li>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>Email: </span>
+                                <span id="user-edit-modal-email"></span>
+                            </li>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>Password: </span>
+                                <span id="user-edit-modal-password"></span>
+                            </li>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>Cohort Number: </span>
+                                <span id="user-edit-modal-cohort"></span>
+                            </li>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>Job Status: </span>
+                                <span id="user-edit-modal-job-status"></span>
+                            </li>
+                            <li class='list-group-item'>
+                                <span class='form-label'>Desired Roles: </span>
+                                <p id="user-edit-modal-roles" style="margin: 0"></p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class='modal-footer'>
+                        <button type='button' id="user-edit-modal-admin" class="btn btn-make-admin" data-bs-dismiss='modal'></button>
+                        <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Close</button>
+                        <form method="post" action="user_edit.php" target="_blank">
+                            <input id="edit-modal-user-id" type="hidden" name="user-id" value="">
+                            <button type="submit" class="modal-edit">Edit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- User Delete Modal -->
         <div class='modal fade' id='user-delete-modal' tabindex='-1' role='dialog' aria-labelledby='delete-app-message' aria-hidden='true'>
             <div class='modal-dialog modal-dialog-centered' role='document'>
@@ -551,137 +562,83 @@ while ($row = mysqli_fetch_assoc($usersResult)) {
                 </div>
             </div>
         </div>
+
+        <!-- View Announcement Modal -->
+        <div class='modal fade' id='view-announcement-modal' tabindex='-1' role='dialog' aria-labelledby='view-announcement' aria-hidden='true'>
+            <div class='modal-dialog' role='document'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        <h5 class='modal-title' id='view-announce-title'>$title</h5>
+                        <button type='button' class='modal-close-primary close' data-bs-dismiss='modal' aria-label='Close'>
+                            <span aria-hidden='true'>&times;</span>
+                        </button>
+                    </div>
+                    <div class='modal-body'>
+                        <ul class='list-group-item'>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>Company: </span><span id="view-announce-employer"></span>
+                            </li>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>Address: </span><span id="view-announce-address"></span>
+                            </li>
+                            <li class='list-group-item pb-1'>
+                                <span class='form-label'>URL: </span>
+                                <a id="view-announce-jurl" href='' target='_blank'>Apply Here</a>
+                            </li>
+                            <li class='list-group-item'>
+                                <span class='form-label'>More Information: </span><span id="view-announce-info"></span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class='modal-footer'>
+                        <button type='button' class='modal-delete' data-bs-dismiss='modal'>Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Announcement Delete Modal -->
+        <div class='modal fade' id='delete-announcement-modal' tabindex='-1' role='dialog' aria-labelledby='delete-announce' aria-hidden='true'>
+            <div class='modal-dialog modal-dialog-centered' role='document'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        <h4 class='modal-title' id='delete-warning'>Delete Announcement?</h4>
+                    </div>
+                    <div class='modal-body'>
+                        <p>Are you sure you want to delete announcement for <span id="delete-announce-title"></span>?</p>
+                    </div>
+                    <div class='modal-footer'>
+                        <form method='POST' action='#'>
+                            <input type='hidden' value='4' name='submit-from'>
+                            <input type='hidden' id='delete-announcement-id' value='' name='announcement-id'>
+                            <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Cancel</button>
+                            <button type='submit' class='modal-delete'>Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 </main>
 
 <?php include 'php/footer.php' ?>
 <script>
     let apps = <?php echo json_encode($apps) ?>;
     let users = <?php echo json_encode($users) ?>;
+    let announcements = <?php echo json_encode($announcements) ?>;
     let role = <?php echo $role ?>;
     let userID = <?php echo $viewingID ?>;
     let appWasDeleted = <?php echo json_encode($appWasDeleted) ?>;
     let userWasDeleted = <?php echo json_encode($userWasDeleted) ?>;
+    let announceWasDeleted = <?php echo json_encode($announceWasDeleted) ?>;
 </script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="js/main.js"></script>
 <script src="js/dash-functions.js"></script>
 <script src="js/dash-apps.js"></script>
 <script src="js/dash-users.js"></script>
+<script src="js/dash-announcements.js"></script>
 </body>
 </html>
 
-
-
-<?php
-
-function createReminders($info) {
-    while ($row = mysqli_fetch_assoc($info)) {
-        $id = $row["announcement_id"];
-        $title = $row["title"];
-        $jtype = $row["job_type"];
-        $location = $row["location"];
-        $ename = $row["ename"];
-        $jobInfo = $row["additional_info"];
-        $jurl = $row["jurl"];
-        $recipient = $row["sent_to"];
-        $date = $row["date_created"];
-
-        echo "
-            <tr id='$id'>
-                <td>$date</td>
-                <td>$title $jtype</td>
-                <td>$ename</td>
-                <td class='job-url'><a href='$jurl' target='_blank'>Apply Link</a></td>
-                <td class='app-button-outer'>
-                        <button class='app-button-inner btn btn-sm btn-update' type='button' data-bs-toggle='modal' data-bs-target='#announcement-modal-$id'><i class='fa-solid fa-pen'></i></button>
-                        <button class='app-button-inner btn btn-sm btn-delete' type='button' data-bs-toggle='modal' data-bs-target='#announcement-delete-modal-$id'><i class='fa-solid fa-trash'></i></button>
-                </td>
-            </tr>
-
-                <div class='modal fade' id='announcement-modal-$id' tabindex='-1' role='dialog' aria-labelledby='job-title' aria-hidden='true'>
-                    <div class='modal-dialog' role='document'>
-                        <div class='modal-content'>
-                            <div class='modal-header'>
-                                <h5 class='modal-title' id='job-title'>$title</h5>
-                                <button type='button' class='modal-close-primary close' data-bs-dismiss='modal' aria-label='Close'>
-                                    <span aria-hidden='true'>&times;</span>
-                                </button>
-                            </div>
-                            <div class='modal-body'>
-                                <ul class='list-group-item'>
-                                    <li class='list-group-item pb-1'>
-                                        <span class='form-label'>Company:</span> $ename
-                                    </li>
-                                    <li class='list-group-item pb-1'>
-                                        <span class='form-label'>Address:</span> $location
-                                    </li>
-                                    <li class='list-group-item pb-1'>
-                                        <span class='form-label'>URL:</span>
-                                        <a href='$jurl' target='_blank'>Apply Here</a>
-                                    </li>
-                                    <li class='list-group-item'>
-                                        <span class='form-label'>More Information:</span>
-                                        <p>$jobInfo</p>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class='modal-footer'>
-                                <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Close</button>
-                                <button type='button' class='modal-edit'>Edit</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Announcement Delete Modal -->
-                <div class='modal fade' id='announcement-delete-modal-$id' tabindex='-1' role='dialog' aria-labelledby='delete-announce' aria-hidden='true'>
-                    <div class='modal-dialog modal-dialog-centered' role='document'>
-                        <div class='modal-content'>
-                            <div class='modal-header'>
-                                <h4 class='modal-title' id='delete-warning'>Delete Announcement?</h4>
-                            </div>
-                            <div class='modal-body'>
-                                <p>Are you sure you want to delete announcement for $ename?</p>
-                            </div>
-                            <div class='modal-footer'>
-                                <form method='POST' action='#'>
-                                    <input type='hidden' value='4' name='submit-from'>
-                                    <input type='hidden' id='delete-announcement-id' value=$id name='id'>
-                                    <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Cancel</button>
-                                    <button type='submit' class='modal-delete'>Delete</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                ";
-    }
-}
-?>
-<?php
-    function createUserTable($info) {
-        while ($row = mysqli_fetch_assoc($info)) {
-            $id = $row["user_id"];
-            $fname = $row["fname"];
-            $lname = $row["lname"];
-            $email = $row["email"];
-            $status = $row["status"];
-
-            $userInfo = json_encode($row);
-
-            echo "
-                <tr id='user-$id' class='user-list-item'>
-                    <td>$fname $lname</td>
-                    <td>$email</td>
-                    <td>$status</td>
-                    <td class='app-button-outer'>
-                        <button class='app-button-inner btn btn-sm btn-update'><i class='fa-solid fa-pen'></i></button>
-                        <button class='app-button-inner btn btn-sm btn-delete' type='button' data-bs-toggle='modal' 
-                        data-bs-target='#user-delete-modal' onclick='deleteUserClicked($userInfo)'><i class='fa-solid fa-trash'></i></button>
-                    </td>
-                </tr>
-            ";
-        }
-    }
-?>
 

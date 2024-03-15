@@ -1,6 +1,6 @@
 <?php
 session_start();
-$_SESSION['location'] = '../';
+$location = '../';
 
 global $cnxn;
 global $db_location;
@@ -74,6 +74,7 @@ include '../php/nav_bar.php' ?>
                     include $db_location;
                 }
 
+
                 $jname = trim($_POST['job-name']);
                 $ename = trim($_POST['employer-name']);
                 $jurl = trim($_POST['job-url']);
@@ -97,7 +98,6 @@ include '../php/nav_bar.php' ?>
                         SET `jname` = '$jname', `ename` = '$ename', `jurl` = '$jurl', `jdescription` = '$jdescription',
                             `adate` = '$adate', `astatus` = '$astatus', `fupdates` = '$fupdates', `followupdate` = '$followupdate'
                         WHERE `application_id` = '$applicationid';";
-
 
                 $result = @mysqli_query($cnxn, $sql);
 

@@ -13,7 +13,6 @@ const userListDiv = $('#dash-users-list');
 
 $(window).on('load', () => {
 
-    console.log(userID);
     // If admin is logged in, Setup Users Input change listeners and show the users
     if (isAdmin()){
 
@@ -139,7 +138,6 @@ function sortUsersByFilters(){
         if (singleUser.length === 0) return;
         // Only show items that match the dropdown status or if the "any" status is selected
         if (userStatus === 'any' || userStatus === singleUser.status){
-            console.log(singleUser.is_deleted);
             if (!showDeletedUsers && singleUser.is_deleted === '1'){
                 return;
             }
@@ -186,8 +184,6 @@ function createUserFromData(userData) {
             `</td>\n` +
             `</tr>`);
 
-
-
     /*
     user.on('click', () => {
         //TODO: show user info
@@ -212,11 +208,49 @@ function createUserFromData(userData) {
     // Create an edit button and add an onclick listener to Open User Modal when edit button is clicked
     const editBtn = $(`<button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>`);
     editBtn.on('click', () => {
-
+        showUserModal(userData, isUserAdmin);
     })
 
     // Create a delete button and add an onclick listener to ask to Delete App when delete button is clicked
     const deleteBtn = $(`<button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i>`);
+    deleteBtn.on('click', () => {
+        askToDeleteUser(userData.user_id, userData.fname, userData.lname);
+    })
+
+    // Show edit and delete btn div is viewRole is a USER and nothing is viewRole is ADMIN
+    const btnDiv = $('<td class="app-button-outer"></td>');
+    btnDiv.append(makeAdminBtn);
+    btnDiv.append(editBtn);
+    btnDiv.append(deleteBtn);
+    // Add button div to app
+    user.append(btnDiv);
+    userListDiv.append(user);
+
+
+    /*---------------------  TESTING A DROPDOWN MENU HERE -------------------------------------
+    const isUserAdmin = userData.permission === '1';
+
+    // Create an edit button and add an onclick listener to Open User Modal when edit button is clicked
+    const makeAdminBtn = $(`<button class="admin-btn dropdown-item"><i class="fa-solid fa-user-tie pe-2"></i>${isUserAdmin ? 'Remove' : 'Make'} Admin</button>`);
+    if (userID == userData.user_id){
+        makeAdminBtn.attr('disabled', true);
+    }
+    makeAdminBtn.on('click', () => {
+        if (isUserAdmin){
+            askToRemoveAdmin(userData.user_id, userData.fname, userData.lname);
+        }else{
+            askToMakeUserAdmin(userData.user_id, userData.fname, userData.lname);
+        }
+    })
+
+    // Create an edit button and add an onclick listener to Open User Modal when edit button is clicked
+    const editBtn = $(`<li><button class="dropdown-item" href="#"><i class="fa-solid fa-pen pe-2"></i>Edit User</button></li>`);
+    editBtn.on('click', () => {
+        showUserModal(userData, isUserAdmin);
+    })
+
+    // Create a delete button and add an onclick listener to ask to Delete App when delete button is clicked
+    const deleteBtn = $(`<li><button class="dropdown-item" href="#"><i class="fa-solid fa-trash pe-2"></i>Delete User</button></li>`);
     deleteBtn.on('click', () => {
         askToDeleteUser(userData.user_id, userData.fname, userData.lname);
     })
@@ -227,10 +261,23 @@ function createUserFromData(userData) {
     btnDiv.append(editBtn);
     btnDiv.append(deleteBtn);
     // Add button div to app
-    user.append(btnDiv);
+    //user.append(btnDiv);
+
+    const tableDropdownDiv = $('<td class="text-end"></td>');
+    const dropdownDiv = $('<div class="dropstart user-dropdown"></div>');
+    const dropdownBtn = $('<button class="user-dropdown-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-ellipsis-vertical"></i></button>');
+    const dropdownMenu = $('<ul class="dropdown-menu"></ul>');
+    tableDropdownDiv.append(dropdownDiv);
+    dropdownDiv.append(dropdownBtn);
+    dropdownDiv.append(dropdownMenu);
+    dropdownMenu.append(makeAdminBtn);
+    dropdownMenu.append(editBtn);
+    dropdownMenu.append(deleteBtn);
 
     //console.log(user);
+    user.append(tableDropdownDiv);
     userListDiv.append(user);
+     */
 }
 
 // Empty the user-list, Sort by clickedField, then populate the user-list
@@ -258,6 +305,55 @@ function emptySortAndPopulateUsersList(sortBySpecificField = false, selectedFiel
         }
     }
     populateUsersList();
+}
+
+function showUserModal(userData, isUserAdmin) {
+    //console.log(userData);
+    // Open user edit modal
+    $('#user-edit-modal').modal('show');
+
+    // Fill in user information
+    $('#user-edit-modal-fname').text(userData.fname);
+    $('#user-edit-modal-lname').text(userData.lname);
+    $('#user-edit-modal-email').text(userData.email);
+    $('#user-edit-modal-password').text("****************");
+    $('#user-edit-modal-cohort').text(userData.cohortNum);
+    $('#user-edit-modal-job-status').text(userData.status);
+    $('#user-edit-modal-roles').text(userData.roles);
+
+    // Fill in hidden ID
+    $('#edit-modal-user-id').val(userData.user_id);
+
+    // Fill in deleted or not value
+    if (userData.is_deleted == 0) {
+        $('#user-edit-modal-deleted').text("Not Deleted");
+    } else {
+        $('#user-edit-modal-deleted').text("Deleted");
+    }
+
+    // Fill in admin or user values
+    if (isUserAdmin === true) {
+        $('#user-edit-modal-permission').text("Admin");
+        $('#user-edit-modal-admin').text("Remove Admin");
+    } else {
+        $('#user-edit-modal-permission').text("User");
+        $('#user-edit-modal-admin').text("Make Admin");
+    }
+
+    $('#user-edit-modal-admin').on('click', () => {
+        if (isUserAdmin) {
+            askToRemoveAdmin(userData.user_id, userData.fname, userData.lname);
+        } else {
+            askToMakeUserAdmin(userData.user_id, userData.fname, userData.lname);
+        }
+    })
+
+    // Self check, cannot remove admin from self
+    if (userID == userData.user_id){
+        $('#user-edit-modal-admin').attr('disabled', true);
+    } else {
+        $('#user-edit-modal-admin').attr('disabled', false);
+    }
 }
 
 // Open delete user modal and set the value for user id to delete
