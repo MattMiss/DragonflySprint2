@@ -4,6 +4,7 @@
 
 :root{
     --font-color: black;
+    --font-color-secondary: #525252;
     --bg-color-primary: white;
     --bg-color-secondary: #f3f3f3;
     --nav-color: #6CB443;
@@ -64,6 +65,7 @@
 
 :root[data-theme="dark"] {
     --font-color: #ddd;
+    --font-color-secondary: #c4c4c4;
     --bg-color-primary: #333;
     --bg-color-secondary: #1d1d1d;
     --nav-color: #006225;
@@ -434,6 +436,7 @@ nav .nav-link:hover {
 .form-label {
     color: var(--header-color);
     font-weight: 600;
+    min-width: 200px;
 }
 
 .submit-btn {
@@ -947,7 +950,6 @@ a {
 /* announcements table*/
 .job-url {
     overflow: hidden;
-    max-width: 20px;
     text-overflow: ellipsis;
     width: fit-content;
     white-space: nowrap;
@@ -1181,10 +1183,6 @@ a {
 }
 
 @media screen and (min-width: 300px) and (max-width: 767px) {
-    .dropdown-item, .dropdown-menu, .show {
-        background: var(--nav-color) !important;
-        border: var(--nav-color) !important;
-    }
 
     nav a {
         width: 12rem !important;
@@ -1266,15 +1264,42 @@ a {
         width:66.66666666666%;
     }
 
+    .table-head{
+        display: none;
+    }
+
     table tr {
         display: flex;
         flex-direction: column;
 
     }
 
+    .dash-table td{
+        padding: 4px 10px;
+    }
+
     thead > tr {
         flex-direction: row;
     }
+
+    .table-date, .table-title, .table-employer, .table-status, .table-btns, .table-link, .table-role, .table-name, .table-email{
+        width: 100%;
+    }
+
+    .table-date, .table-status{
+        font-weight: bold;
+    }
+
+    .table-title, .table-name{
+        font-size: 1.2rem;
+        color: var(--font-color-secondary);
+        font-weight: bold;
+    }
+
+    .table-employer{
+        font-size: 1.1rem;
+    }
+
 
     .footer-btn-div p{
         font-size: .7rem !important;
@@ -1284,8 +1309,10 @@ a {
         width: 200px;
     }
 
-    .app-list-item{
+    .app-list-item, .announce-list-item, .user-list-item{
         align-items: start !important;
+        padding-top: 8px;
+        padding-bottom: 8px;
     }
 
     .app-date-col, .announce-date-col

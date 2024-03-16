@@ -169,19 +169,19 @@ if(! empty($_POST)) {
             <div class='form-receipt-container p-3'>
                 <ul class='receipt-content list-group list-group-flush'>
                     <li class='list-group-item'>
-                        Name: $name
+                        <span class='form-label'>Name:</span> $name
                     </li>
                     <li class='list-group-item'>
-                        Email: $email
+                        <span class='form-label'>Email:</span> $email
                     </li>
                     <li class='list-group-item'>
-                        Password: " . str_pad('',strlen($password),'*') . "
+                        <span class='form-label'>Password:</span> " . str_pad('',strlen($password),'*') . "
                     </li>
                     <li class='list-group-item'>
-                        Cohort Number: $cohortNum
+                        <span class='form-label'>Cohort Number:</span> $cohortNum
                     </li>
                     <li class='list-group-item'>
-                        Status: $status
+                        <span class='form-label'>Status:</span> $status
                     </li>
                     <li class='list-group-item message-box'>
                         " . stripslashes($roles) . "

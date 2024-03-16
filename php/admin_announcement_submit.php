@@ -159,22 +159,22 @@ if(! empty($_POST)) {
             <div class='form-receipt-container p-3'>
                 <ul class='receipt-content list-group list-group-flush'>
                     <li class='list-group-item text-break'>
-                        Title: $title
+                        <span class='form-label'>Title:</span> $title
                     </li>
                     <li class='list-group-item text-break'>
-                        Job Type: $jobType
+                        <span class='form-label'>Job Type:</span> $jobType
                     </li>
                     <li class='list-group-item text-break'>
-                        Location: $location
+                        <span class='form-label'>Location:</span> $location
                     </li>
                     <li class='list-group-item text-break'>
-                        Employer: $employer
+                        <span class='form-label'>Employer:</span> $employer
                     </li>
                     <li class='list-group-item text-break'>
-                        More Information: $addltext
+                        <span class='form-label'>More Information:</span> $addltext
                     </li>
                     <li class='list-group-item text-break'>
-                        URL: $url
+                        <span class='form-label'>URL:</span> $url
                     </li>
                     <!--
                     <li class='list-group-item text-break'>

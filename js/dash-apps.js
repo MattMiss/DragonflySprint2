@@ -275,18 +275,18 @@ function createAppFromData(appData){
     if (isAdmin()){
         // Create a list item with the application data filled in for an ADMIN
         app = $(`<tr class="app-list-item" id="app-${appData.application_id}">
-                            <td>${appDate}</td>
-                            <td>${appData.jname}</td>
-                            <td>${appData.ename}</td>
-                            <td><a href="${appData.jurl}" target="_blank" rel="noopener noreferrer">Apply Link</a></td>
+                            <td class="table-date">${appDate}</td>
+                            <td class="table-title">${appData.jname}</td>
+                            <td class="table-employer">${appData.ename}</td>
+                            <td class="table-link"><a href="${appData.jurl}" target="_blank" rel="noopener noreferrer">Apply Link</a></td>
                         </tr>`);
     }else{
         // Create a list item with the application data filled in for a USER
         app = $(`<tr class="app-list-item" id="app-${appData.application_id}">
-                            <td>${appDate}</td>
-                            <td>${appData.jname}</td>
-                            <td>${appData.ename}</td>
-                            <td class="status status-${appData.astatus}">
+                            <td class="table-date">${appDate}</td>
+                            <td class="table-title">${appData.jname}</td>
+                            <td class="table-employer">${appData.ename}</td>
+                            <td class="table-status status status-${appData.astatus}">
                                 <i class="fa-solid fa-circle"></i>
                                 <span style="text-transform: capitalize">` + statusReplace + `</span>
                             </td>
@@ -304,7 +304,7 @@ function createAppFromData(appData){
         })
 
         // Show edit and delete btn div is viewRole is a USER and nothing is viewRole is ADMIN
-        const btnDiv = $('<td class="app-button-outer"></td>');
+        const btnDiv = $('<td class="app-button-outer table-btns"></td>');
         btnDiv.append(editBtn);
         btnDiv.append(deleteBtn);
         // Add button div to app

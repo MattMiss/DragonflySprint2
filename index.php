@@ -136,7 +136,7 @@ while ($row = mysqli_fetch_assoc($appReminders)) {
                     </div>
                 </div>
                 <table class="dash-table">
-                    <thead>
+                    <thead class="table-head">
                     <tr>
 
                         <th scope="col" class="app-date-col">

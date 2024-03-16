@@ -64,11 +64,11 @@ function createAnnounceFromData(announceData){
 
     // Create a list item with the application data filled in
     const announce =
-        $(`<tr>\n` +
-            `<td>${announceDate}</td>\n` +
-            `<td>${announceData.title} ${announceData.job_type}</td>\n` +
-            `<td>${announceData.ename}</td>\n` +
-            `<td class='job-url'><a href=${announceData.jurl} target='_blank'>Apply Now</a></td>\n` +
+        $(`<tr class="announce-list-item">\n` +
+            `<td class="table-date">${announceDate}</td>\n` +
+            `<td class="table-title">${announceData.title} ${announceData.job_type}</td>\n` +
+            `<td class="table-employer">${announceData.ename}</td>\n` +
+            `<td class='table-link job-url'><a href=${announceData.jurl} target='_blank'>Apply Now</a></td>\n` +
             `</tr>`);
 
     // Create a delete button and add an onclick listener to ask to Delete App when delete button is clicked
@@ -78,7 +78,7 @@ function createAnnounceFromData(announceData){
     })
 
     // Show edit and delete btn div is viewRole is a USER and nothing is viewRole is ADMIN
-    const btnDiv = $('<td class="app-button-outer"></td>');
+    const btnDiv = $('<td class="app-button-outer table-btns"></td>');
     btnDiv.append(deleteBtn);
     // Add button div to app
     announce.append(btnDiv);
