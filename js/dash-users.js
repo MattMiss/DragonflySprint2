@@ -1,4 +1,4 @@
-let sortedUsers = users;
+let sortedUsers = results.allUsers;
 let tempUsers;
 let userStatus = 'any';
 let userSearchTerm = '';
@@ -23,7 +23,7 @@ $(window).on('load', () => {
         toggleUserFieldOrder('#user-name-field-icon', 'fname');
     }
 
-    if (userWasDeleted) {
+    if (results.userWasDeleted) {
         showToast("User was deleted!", 2000);
     }
 });
@@ -133,7 +133,7 @@ function emptyUsersList(){
 function sortUsersByFilters(){
     //console.log(users);
     tempUsers = [];
-    users.forEach(singleUser => {
+    results.allUsers.forEach(singleUser => {
         // Return if app has no data
         if (singleUser.length === 0) return;
         // Only show items that match the dropdown status or if the "any" status is selected
@@ -194,7 +194,7 @@ function createUserFromData(userData) {
 
     // Create an edit button and add an onclick listener to Open User Modal when edit button is clicked
     const makeAdminBtn = $(`<button class="app-button-inner btn btn-make-admin">${isUserAdmin ? 'Remove' : 'Make'} Admin</button>`);
-    if (userID == userData.user_id){
+    if (results.userID == userData.user_id){
         makeAdminBtn.attr('disabled', true);
     }
     makeAdminBtn.on('click', () => {

@@ -26,20 +26,19 @@ function setupFormatSelect(){
 }
 
 function setDateFormat(format){
+    console.log(uID);
     switch(format){
         case 'mm-dd-yy':
-            setCookieItem('date-format', 'mm-dd-yy');
+            setCookieItem('date-format-' + uID, 'mm-dd-yy');
             break;
         case 'dd-mm-yy':
-            setCookieItem('date-format', 'dd-mm-yy');
+            setCookieItem('date-format-' + uID, 'dd-mm-yy');
             break;
         case 'yy-mm-dd':
-            setCookieItem('date-format', 'yy-mm-dd');
+            setCookieItem('date-format-' + uID, 'yy-mm-dd');
             break;
     }
 }
-
-
 
 function setupCookieDarkMode(){
     darkModeSwitch = $('#dark-mode-switch');

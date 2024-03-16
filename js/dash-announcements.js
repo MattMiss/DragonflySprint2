@@ -1,11 +1,12 @@
-let sortedAnnouncements = announcements;
+let sortedAllAnnouncements = results.allAnnouncements;
+let sortedMyAnnouncements = results.myAnnouncements;
 const announceListDiv = $('#dash-announcements-list');
+const myAnnouncementsDiv = $('#my-announcements');
 
 
 $(window).on('load', () => {
-
     document.addEventListener('dateFormatChanged', (e)=>{
-        console.log("Date Changed");
+        //console.log("Date Changed");
         emptyAnnouncementList()
         populateAnnouncementList();
     }, true)
@@ -13,36 +14,52 @@ $(window).on('load', () => {
     emptyAnnouncementList();
     populateAnnouncementList();
 
-    if (announceWasDeleted){
+    if (results.announceWasDeleted){
         showToast("Announcement was deleted!", 2000);
     }
 });
 
 function emptyAnnouncementList(){
-    announceListDiv.empty();
+    if (isAdmin()){
+        announceListDiv.empty();
+    }else{
+        myAnnouncementsDiv.empty();
+    }
+
 }
 
 // Loop through each application in sortedApps and create a <tr> with all the fields filled in
 function populateAnnouncementList(){
-    if (sortedAnnouncements.length === 0){
-        const noResults = '<tr class="user-list-item">\n' +
-            '<td></td>\n' +
-            '<td></td>\n' +
-            '<td class="text-center">No Announcements</td>\n' +
-            '<td></td>\n' +
-            '<td></td>\n' +
-            '</tr>';
-        announceListDiv.append(noResults);
-    }
-
-    for(let i = 0; i < sortedAnnouncements.length; i++){
-        createAnnounceFromData(sortedAnnouncements[i]);
+    if (isAdmin()){
+        if (sortedAllAnnouncements[0].length === 0){
+            const noResults = '<tr class="user-list-item">\n' +
+                '<td></td>\n' +
+                '<td></td>\n' +
+                '<td class="text-center">No Announcements</td>\n' +
+                '<td></td>\n' +
+                '<td></td>\n' +
+                '</tr>';
+            announceListDiv.append(noResults);
+        }else{
+            sortedAllAnnouncements[0].forEach((announcement) => {
+                createAnnounceFromData(announcement);
+            })
+        }
+    }else{
+        if (sortedMyAnnouncements.length === 0){
+            const noResults =   `<div class="reminder">
+                                            <p>No Recent Announcements</p>
+                                        </div>`;
+            myAnnouncementsDiv.append(noResults);
+        }else{
+            sortedMyAnnouncements.forEach((announcement) => {
+                createMyAnnounceFromData(announcement);
+            })
+        }
     }
 }
 
 function createAnnounceFromData(announceData){
-    console.log(announceData);
-
     const announceDate = getFormattedDate(announceData.date_created, dateFormat);
 
     // Create a list item with the application data filled in
@@ -69,8 +86,18 @@ function createAnnounceFromData(announceData){
     announceListDiv.append(announce);
 }
 
-function askToDeleteAnnouncement(announce_id){
+function createMyAnnounceFromData(announceData){
+    const announceDate = getFormattedDate(announceData.date_created, dateFormat);
 
+    // Create a list item with the application data filled in
+    const announce =
+        $(`<div class='reminder'>
+                    <i class='fa-regular fa-comment'></i>
+                    <button class='announcement-modal-btn text-start' type='button' onclick='showViewAnnouncementModal(${JSON.stringify(announceData)})' >${announceData.title} ${announceData.job_type} at <span>${announceData.ename}</span></button>
+                    <p>Date Created: <span>${announceDate}</span></p>
+                </div>`);
+
+    myAnnouncementsDiv.append(announce);
 }
 
 function showViewAnnouncementModal(announcement){
