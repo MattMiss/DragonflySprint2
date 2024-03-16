@@ -173,7 +173,7 @@ while ($row = mysqli_fetch_assoc($announceResult)){
 
 <!--                start of app table -->
                 <table class="dash-table admin-app">
-                    <thead>
+                    <thead class="table-head">
                     <tr>
                         <th scope="col" class="app-date-col">
                             <div class="row clickable" id="date-order-btn">
@@ -245,7 +245,7 @@ while ($row = mysqli_fetch_assoc($announceResult)){
             <div class="reminders-list pt-4">
                 <h3>Announcements</h3>
                 <table class="dash-table admin-announcement">
-                    <thead>
+                    <thead class="table-head">
                         <tr>
                             <th scope="col" class="announce-date-col">Date</th>
                             <th scope="col" class="announce-position-col">Position</th>
@@ -304,7 +304,7 @@ while ($row = mysqli_fetch_assoc($announceResult)){
                     </div>
                 </div>
                 <table class="dash-table admin-user">
-                    <thead>
+                    <thead class="table-head">
                     <tr>
                         <th scope="col" class="user-role-col">
                             <div class="row clickable" id="user-role-order-btn">

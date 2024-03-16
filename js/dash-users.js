@@ -176,11 +176,11 @@ function createUserFromData(userData) {
 
     // Create a list item with the application data filled in
     const user =
-        $(`<tr class="${itemClass}" id="user-${userData.user_id}">\n` +
-            `<td>${role}</td>\n` +
-            `<td>${deletedIcon}${userData.fname} ${userData.lname}</td>\n` +
-            `<td>${userData.email}</td>\n` +
-            `<td>${userData.status}</td>\n` +
+        $(`<tr class="user-list-item ${itemClass}" id="user-${userData.user_id}">\n` +
+            `<td class="table-role">${role}</td>\n` +
+            `<td class="table-name">${deletedIcon}${userData.fname} ${userData.lname}</td>\n` +
+            `<td class="table-email">${userData.email}</td>\n` +
+            `<td class="table-status">${userData.status}</td>\n` +
             `</td>\n` +
             `</tr>`);
 
@@ -218,7 +218,7 @@ function createUserFromData(userData) {
     })
 
     // Show edit and delete btn div is viewRole is a USER and nothing is viewRole is ADMIN
-    const btnDiv = $('<td class="app-button-outer"></td>');
+    const btnDiv = $('<td class="app-button-outer table-btns"></td>');
     btnDiv.append(makeAdminBtn);
     btnDiv.append(editBtn);
     btnDiv.append(deleteBtn);

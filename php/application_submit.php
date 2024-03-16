@@ -107,28 +107,28 @@ if(! empty($_POST)) {
                 <div class='form-receipt-container p-3'>
                     <ul class='receipt-content list-group list-group-flush'>
                         <li class='list-group-item'>
-                            Name: $jname
+                            <span class='form-label'>Name:</span> $jname
                         </li>
                         <li class='list-group-item'>
-                            Employer Name: $ename
+                            <span class='form-label'>Employer Name:</span> $ename
                         </li>
                         <li class='list-group-item'>
-                            Job Url: $jurl
+                            <span class='form-label'>Job Url:</span> $jurl
                         </li>
                         <li class='list-group-item'>
-                            Job Description: $jdescription
+                            <span class='form-label'>Job Description:</span> $jdescription
                         </li>
                         <li class='list-group-item'>
-                            App Date: $adate
+                            <span class='form-label'>App Date:</span> $adate
                         </li>
                         <li class='list-group-item'>
-                            Application Status: ". str_replace('-', ' ', $astatus) ."
+                            <span class='form-label'>Application Status:</span> ". str_replace('-', ' ', $astatus) ."
                         </li>
                         <li class='list-group-item'>
-                            Followup Updates: $fupdates
+                            <span class='form-label'>Followup Updates:</span> $fupdates
                         </li>
                         <li class='list-group-item'>
-                            Followup Date: $followupdate
+                            <span class='form-label'>Followup Date:</span> $followupdate
                         </li>
                         <li class='align-self-center'>
                             <a class='link' href='../index.php'>Return home</a>

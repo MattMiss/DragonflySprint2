@@ -100,10 +100,10 @@ if(! empty($_POST)) {
                     <div class='form-receipt-container p-3'>
                         <ul class='receipt-content list-group list-group-flush'>
                             <li class='list-group-item'>
-                                Name: $name
+                                <span class='form-label'>Name:</span> $name
                             </li>
                             <li class='list-group-item'>
-                                Email: $email
+                                <span class='form-label'>Email:</span> $email
                             </li>
                             <li class='list-group-item'>
                                 $message 
