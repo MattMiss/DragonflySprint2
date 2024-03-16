@@ -458,6 +458,30 @@ nav .nav-link:hover {
 .warning {
     color: #D14900;
 }
+#name-error {
+    visibility: hidden;
+}
+
+#email-error {
+    visibility: hidden;
+    display: block;
+}
+
+#password-error {
+    visibility: hidden;
+}
+
+#cohort-error {
+    visibility: hidden;
+}
+
+#status-error {
+    visibility: hidden;
+}
+
+#roles-error {
+    visibility: hidden;
+}
 
 .date-input{
 
