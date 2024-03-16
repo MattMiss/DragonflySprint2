@@ -1,5 +1,5 @@
 const ADMIN = 1;
-let viewRole = role;
+let viewRole = results.role;
 let dateFormat = 'yy-mm-dd';
 
 $(window).on('load', () => {
@@ -14,6 +14,7 @@ function isAdmin(){
 }
 
 function setupDateFormat(){
+    console.log(uID);
     // Get cookies string and separate items by ';'
     const cookies = document.cookie.split('; ');
     // Set default theme to light
@@ -23,10 +24,8 @@ function setupDateFormat(){
         const name = cookies[i].split('=')[0];
         const value = cookies[i].split('=')[1];
         // Set the theme if one exists
-        if (name === 'date-format'){
+        if (name === 'date-format-' + uID){
             dateFormat = value;
-            console.log("Found cookies");
-            console.log(dateFormat);
         }
     }
 }
@@ -76,6 +75,7 @@ function getFormattedURL(url){
 }
 
 function getFormattedDate(date, format){
+    console.log(date);
     const d = new Date(date);
     const parts = date.split('-');
     let dateString = '';
@@ -91,6 +91,5 @@ function getFormattedDate(date, format){
             dateString = parts[1] + '-' + parts[2] + '-' + parts[0][2] + parts[0][3];
             break;
     }
-    console.log(dateString);
     return dateString;
 }

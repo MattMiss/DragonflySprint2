@@ -49,6 +49,9 @@ if (isset($_SESSION['fname'])){
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script>
+    let uID = <?php echo $_SESSION['user_id']; ?>
+</script>
 <script src="../js/navbar.js"></script>
 
 <?php

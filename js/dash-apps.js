@@ -1,4 +1,5 @@
-let sortedApps = apps;
+let sortedApps = results.myApps;
+let sortedAppReminders = results.myAppReminders;
 let tempApps;
 let targetStatus = 'any';
 let searchTerm = '';
@@ -17,13 +18,17 @@ let appShowingCnt = 0;
 const APP_MAX_LOAD_CNT = 10;
 let appCntToLoad = APP_MAX_LOAD_CNT;
 const appListDiv = $('#dash-apps-list');
+const myAppRemindersDiv = $('#my-app-reminders');
 
 $(window).on('load', () => {
     appCntToLoad = APP_MAX_LOAD_CNT;
 
+    // Repopulate lists with the new date format that was selected
     document.addEventListener('dateFormatChanged', (e)=>{
         console.log("Date Changed");
         emptySortAndPopulateAppList(false);
+        emptyAppReminders();
+        populateAppReminders();
     }, true)
 
 
@@ -35,7 +40,11 @@ $(window).on('load', () => {
     toggleAppFieldOrder('#date-field-icon', 'adate');
     toggleAppFieldOrder('#date-field-icon', 'adate');
 
-    if (appWasDeleted){
+    // Empty and Add any app reminders for the user
+    emptyAppReminders();
+    populateAppReminders();
+
+    if (results.appWasDeleted){
         showToast("Application was deleted!", 2000);
     }
 });
@@ -180,10 +189,29 @@ function populateAppList(){
     }
 }
 
+function populateAppReminders(){
+    if (sortedAppReminders.length === 0){
+        const noResults =   `<div class="reminder">
+                                        <p>No Recent Announcements</p>
+                                    </div>`;
+        myAppRemindersDiv.append(noResults);
+    }else{
+
+        sortedAppReminders.forEach((appReminder) => {
+            console.log(appReminder);
+           createMyAppReminderFromData(appReminder);
+        });
+    }
+}
+
 // Remove children from application list
 function emptyAppList(){
     appListDiv.empty();
     appShowingCnt = 0;
+}
+
+function emptyAppReminders(){
+    myAppRemindersDiv.empty();
 }
 
 // Searches through all apps and adds apps that pass the filters into sortedApps
@@ -191,7 +219,7 @@ function emptyAppList(){
 function sortAppsByUserFilters(){
     //console.log(apps);
     tempApps = [];
-    apps.forEach(singleApp => {
+    results.myApps.forEach(singleApp => {
         // Return if app has no data
         if (singleApp.length === 0) return;
 
@@ -246,29 +274,23 @@ function createAppFromData(appData){
 
     if (isAdmin()){
         // Create a list item with the application data filled in for an ADMIN
-        app = $(`<tr class="app-list-item" id="app-${appData.application_id}">\n` +
-            `<td>${appDate}</td>\n` +
-            `<td>${appData.jname}</td>\n` +
-            `<td>${appData.ename}</td>\n` +
-            `<td><a href="${appData.jurl}" target="_blank" rel="noopener noreferrer">Apply Link</a></td>\n` +
-            //`<td>${appData.fname} ${appData.lname}</td>\n` +
-            //`<td>${appData.email}</td>\n` +
-            //`<td class="status status-${appData.astatus}">\n` +
-            //`    <i class="fa-solid fa-circle"></i>\n` +
-            //`    <span style="text-transform: capitalize">` + statusReplace + `</span>\n` +
-            //`</td>\n` +
-            `</tr>`);
+        app = $(`<tr class="app-list-item" id="app-${appData.application_id}">
+                            <td>${appDate}</td>
+                            <td>${appData.jname}</td>
+                            <td>${appData.ename}</td>
+                            <td><a href="${appData.jurl}" target="_blank" rel="noopener noreferrer">Apply Link</a></td>
+                        </tr>`);
     }else{
         // Create a list item with the application data filled in for a USER
-        app = $(`<tr class="app-list-item" id="app-${appData.application_id}">\n` +
-            `<td>${appDate}</td>\n` +
-            `<td>${appData.jname}</td>\n` +
-            `<td>${appData.ename}</td>\n` +
-            `<td class="status status-${appData.astatus}">\n` +
-            `    <i class="fa-solid fa-circle"></i>\n` +
-            `    <span style="text-transform: capitalize">` + statusReplace + `</span>\n` +
-            `</td>\n` +
-            `</tr>`);
+        app = $(`<tr class="app-list-item" id="app-${appData.application_id}">
+                            <td>${appDate}</td>
+                            <td>${appData.jname}</td>
+                            <td>${appData.ename}</td>
+                            <td class="status status-${appData.astatus}">
+                                <i class="fa-solid fa-circle"></i>
+                                <span style="text-transform: capitalize">` + statusReplace + `</span>
+                            </td>
+                        </tr>`);
         // Create an edit button and add an onclick listener to Open App Modal when edit button is clicked
         const editBtn = $(`<button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>`);
         editBtn.on('click', () => {
@@ -301,6 +323,21 @@ function createAppFromData(appData){
     appShowingCnt++;
 }
 
+// Create an App Reminder for the Followups section
+function createMyAppReminderFromData(appReminderData){
+    const followupDate = getFormattedDate(appReminderData.followupdate, dateFormat);
+
+    // Create a list item with the application data filled in
+    const appReminder =
+        $(`<div class='reminder'>
+                    <i class='fa-regular fa-comment'></i>
+                    <button class='reminder-modal-btn text-start' type='button' onclick='showFollowUpApp(${JSON.stringify(appReminderData)})' >${appReminderData.jname} at <span>${appReminderData.ename}</span></button>
+                    <p>Follow-up Date: <span>${followupDate}</span></p>
+                </div>`);
+
+    myAppRemindersDiv.append(appReminder);
+}
+
 // Empty the app-list, Sort by clickedField, then populate the app-list
 // If sortBySpecificField is true, then sort apps using the provided field type
 function emptySortAndPopulateAppList(sortBySpecificField = false, selectedFieldIndex, clickedFieldIconName, clickedField){
@@ -330,7 +367,7 @@ function emptySortAndPopulateAppList(sortBySpecificField = false, selectedFieldI
 
 // Load more apps by increasing the app count to load by APP_MAX_LOAD_CNT and then refresh the list
 function loadMoreApps(){
-    console.log("Loading more Apps");
+    //console.log("Loading more Apps");
     appCntToLoad += APP_MAX_LOAD_CNT;
     emptyAppList();
     populateAppList();
@@ -344,20 +381,15 @@ function showFollowUpApp(appData){
 
 // Open the edit-modal and fill in the data from the appData
 function showAppModal(appData, status, formattedUrl){
-    console.log(appData);
-
     $('#edit-modal').modal('show');
 
-    console.log(status);
-    console.log(formattedUrl);
-
     // Fill in modal info
-    $('#edit-modal-adate').text(appData.adate);
+    $('#edit-modal-adate').text(getFormattedDate(appData.adate, dateFormat));
     $('#edit-modal-jname').text(appData.jname);
     $('#edit-modal-ename').text(appData.ename);
     $('#edit-modal-description').text(appData.jdescription)
     $('#edit-modal-astatus').text(status);
-    $('#edit-modal-fdate').text(appData.followupdate);
+    $('#edit-modal-fdate').text(getFormattedDate(appData.followupdate, dateFormat));
     $('#edit-modal-updates').text(appData.fupdates);
     $('#edit-modal-appid').val(appData.application_id);
 

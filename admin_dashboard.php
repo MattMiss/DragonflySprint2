@@ -99,25 +99,25 @@ $announceResult = @mysqli_query($cnxn, $sqlAnnounce);
 $usersResult = @mysqli_query($cnxn, $sqlUsers);
 
 // Fill in apps array
-$apps[] = array();
-$users[] = array();
-$announcements[] = array();
+$myApps[] = [];
+$allUsers[] = [];
+$allAnnouncements[] = [];
 
 $appCount = 0;
 while ($row = mysqli_fetch_assoc($appsResult)) {
-    $apps[$appCount] = $row;
+    $myApps[$appCount] = $row;
     $appCount++;
 }
 
 $userCount = 0;
 while ($row = mysqli_fetch_assoc($usersResult)) {
-    $users[$userCount] = $row;
+    $allUsers[$userCount] = $row;
     $userCount++;
 }
 
 $announceCount = 0;
 while ($row = mysqli_fetch_assoc($announceResult)){
-    $announcements[$announceCount] = $row;
+    $allAnnouncements[$announceCount] = $row;
     $announceCount++;
 }
 
@@ -623,14 +623,18 @@ while ($row = mysqli_fetch_assoc($announceResult)){
 
 <?php include 'php/footer.php' ?>
 <script>
-    let apps = <?php echo json_encode($apps) ?>;
-    let users = <?php echo json_encode($users) ?>;
-    let announcements = <?php echo json_encode($announcements) ?>;
-    let role = <?php echo $role ?>;
-    let userID = <?php echo $viewingID ?>;
-    let appWasDeleted = <?php echo json_encode($appWasDeleted) ?>;
-    let userWasDeleted = <?php echo json_encode($userWasDeleted) ?>;
-    let announceWasDeleted = <?php echo json_encode($announceWasDeleted) ?>;
+    const results = {
+        myApps : <?php echo json_encode($myApps) ?>,
+        myAnnouncements : [],
+        myAppReminders : [],
+        allAnnouncements : [<?php echo json_encode($allAnnouncements) ?>],
+        role : <?php echo $role ?>,
+        allUsers : <?php echo json_encode($allUsers) ?>,
+        userID : <?php echo $viewingID ?>,
+        appWasDeleted : <?php echo json_encode($appWasDeleted) ?>,
+        userWasDeleted : <?php echo json_encode($userWasDeleted) ?>,
+        announceWasDeleted : <?php echo json_encode($announceWasDeleted) ?>
+    }
 </script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="js/main.js"></script>

@@ -75,7 +75,15 @@ $appReminders = @mysqli_query($cnxn, $sqlRecentApps);
 $apps[] = [];
 
 while ($row = mysqli_fetch_assoc($appsResult)) {
-    $apps[] = $row;
+    $myApps[] = $row;
+}
+
+while ($row = mysqli_fetch_assoc($announceResult)) {
+    $myAnnouncements[] = $row;
+}
+
+while ($row = mysqli_fetch_assoc($appReminders)) {
+    $myAppReminders[] = $row;
 }
 
 ?>
@@ -189,7 +197,9 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
                     </tr>
                     </thead>
                     <tbody class="table-body" id="dash-apps-list">
+
                         <!-- List gets populated with applications from the database here-->
+
                     </tbody>
                 </table>
                 <div class="col text-center pt-2 pb-2" id="more-apps">
@@ -205,16 +215,20 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
                 <div>
                     <h6>Announcements</h6>
                     <hr>
-                    <?php
-                    createAppAnnouncements($announceResult);
-                    ?>
+                    <div id="my-announcements">
+
+                        <!-- List gets populated with announcements from the database here-->
+
+                    </div>
                 </div>
                 <div style="padding-top: 20px;">
                     <h6>Follow Up</h6>
                     <hr>
-                    <?php
-                    createAppReminders($appReminders);
-                    ?>
+                    <div id="my-app-reminders">
+
+                        <!-- List gets populated with application follow-up reminders from the database here-->
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -356,12 +370,17 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="js/contactscript.js"></script>
 <script>
-    let apps = <?php echo json_encode($apps) ?>;
-    let announcements = [];
-    let role = <?php echo $role ?>; users='';
-    let appWasDeleted = <?php echo json_encode($appWasDeleted) ?>;
-    let userWasDeleted = false;
-    let announceWasDeleted = false;
+    const results = {
+        myApps : <?php echo json_encode($myApps) ?>,
+        myAnnouncements : <?php echo json_encode($myAnnouncements) ?>,
+        myAppReminders : <?php echo json_encode($myAppReminders) ?>,
+        allAnnouncements : [],
+        role : <?php echo $role ?>,
+        users : '',
+        appWasDeleted : <?php echo json_encode($appWasDeleted) ?>,
+        userWasDeleted : false,
+        announceWasDeleted : false
+    }
 </script>
 <script src="js/main.js"></script>
 <script src="js/dash-functions.js"></script>
@@ -369,73 +388,3 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
 <script src="js/dash-announcements.js"></script>
 </body>
 </html>
-
-<?php
-function createAppAnnouncements($info) {
-    $isEmpty = true;
-    while ($row = mysqli_fetch_assoc($info)) {
-        $id = $row["announcement_id"];
-        $title = $row["title"];
-        $jtype = $row["job_type"];
-        $location = $row["location"];
-        $ename = $row["ename"];
-        $jobInfo = $row["additional_info"];
-        $jurl = $row["jurl"];
-        $recipient = $row["sent_to"];
-        $date = $row["date_created"];
-        $announce = json_encode($row);
-        $isEmpty = false;
-        //            $app_info = json_encode($row);
-
-        echo "
-            <div class='reminder'>
-                <i class='fa-regular fa-comment'></i>
-                <button class='announcement-modal-btn text-start' type='button' onclick='showViewAnnouncementModal($announce)' >$title $jtype at <span>$ename</span></button>
-                <p>Date Created: <span>$date</span></p>
-            </div>
-            ";
-    }
-    // Show text is no announcements
-    if ($isEmpty){
-        echo "
-            <div class='reminder'>  
-                <p>No Recent Announcements</p>
-            </div>
-        ";
-    }
-}
-
-function createAppReminders($info) {
-    $isEmpty = true;
-    while ($row = mysqli_fetch_assoc($info)) {
-        $id = $row["application_id"];
-        $jobName = $row["jname"];
-        $ename = $row["ename"];
-        $jurl = $row["jurl"];
-        $adate = $row["adate"];
-        $followupdate = $row["followupdate"];
-        $astatus = $row['astatus'];
-        $jdescription = $row['jdescription'];
-        $fupdates = $row['fupdates'];
-        $data = json_encode($row);
-        $isEmpty = false;
-        //$app_info = json_encode($row);
-
-        echo "
-            <div class='reminder'>
-                <i class='fa-regular fa-comment'></i>
-                <button class='reminder-modal-btn text-start' type='button' onclick='showFollowUpApp($data)'>$jobName at <span>$ename</span></button>
-                <p>Follow-up Date: <span>$followupdate</span></p>
-            </div>
-            ";
-    }
-    // Show text is no announcements
-    if ($isEmpty){
-        echo "
-            <div class='reminder'>  
-                <p>No Follow-ups Needed</p>
-            </div>
-        ";
-    }
-}
-?>
