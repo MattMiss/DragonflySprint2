@@ -133,13 +133,13 @@ while ($row = mysqli_fetch_assoc($announceResult)){
             <div class="app-list-admin">
                 <h3>Recent Applications</h3>
                 <div class="row">
-                    <div class="col-md-4 pt-2">
+                    <div class="col-md-4 col-sm-6 pt-2">
                         <div class="input-group input-group-sm">
                             <span class="input-group-text">Start Date</span>
                             <input type="date" class="form-control date-input" id="app-start-date" name="search-start-date">
                         </div>
                     </div>
-                    <div class="col-md-4 pt-2">
+                    <div class="col-md-4 col-sm-6 pt-2">
                         <div class="input-group input-group-sm">
                             <span class="input-group-text">End Date</span>
                             <input type="date" class="form-control date-input" id="app-end-date" name="search-end-date">
@@ -215,17 +215,10 @@ while ($row = mysqli_fetch_assoc($announceResult)){
                                 </div>
                             </div>
                         </th>
-                        <th scope="col" class="app-status-col" id="status-order-btn">
-                            <div class="row clickable">
+                        <th scope="col" class="app-url-col">
+                            <div class="row">
                                 <div class="col-auto pe-0 my-auto">
                                     URL
-                                </div>
-                                <div class="col-auto ps-2 my-auto">
-                                    <div class="order-icons">
-                                        <div class="order-icons">
-                                            <i class="fa-solid fa-sort" id="status-field-icon"></i>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </th>
@@ -242,14 +235,101 @@ while ($row = mysqli_fetch_assoc($announceResult)){
         </div>
 
         <div class="row dashboard-top">
-            <div class="reminders-list pt-4">
+            <div class="announcements-list pt-4">
                 <h3>Announcements</h3>
+                <div class="row">
+                    <div class="col-md-4 col-sm-6 pt-2">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Start Date</span>
+                            <input type="date" class="form-control date-input" id="announce-start-date" name="announce-search-start-date">
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6 pt-2">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">End Date</span>
+                            <input type="date" class="form-control date-input" id="announce-end-date" name="announce-search-end-date">
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-end pt-2">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Job Type</span>
+                            <select class="form-select job-type-select" id="announce-job-type-select">
+                                <option selected value="both">Both</option>
+                                <option value="job">Job</option>
+                                <option value="internship">Internship</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col py-2">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </span>
+                            <input id="announce-search-bar" type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                </div>
                 <table class="dash-table admin-announcement">
                     <thead class="table-head">
                         <tr>
-                            <th scope="col" class="announce-date-col">Date</th>
-                            <th scope="col" class="announce-position-col">Position</th>
-                            <th scope="col" class="announce-employer-col">Employer</th>
+                            <th scope="col" class="announce-date-col">
+                                <div class="row clickable" id="announce-date-order-btn">
+                                    <div class="col-auto pe-0 my-auto">
+                                        Date
+                                    </div>
+                                    <div class="col-auto ps-2 my-auto">
+                                        <div class="order-icons">
+                                            <div class="order-icons">
+                                                <i class="fa-solid fa-sort" id="announce-date-field-icon"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th>
+                            <th scope="col" class="announce-position-col">
+                                <div class="row clickable" id="announce-title-order-btn">
+                                    <div class="col-auto pe-0 my-auto">
+                                        Position
+                                    </div>
+                                    <div class="col-auto ps-2 my-auto">
+                                        <div class="order-icons">
+                                            <div class="order-icons">
+                                                <i class="fa-solid fa-sort" id="announce-title-field-icon"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th>
+                            <th scope="col" class="announce-employer-col">
+                                <div class="row clickable" id="announce-employer-order-btn">
+                                    <div class="col-auto pe-0 my-auto">
+                                        Employer
+                                    </div>
+                                    <div class="col-auto ps-2 my-auto">
+                                        <div class="order-icons">
+                                            <div class="order-icons">
+                                                <i class="fa-solid fa-sort" id="announce-employer-field-icon"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th>
+                            <th scope="col" class="announce-job-type-col">
+                                <div class="row clickable" id="announce-job-type-order-btn">
+                                    <div class="col-auto pe-0 my-auto">
+                                        Job Type
+                                    </div>
+                                    <div class="col-auto ps-2 my-auto">
+                                        <div class="order-icons">
+                                            <div class="order-icons">
+                                                <i class="fa-solid fa-sort" id="announce-job-type-field-icon"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th>
                             <th scope="col" class="announce-url-col">URL</th>
                             <th scope="col" class="w-btn"></th>
                         </tr>

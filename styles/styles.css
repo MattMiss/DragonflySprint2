@@ -12,6 +12,7 @@
     --header-color: #006225;
     --footer-color: rgba(0,0,0,.03);
     --outline-color: black;
+    --deleted-item-color: #d39a9a;
 
     /* dropdown colors */
     --dropdown-item-hover: #eaeaea;
@@ -76,6 +77,7 @@
     --form-outline-color: rgba(220, 220, 220,.125);
     --form-input-color: #454545;
     --placeholder-font-color: #ddd;
+    --deleted-item-color: #563333;
 
     /* dropdown theme */
     --dropdown-item-hover: #3f3f3f;
@@ -391,7 +393,7 @@ nav .nav-link:hover {
     margin: 0 auto 3rem auto;
 }
 
-.form-container, .app-list, .user-list, .app-list-admin, .date-list{
+.form-container, .app-list, .user-list, .app-list-admin, .date-list, .announcements-list{
     & input, & textarea, .input-group-text, .input-group, .form-select{
         background-color: var(--form-input-color) !important;
         border-color: var(--form-outline-color);
@@ -633,7 +635,7 @@ table td {
 /*********************** delete modal **************************/ /*********************** delete modal **************************/
 /* User List */
 .deleted-user{
-    box-shadow: 0px 0px 10px 4px #563333 inset;
+    box-shadow: 0px 0px 10px 4px var(--deleted-item-color) inset;
     text-decoration: line-through;
 }
 
@@ -910,11 +912,11 @@ a {
     width: 70px;
 }
 
-.app-date-col, .announce-date-col {
+.app-date-col, .announce-date-col, .announce-job-type-col {
     width: 120px;
 }
 
-.app-status-col,.user-status-col{
+.app-status-col, .app-url-col, .user-status-col{
     width: 160px;
 }
 
@@ -1320,7 +1322,7 @@ a {
         width: 15%;
     }
 
-    .app-employer-col, .app-status-col, .announce-position-col, .announce-employer-col{
+    .app-employer-col, .app-status-col, .app-url-col, .announce-position-col, .announce-employer-col, .announce-job-type-col{
         width: 20%;
     }
 
