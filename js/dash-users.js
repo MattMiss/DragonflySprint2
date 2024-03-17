@@ -3,12 +3,15 @@ let tempUsers;
 let userStatus = 'any';
 let userSearchTerm = '';
 let userFieldButtonState = {
+    "permission" : 0,
     "fname" : 0,
     "email" : 0,
     "status" : 0
 }
 let lastUserFieldClicked = null;
 let showDeletedUsers = false;
+let curUserListDirection = '';
+let curUserListField = '';
 const userListDiv = $('#dash-users-list');
 
 $(window).on('load', () => {
@@ -71,10 +74,6 @@ function setUserFieldBtnListeners(){
 // Cycle through buttons depending on the field clicked Each field has 3 states.
 // [0 = no order, shows up and down arrows][1 = asc order, shows up arrow][2 = dsc order, shows down arrow]
 function toggleUserFieldOrder(clickedFieldIconName, clickedField){
-    //console.log("Toggling Field order: " + clickedField);
-    // If field is different from last field, reset last field (show both up and down arrows)
-    //console.log("Last Field Click: " + lastAppFieldClicked);
-
     // Show Field Buttons for previously clicked field buttons but only if field button is not null or the
     // same as the previously clicked button
     if (lastUserFieldClicked && (lastUserFieldClicked !== clickedFieldIconName)){
@@ -111,6 +110,7 @@ function populateUsersList(){
     if (sortedUsers.length === 0){
         const noResults = '<tr class="user-list-item">\n' +
             '<td></td>\n' +
+            '<td></td>\n' +
             '<td class="text-center">No Users</td>\n' +
             '<td></td>\n' +
             '<td></td>\n' +
@@ -131,7 +131,6 @@ function emptyUsersList(){
 // Searches through all users and adds users that pass the filters into sortedUsers
 // sortedUsers will be ordered by how the users are ordered in the database
 function sortUsersByFilters(){
-    //console.log(users);
     tempUsers = [];
     results.allUsers.forEach(singleUser => {
         // Return if app has no data
@@ -157,7 +156,6 @@ function sortUsersByFilters(){
         }
     })
     sortedUsers = tempUsers;
-    //console.log(sortedUsers);
 }
 
 // Create a user list item using the supplied userData
@@ -282,33 +280,38 @@ function createUserFromData(userData) {
 
 // Empty the user-list, Sort by clickedField, then populate the user-list
 // If sortBySpecificField is true, then sort users using the provided field type
-function emptySortAndPopulateUsersList(sortBySpecificField = false, selectedFieldIndex, clickedFieldIconName, clickedField){
+function emptySortAndPopulateUsersList(newFieldWasClicked = false, selectedFieldIndex, clickedFieldIconName, clickedField){
     // Empty out the user list
     emptyUsersList();
     // Sort users by the inputs
     sortUsersByFilters();
     // Sort by a specific field if true, otherwise skip this
-    if (sortBySpecificField){
+    if (newFieldWasClicked){
+        curUserListField = clickedField;
         switch (selectedFieldIndex){
             case 2:
                 $(clickedFieldIconName).removeClass().addClass('fa-solid fa-sort-down');
-                sortListByField(sortedUsers, 'dsc', clickedField);
+                curUserListDirection = 'dsc';
+                sortListByField(sortedUsers, curUserListDirection, curUserListField);
                 break;
             case 1:
                 $(clickedFieldIconName).removeClass().addClass('fa-solid fa-sort-up');
-                sortListByField(sortedUsers, 'asc', clickedField);
+                curUserListDirection = 'asc';
+                sortListByField(sortedUsers, curUserListDirection, curUserListField);
                 break;
             case 0:
             default:
                 $(clickedFieldIconName).removeClass().addClass('fa-solid fa-sort');
                 break;
         }
+    }else {
+        // Sort List by the same field already selected (sorts list without changing the arrow direction icons)
+        sortListByField(sortedUsers, curUserListDirection, curUserListField);
     }
     populateUsersList();
 }
 
 function showUserModal(userData, isUserAdmin) {
-    //console.log(userData);
     // Open user edit modal
     $('#user-edit-modal').modal('show');
 
