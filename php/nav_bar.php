@@ -2,6 +2,7 @@
 global $location;
 global $isLogin;
 
+$uID = -1;
 $permission = 0;
 $firstName = '';
 
@@ -10,6 +11,10 @@ if (isset($_SESSION['permission'])){
 }
 if (isset($_SESSION['fname'])){
     $firstName = $_SESSION['fname'];
+}
+
+if (isset($_SESSION['user_id'])){
+    $uID = $_SESSION['user_id'];
 }
 ?>
 
@@ -50,7 +55,7 @@ if (isset($_SESSION['fname'])){
 </div>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script>
-    let uID = <?php echo $_SESSION['user_id']; ?>
+    let uID = <?php echo $uID; ?>
 </script>
 <script src="../js/navbar.js"></script>
 

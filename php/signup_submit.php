@@ -54,11 +54,11 @@ if(! empty($_POST)) {
         $value = trim($value);
 
         if (empty($value)) {
+
             echoError();
             return;
         }
     }
-
     include '../db_picker.php';
     if ($use_local){
         include '../' . $db_location;
@@ -111,7 +111,7 @@ if(! empty($_POST)) {
     }
 
     // roles
-    if(! strlen($roles) >= $MIN_ROLES && ! strlen($roles) <= $MAX_ROLES) {
+    if(!(strlen($roles) >= $MIN_ROLES) && !(strlen($roles) <= $MAX_ROLES)) {
         echoError();
         return;
     }

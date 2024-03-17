@@ -14,7 +14,6 @@ function isAdmin(){
 }
 
 function setupDateFormat(){
-    console.log(uID);
     // Get cookies string and separate items by ';'
     const cookies = document.cookie.split('; ');
     // Set default theme to light
@@ -75,8 +74,6 @@ function getFormattedURL(url){
 }
 
 function getFormattedDate(date, format){
-    console.log(date);
-    const d = new Date(date);
     const parts = date.split('-');
     let dateString = '';
 
