@@ -54,6 +54,7 @@ if(! empty($_POST)) {
         $value = trim($value);
 
         if (empty($value)) {
+            echo "<script>console.log('Empty _POST Value');</script>";
             echoError();
             return;
         }
@@ -81,7 +82,7 @@ if(! empty($_POST)) {
     $fname = $_POST['firstName'];
     $lname = $_POST['lastName'];
     $email = $_POST['email'];
-    $password = $_POST['password'];
+    $plainPassword = $_POST['password'];
     $passwordConfirm = $_POST['password-confirm'];
     $cohortNum = $_POST['cohort-num'];
     $status = $_POST['status'];
@@ -93,7 +94,7 @@ if(! empty($_POST)) {
     $email = filter_var($email, FILTER_SANITIZE_EMAIL);
     $cohortNum = filter_var($cohortNum, FILTER_SANITIZE_NUMBER_INT);
     $roles = strip_tags(filter_var($roles, FILTER_SANITIZE_ADD_SLASHES));
-    $password = strip_tags($password);
+    $plainPassword = strip_tags($plainPassword);
     $passwordConfirm = strip_tags($passwordConfirm);
 
     // validation
@@ -101,23 +102,27 @@ if(! empty($_POST)) {
     // names
     if (! (strlen($fname) >= $MIN_NAME && strlen($fname) <= $MAX_NAME) || ! (strlen($lname) >= $MIN_NAME && strlen($lname) <= $MAX_NAME)) {
         echoError();
+        echo "<script>console.log('Error Names');</script>";
         return;
     }
 
     // cohort number
-    if(! $cohortNum >= $MIN_COHORT_NUM && ! $cohortNum <= $MAX_COHORT_NUM) {
+    if(! ($cohortNum >= $MIN_COHORT_NUM && $cohortNum <= $MAX_COHORT_NUM)) {
+        echo "<script>console.log('Error Cohort');</script>";
         echoError();
         return;
     }
 
     // roles
-    if(! strlen($roles) >= $MIN_ROLES && ! strlen($roles) <= $MAX_ROLES) {
+    if(! (strlen($roles) >= $MIN_ROLES && strlen($roles) <= $MAX_ROLES)) {
+        echo "<script>console.log('Error Roles');</script>";
         echoError();
         return;
     }
 
     // email
     if(! preg_match("/[^\s@]+@[^\s@]+\.[^\s@]+/", $email) ) {
+        echo "<script>console.log('Error Email');</script>";
         echoError();
         return;
     }
@@ -127,22 +132,26 @@ if(! empty($_POST)) {
     $resultCheckEmail = @mysqli_query($cnxn, $checkEmail);
 
     if(mysqli_num_rows($resultCheckEmail) !== 0) {
+        echo "<script>console.log('Error Email Already Exists');</script>";
         echoError();
         return;
     }
 
     // password
-    if(strlen($password) < $MIN_PASSWORD || strlen($password) > $MAX_PASSWORD) {
+    if(strlen($plainPassword) < $MIN_PASSWORD || strlen($plainPassword) > $MAX_PASSWORD) {
+        echo "<script>console.log('Error Password Length');</script>";
         echoError();
         return;
     }
 
-    if($password !== $passwordConfirm) {
+    if($plainPassword !== $passwordConfirm) {
+        echo "<script>console.log('Error Password Confirm');</script>";
         echoError();
         return;
     }
 
-    if(! preg_match("/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z\d!@#$%&*_\-.]{8,16}$/", $password)) {
+    if(! preg_match("/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z\d!@#$%&*_\-.]{8,16}$/", $plainPassword)) {
+        echo "<script>console.log('Error Password Regex');</script>";
         echoError();
         return;
     }
@@ -150,14 +159,17 @@ if(! empty($_POST)) {
     //  status
 
     if(! in_array($status, $RADIO_VALUES)) {
+        echo "<script>console.log('Error Radio Values');</script>";
         echoError();
         return;
     }
 
     $name = ucfirst($fname) . " " . ucfirst($lname);
 
+    $hashPass = password_hash($plainPassword, PASSWORD_DEFAULT);
+
     $sql = "INSERT INTO `users` (`fname`, `lname`, `email`, `password`, `cohortNum`, `status`, `roles`) VALUES ('$fname', 
-            '$lname', '$email', '$password', '$cohortNum', '$status', '$roles')";
+            '$lname', '$email', '$hashPass', '$cohortNum', '$status', '$roles')";
 
     //echo $sql;
 
@@ -175,7 +187,7 @@ if(! empty($_POST)) {
                         <span class='form-label'>Email:</span> $email
                     </li>
                     <li class='list-group-item'>
-                        <span class='form-label'>Password:</span> " . str_pad('',strlen($password),'*') . "
+                        <span class='form-label'>Password:</span> " . str_pad('',strlen($plainPassword),'*') . "
                     </li>
                     <li class='list-group-item'>
                         <span class='form-label'>Cohort Number:</span> $cohortNum
