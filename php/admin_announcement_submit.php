@@ -75,6 +75,10 @@ if(! empty($_POST)) {
         $employer = $_POST['employer'];
         $addltext = $_POST['additional-text'];
         $url = $_POST['announcement-url'];
+
+        $sendToSelect = $_POST['send-to-select'];
+        $discardInactiveUsers = isset($_POST['discard-inactive-users']) && ($_POST['discard-inactive-users'] === 'true');
+
         // $sentto = $_POST['sent-to'];
 //        $fname = $_POST['first-name'] == 'default' ? '' : $_POST['first-name'];
 //        $lname = $_POST['last-name'] == 'default' ? '' : $_POST['last-name'];
@@ -91,10 +95,10 @@ if(! empty($_POST)) {
 
         // run queries
         $sql = "INSERT INTO announcements (title, job_type, location, ename, additional_info, jurl, sent_to, date_created, is_deleted) 
-                VALUES ('$title', '$jobType', '$location', '$employer', '$addltext', '$url', 'all', '$today', 0)";
+                VALUES ('$title', '$jobType', '$location', '$employer', '$addltext', '$url', '$sendToSelect', '$today', 0)";
         $result = @mysqli_query($cnxn, $sql);
 
-        $sql2 = "SELECT fname, lname, email FROM users WHERE is_deleted = 0";
+        $sql2 = "SELECT fname, lname, email, permission, status FROM users WHERE is_deleted = 0";
         $result2 = @mysqli_query($cnxn, $sql2);
 
 
@@ -116,23 +120,40 @@ if(! empty($_POST)) {
             "\nURL: ". $url .
             "\nAdditional Info: \n" . $addltext;
 
-
         $isSent = false;
 
         // checks if result2 is null/empty
         if($result2) {
             // loops throw result2 array
             foreach ($result2 as $row) {
-                $fname = $row['fname'];
-                $lname = $row['lname'];
-                $email = $row['email'];
+                $includeUser = false;
+                $permission = $row['permission'];
 
-                $name = $fname . " " . $lname; // user's name
-                $to = $name . "<" . $email . ">"; // user's name and email
-
-                if(mail($to, $subject, $message, $headers)) {
-                    $isSent = true;
+                if ($sendToSelect === 'all'){
+                    if (!($discardInactiveUsers && ($row['status'] === 'Not Actively Searching'))){
+                        $includeUser = true;
+                    }
+                }else if (($permission === '1') && ($sendToSelect === 'admins')) {
+                    $includeUser = true;
+                }else if (($sendToSelect === 'jobs') && ($row['status'] === 'Seeking Job')){
+                    $includeUser = true;
+                }else if (($sendToSelect === 'interns') && ($row['status'] === 'Seeking Internship')){
+                    $includeUser = true;
                 }
+
+                if ($includeUser){
+                    $fname = $row['fname'];
+                    $lname = $row['lname'];
+                    $email = $row['email'];
+
+                    $name = $fname . " " . $lname; // user's name
+                    $to = $name . "<" . $email . ">"; // user's name and email
+
+                    if(mail($to, $subject, $message, $headers)) {
+                        $isSent = true;
+                    }
+                }
+
             }
         }
 

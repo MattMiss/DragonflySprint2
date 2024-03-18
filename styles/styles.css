@@ -311,6 +311,10 @@ nav .nav-link:hover {
     background-image: var(--select-icon-img);
 }
 
+.form-select{
+    background-image: var(--select-icon-img);
+}
+
 
 
 /*********************** dark mode **************************/ /*********************** dark mode **************************/

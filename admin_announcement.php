@@ -62,6 +62,21 @@ include $db_location;
                     <input type="url" class="form-control" id="announcement-url" name="announcement-url"
                            placeholder="e.g. https://www.example.com" required>
                 </div>
+                <div class="mb-4">
+                    <label for="announce-send-to-select" class="form-label">Send Announcement To</label>
+                    <select class="form-select" id="announce-send-to-select" name="send-to-select">
+                        <option selected value="all">Everyone</option>
+                        <option value="interns">Users Looking For Internships</option>
+                        <option value="jobs">Users Looking For Jobs</option>
+                        <option value="admins">Admins Only</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="discard-inactive-users" id="discard-inactive-users" value="true" checked>
+                        <label class="form-check-label" for="discard-inactive-users">Leave out users who are not actively searching</label>
+                    </div>
+                </div>
                 <input type="hidden" id="first-name" name="first-name" value="default">
                 <input type="hidden" id="last-name" name="last-name" value="default">
 

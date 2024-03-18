@@ -43,6 +43,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! empty($_POST)) {
             $_SESSION['user_id'] = $row['user_id'];
             $_SESSION['permission'] = $row['permission'];
             $_SESSION['fname'] = $row['fname'];
+
+            // Set Max Logged In Time and Idle Logout Time
+            $_SESSION['login_time_stamp'] = time();
+            $_SESSION['idle_time_stamp'] = time();
+
             if ($row['permission'] === '0'){
                 // Redirect Users to User Dashboard
                 header("Location:$indexLocation");

@@ -6,15 +6,19 @@ $uID = -1;
 $permission = 0;
 $firstName = '';
 
+
+if (isset($_SESSION['user_id'])){
+    $uID = $_SESSION['user_id'];
+
+    // Log user out if idle time or logged in time is past max
+    include 'php/roles/timeout_check.php';
+}
+
 if (isset($_SESSION['permission'])){
     $permission = $_SESSION['permission'];
 }
 if (isset($_SESSION['fname'])){
     $firstName = $_SESSION['fname'];
-}
-
-if (isset($_SESSION['user_id'])){
-    $uID = $_SESSION['user_id'];
 }
 
 $theme = 'light';
