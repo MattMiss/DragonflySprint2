@@ -1,5 +1,5 @@
 <?php
-global $use_local, $indexLocation, $loginLocation, $adminLocation;
+global $use_local, $indexLocation, $loginLocation, $adminLocation, $timedOutLocation;
 
 include 'db_picker.php';
 
@@ -10,11 +10,15 @@ if ($use_local){
     $adminLocation =  'http://localhost:63342/Sprint4/admin_dashboard.php';
 
     $loginLocation =  'http://localhost:63342/Sprint4/login.php';
+
+    $timedOutLocation = 'http://localhost:63342/Sprint4/timed_out.php';
 }else{
     $indexLocation =  'https://dragonfly.greenriverdev.com/sprint5/index.php'; //cpanel
 
     $adminLocation =  'https://dragonfly.greenriverdev.com/sprint5/admin_dashboard.php'; //cpanel
 
     $loginLocation =  'https://dragonfly.greenriverdev.com/sprint5/login.php'; //cpanel
+
+    $timedOutLocation = 'https://dragonfly.greenriverdev.com/sprint5/timed_out.php'; //cpanel
 }
 ?>
