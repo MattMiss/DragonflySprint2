@@ -3,9 +3,6 @@ let theme;
 initThemeWithCookies(); // Use Cookies to get/set theme
 //initThemeWithLocalStorage();  // Use LocalStorage to get/set theme
 
-console.log("Theme loaded");
-
-
 function initThemeWithCookies(){
     // Get cookies string and separate items by ';'
     const cookies = document.cookie.split('; ');

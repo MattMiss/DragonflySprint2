@@ -1,6 +1,7 @@
 <?php
 session_start();
 $location = '';
+$pageTitle = 'Edit Application';
 
 global $db_location;
 global $cnxn;
@@ -22,26 +23,7 @@ if (!$app_id){
     header("Location:$indexLocation");
 }
 
-echo '
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Application</title>
-    <!-- Load theme from localstorage -->
-    <script src="js/themescript.js"></script>
-    <!-- Latest compiled and minified CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="styles/styles.css"/>
-    <!-- Latest compiled JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</head>
-<body>';
-
-
+include 'header.php';
 include 'db_picker.php';
 include $db_location;
 

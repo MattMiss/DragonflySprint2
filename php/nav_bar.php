@@ -16,11 +16,18 @@ if (isset($_SESSION['fname'])){
 if (isset($_SESSION['user_id'])){
     $uID = $_SESSION['user_id'];
 }
+
+$theme = 'light';
+if (isset($_COOKIE['theme'])){
+    $theme = $_COOKIE['theme'];
+}
+
 ?>
 
 <nav class="navbar navbar-expand-md sticky-top py-1 ">
     <div class="container-fluid">
-        <img src="<?php echo $location?>images/GRC_Logo-Rich-Black.png" alt="GreenRiver College logo" id="grc-logo">
+        <img src="<?php echo $location?>images/GRC_Logo-Rich-Black.png" alt="GreenRiver College logo" id="grc-logo" class="<?php if($theme === 'dark'){echo 'hidden';}?>">
+        <img src="<?php echo $location?>images/GRC_Logo_White.png" alt="GreenRiver College logo" id="grc-logo-white" class="<?php if($theme === 'light'){echo 'hidden';}?>">
         <button type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" class="navbar-toggler"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse mx-1" id="navbar-menu">
             <ul class="navbar-nav nav-underline">
@@ -95,7 +102,9 @@ function showWelcome(){
     // Set welcome message to user first name if logged in
     $welcomeMsg = $loggedIn ? 'Welcome, ' . $firstName . '!' : 'User';
 
-    $loggedInDropdownItems = "<form method='post' action='user_edit.php'>  
+    $userEditLoc = $location . 'user_edit.php';
+
+    $loggedInDropdownItems = "<form method='post' action='$userEditLoc'>  
                                   <input type='hidden' name='user_id' value=$uID>
                                   <button class='btn-log-in-out'>
                                       <i class='fa-solid fa-gear pe-1'></i>Account
@@ -113,7 +122,7 @@ function showWelcome(){
                                </button>";
     $dropdownItems = $loggedIn ? $loggedInDropdownItems : $loggedOutDropdownItems;
 
-    $dateFormatListItem = "<li class=''>
+    $dateFormatListItem = $loggedIn ? "<li class=''>
                                 <div class='d-flex justify-content-between date-list pe-3'>
                                     <span class='user-menu-label ps-3'>DATE FORMAT</span>
                                     <select class='form-select' id='date-format-select' aria-label='Date Format Select'>
@@ -122,7 +131,7 @@ function showWelcome(){
                                         <option value='yy-mm-dd'>YY-MM-DD</option>
                                     </select>
                                 </div>       
-                           </li>";
+                           </li>" : "";
 
     echo "
         <div class='dropdown'>

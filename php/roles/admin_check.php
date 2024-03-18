@@ -2,13 +2,8 @@
 global $viewingID;
 global $cnxn;
 global $location;
-
-//$indexLocation = 'http://localhost:63342/Sprint4/index.php';
-//$indexLocation =  'https://dragonfly.greenriverdev.com/sprint5/index.php'; //cpanel
-
-global $location;
 global $indexLocation;
-include 'page_locations.php';;
+include $location . 'page_locations.php';;
 
 $permission = null;
 if (isset($_SESSION['permission']) && $_SESSION['permission'] == 1){

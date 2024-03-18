@@ -1,6 +1,7 @@
 <?php
 session_start();
 $location = '../';
+$pageTitle = 'Edited User';
 
 global $db_location;
 global $cnxn;
@@ -11,59 +12,47 @@ global $viewingID;
 include '../php/roles/logout_check.php';
 // Check for user_id in SESSION and redirect to login if null
 include '../php/roles/user_check.php';
-// might need admins
-// Redirect admins to admin dashboard
-//include 'php/roles/admin_kick.php';
 
-// Set the editing UID so it doesnt save over the admins info if the viewingID is the admins.
+// Set the editing UID so it doesn't save over the admins info if the viewingID is the admins.
 $editUID = '';
 if (isset($_SESSION['edit-uid'])){
     $editUID = $_SESSION['edit-uid'];
 }
 
-echo
-'<!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Edited User</title>
-        <!-- Load theme from localstorage -->
-        <script src="../js/themescript.js"></script>
-        <!-- Latest compiled and minified CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Font awesome -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-        <link rel="stylesheet" href="../styles/styles.css"/>
-        <!-- Latest compiled JavaScript -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    </head>
-<body>';
-
-
+include '../header.php';
 include '../php/nav_bar.php';
 ?>
 <main>
     <div class="container p-3" id="main-container">
         <?php
 
-        function echoError($errorMessage) {
+        function echoError() {
             echo "
             <div class='form-error'>
                 <h3>Update failed, please try again.</h3>
-                <a>$errorMessage</a>
                 <a class='link' href='../user_edit.php'>Go to edit form</a>
             </div>
          ";
         }
 
         if(! empty($_POST)) {
-            // removing
-            foreach ($_POST as $value) {
-                $value = trim($value);
+            $isNewPass = $_POST['new-pass-select'] === 'new';
 
-                if (empty($value)) {
-                    echoError('Nothing set');
+            if ($isNewPass){
+                // removing
+                foreach ($_POST as $value) {
+                    $value = trim($value);
+                    if (empty($value)) {
+                        echoError();
+                        return;
+                    }
+                }
+            }else{
+                // Check everything but the password field
+                if (empty(trim($_POST['firstName'])) || empty(trim($_POST['lastName'])) ||
+                    empty(trim($_POST['email'])) || empty(trim($_POST['cohort-num'])) ||
+                    empty(trim($_POST['status'])) || empty(trim($_POST['roles']))){
+                    echoError();
                     return;
                 }
             }
@@ -95,8 +84,7 @@ include '../php/nav_bar.php';
             $cohortNum = $_POST['cohort-num'];
             $status = $_POST['status'];
             $roles = $_POST['roles'];
-            $isNewPass = $_POST['new-pass-select'] === 'new';
-            echo $isNewPass;
+
 
             // sanitization
             $fname = strip_tags(filter_var($fname, FILTER_SANITIZE_ADD_SLASHES));
@@ -112,42 +100,42 @@ include '../php/nav_bar.php';
 
             // names
             if (! (strlen($fname) >= $MIN_NAME && strlen($fname) <= $MAX_NAME) || ! (strlen($lname) >= $MIN_NAME && strlen($lname) <= $MAX_NAME)) {
-                echoError('Name error');
+                echoError();
                 return;
             }
 
             // cohort number
             if(! $cohortNum >= $MIN_COHORT_NUM && ! $cohortNum <= $MAX_COHORT_NUM) {
-                echoError('Cohort error');
+                echoError();
                 return;
             }
 
             // roles
             if(! strlen($roles) >= $MIN_ROLES && ! strlen($roles) <= $MAX_ROLES) {
-                echoError('Roles error');
+                echoError();
                 return;
             }
 
             // email
             if(! preg_match("/[^\s@]+@[^\s@]+\.[^\s@]+/", $email) ) {
-                echoError('Email error');
+                echoError();
                 return;
             }
 
             // password
             if ($isNewPass){
                 if((strlen($password) < $MIN_PASSWORD || strlen($password) > $MAX_PASSWORD)) {
-                    echoError('Password error1');
+                    echoError();
                     return;
                 }
 
                 if($password !== $passwordConfirm) {
-                    echoError('Password error2');
+                    echoError();
                     return;
                 }
 
                 if(! preg_match("/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z\d!@#$%&*_\-.]{8,16}$/", $password)) {
-                    echoError('Password error3');
+                    echoError();
                     return;
                 }
             }
@@ -181,6 +169,10 @@ include '../php/nav_bar.php';
 
             $result = @mysqli_query($cnxn, $sql);
 
+
+            $passField = $isNewPass ? "<li class='list-group-item'><span class='form-label'>Password:</span> " .
+                str_pad('',strlen($password),'*') . "</li>" : "";
+
             echo "
             <div class='container p-3'>
             <h3 class='receipt-message p-3 mb-0'>Success! Account has been edited.</h3>
@@ -192,9 +184,7 @@ include '../php/nav_bar.php';
                     <li class='list-group-item'>
                         <span class='form-label'>Email:</span> $email
                     </li>
-                    <li class='list-group-item'>
-                        <span class='form-label'>Password:</span> " . str_pad('',strlen($password),'*') . "
-                    </li>
+                    {$passField}
                     <li class='list-group-item'>
                         <span class='form-label'>Cohort Number:</span> $cohortNum
                     </li>

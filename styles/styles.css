@@ -22,6 +22,7 @@
     --form-header-color: rgba(0,0,0,.03);
     --form-input-color: white;
     --placeholder-font-color: #696969;
+    --calendar-invert-amount: 0;
 
     /* submit button theme */
     --submit-color: white;
@@ -98,6 +99,7 @@
     --table-hover-color: dimgrey;
 
     --form-header-color: #454545;
+    --calendar-invert-amount: 1;
 
     /* modal button themes */
     --secondary-close-bg-color: #454545;
@@ -167,7 +169,7 @@ footer{
 /*********************** nav **************************/ /*********************** nav **************************/
 /*********************** nav **************************/ /*********************** nav **************************/
 
-#grc-logo {
+#grc-logo, #grc-logo-white {
     height: 70px;
 }
 
@@ -488,13 +490,16 @@ nav .nav-link:hover {
     visibility: hidden;
 }
 
-.date-input{
-
-}
-
 .status-select{
     background-image: var(--select-icon-img);
 }
+
+/* Customize the color of the calendar icon */
+input::-webkit-calendar-picker-indicator {
+    filter: invert(var(--calendar-invert-amount));
+}
+
+
 
 /*********************** form receipt **************************/ /*********************** form receipt **************************/
 /*********************** form receipt **************************/ /*********************** form receipt **************************/

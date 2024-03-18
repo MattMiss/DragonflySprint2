@@ -1,7 +1,4 @@
 <?php
-$indexLocation = 'http://localhost:63342/Sprint4/index.php';
-//$indexLocation =  'https://dragonfly.greenriverdev.com/sprint5/index.php'; //cpanel
-
 global $location;
 global $indexLocation;
 include $location . 'page_locations.php';;

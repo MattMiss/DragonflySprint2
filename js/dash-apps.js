@@ -54,55 +54,84 @@ $(window).on('load', () => {
 // Set up listeners for User Filter StartDate, EndDate, SearchTerm, and Selected Status
 // List will reload if any User Filters are changed
 function setAppSearchListeners(){
-    // App List Listeners
-    $('#app-search-bar').on('change keyup', (e) => {
-        searchTerm = e.target.value;
-        emptySortAndPopulateAppList(false);
-    });
+    const appSearchBar = $('#app-search-bar');
+    if (appSearchBar){
+        appSearchBar.on('change keyup', (e) => {
+            searchTerm = e.target.value;
+            emptySortAndPopulateAppList(false);
+        });
+    }
 
-    $('#app-status-select').on('change', (e) => {
-        targetStatus = e.target.value;
-        emptySortAndPopulateAppList(false);
-    });
+    const appStatusSelect = $('#app-status-select')
+    if (appStatusSelect){
+        appStatusSelect.on('change', (e) => {
+            targetStatus = e.target.value;
+            emptySortAndPopulateAppList(false);
+        });
+    }
 
-    $('#app-start-date').on('change', (e) => {
-        startDate = e.target.value;
-        emptySortAndPopulateAppList(false);
-    });
+    const appStartDate = $('#app-start-date');
+    if (appStartDate){
+        appStartDate.on('change', (e) => {
+            startDate = e.target.value;
+            emptySortAndPopulateAppList(false);
+        });
+    }
 
-    $('#app-end-date').on('change', (e) => {
-        endDate = e.target.value;
-        emptySortAndPopulateAppList(false);
-    });
+    const appEndDate = $('#app-end-date');
+    if (appEndDate){
+        appEndDate.on('change', (e) => {
+            endDate = e.target.value;
+            emptySortAndPopulateAppList(false);
+        });
+    }
 }
 
 // Onclick Events for OrderBy buttons on each field
 // Clicking on a field button will cycle between ascending and descending
 function setAppFieldBtnListeners(){
-    $('#date-order-btn').on('click', () => {
-        toggleAppFieldOrder('#date-field-icon', 'adate');
-    });
+    const dateOrderBtn = $('#date-order-btn');
+    if (dateOrderBtn){
+        dateOrderBtn.on('click', () => {
+            toggleAppFieldOrder('#date-field-icon', 'adate');
+        });
+    }
 
-    $('#job-order-btn').on('click', () => {
-        toggleAppFieldOrder('#job-field-icon', 'jname');
-    });
+    const jobOrderBtn = $('#job-order-btn');
+    if (jobOrderBtn){
+        jobOrderBtn.on('click', () => {
+            toggleAppFieldOrder('#job-field-icon', 'jname');
+        });
+    }
 
-    $('#employer-order-btn').on('click', () => {
-        toggleAppFieldOrder('#employer-field-icon', 'ename');
-    });
+    const employerOrderBtn = $('#employer-order-btn');
+    if (employerOrderBtn){
+        employerOrderBtn.on('click', () => {
+            toggleAppFieldOrder('#employer-field-icon', 'ename');
+        });
+    }
 
-    $('#status-order-btn').on('click', () => {
-        toggleAppFieldOrder('#status-field-icon', 'astatus');
-    });
+    const statusOrderBtn = $('#status-order-btn');
+    if (statusOrderBtn){
+        statusOrderBtn.on('click', () => {
+            toggleAppFieldOrder('#status-field-icon', 'astatus');
+        });
+    }
 
     // Set click listeners for user and email if role is admin
     if (isAdmin()){
-        $('#user-order-btn').on('click', () => {
-            toggleAppFieldOrder('#user-field-icon', 'fname');
-        });
-        $('#email-order-btn').on('click', () => {
-            toggleAppFieldOrder('#email-field-icon', 'email');
-        });
+        const userOrderBtn = $('#user-order-btn');
+        if (userOrderBtn){
+            userOrderBtn.on('click', () => {
+                toggleAppFieldOrder('#user-field-icon', 'fname');
+            });
+        }
+        const emailOrderBtn = $('#email-order-btn');
+        if (emailOrderBtn){
+            emailOrderBtn.on('click', () => {
+                toggleAppFieldOrder('#email-field-icon', 'email');
+            });
+        }
     }
 }
 

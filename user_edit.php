@@ -1,6 +1,7 @@
 <?php
 session_start();
 $location = '';
+$pageTitle = 'Edit User';
 
 global $db_location;
 global $cnxn;
@@ -10,30 +11,8 @@ global $viewingID;
 include 'php/roles/logout_check.php';
 // Check for user_id in SESSION and redirect to login if null
 include 'php/roles/user_check.php';
-// might need admins
-// Redirect admins to admin dashboard
-//include 'php/roles/admin_kick.php';
 
-echo '
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit User</title>
-    <!-- Load theme from localstorage -->
-    <script src="js/themescript.js"></script>
-    <!-- Latest compiled and minified CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="styles/styles.css"/>
-    <!-- Latest compiled JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</head>
-<body>';
-
-
+include 'header.php';
 include 'db_picker.php';
 include $db_location;
 
@@ -111,22 +90,26 @@ include 'php/nav_bar.php' ?>
                     <div class="row mb-3 hidden" id="user-edit-new-pass">
                         <div class="col">
                             <label for="input-password" class="form-label">New Password*</label>
-                            <input type="password" class="form-control" id="input-password" name="password" minlength="8" maxlength="16" value="<?php echo str_pad('',16,'*')?>">
+                            <input type="password" class="form-control" id="input-password" name="password" minlength="8" maxlength="16" value="">
                         </div>
 
                         <div class="col">
                             <label for="input-password-confirm" class="form-label">Re-enter New Password*</label>
-                            <input type="password" class="form-control" id="input-password-confirm" name="password-confirm" minlength="8" maxlength="16" value="<?php echo str_pad('',16,'*')?>">
+                            <input type="password" class="form-control" id="input-password-confirm" name="password-confirm" minlength="8" maxlength="16" value="">
                         </div>
                         <small id="password-error" class="warning">Please enter a valid password, refer to the requirements below</small>
                     </div>
-
-
+                    <ul class="mb-3 hidden" id="user-edit-pass-reqs">
+                        <li>Between 8-16 characters</li>
+                        <li>Must include at least 1 number</li>
+                        <li>Both passwords must match</li>
+                        <li>OPTIONAL: include special characters: !@#$%&*_-.</li>
+                    </ul>
                     <div class="mb-3">
                         <label for="input-cohort-num" class="form-label">Cohort Number*</label>
                         <input type="number" class="form-control" id="input-cohort-num" name="cohort-num" min="1" max="100"
                                placeholder="1-100" required value="<?php echo $cohortNum?>">
-                        <small id="password-error" class="warning">Please enter a valid password, refer to the requirements below</small>
+                        <small id="cohort-error" class="warning">Please enter a number between 1 and 100</small>
                     </div>
 
                     <div class="mb-3">
