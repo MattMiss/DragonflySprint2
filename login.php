@@ -22,20 +22,23 @@ include $db_location;
 
 // get user email, id and password from db
 $email = "";
-$pass = "";
+$plainPass = "";
 $failedMsg = "";
 $isLogin = true;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && ! empty($_POST)) {
     $email = $_POST['email'];
-    $pass = $_POST['password'];
-    $sqlUserPass = "SELECT `user_id`, `email`, password, permission, fname  FROM users WHERE `email`='$email' AND `password`='$pass' AND `users`.is_deleted = 0 ";
+    $plainPass = $_POST['password'];
+    $sqlUserPass = "SELECT `user_id`, `email`, password, permission, fname  FROM users WHERE `email`='$email' AND `users`.is_deleted = 0 ";
 
     $result = mysqli_query($cnxn, $sqlUserPass);
 
     if(mysqli_num_rows($result)===1) {
         $row = mysqli_fetch_assoc($result);
-        if($row['email']===$email && $row['password']===$pass){
+        $retrievedHashPass = $row['password'];
+        $verifyPass = password_verify($plainPass, $retrievedHashPass);
+
+        if($row['email']===$email && $verifyPass){
             $_SESSION['user_id'] = $row['user_id'];
             $_SESSION['permission'] = $row['permission'];
             $_SESSION['fname'] = $row['fname'];
