@@ -4,7 +4,7 @@ $location = '../';
 
 global $db_location;
 global $cnxn;
-//global $use_local;
+global $use_local;
 global $viewingID;
 
 // Logout and return to login.php if ?logout=true
@@ -14,6 +14,12 @@ include '../php/roles/user_check.php';
 // might need admins
 // Redirect admins to admin dashboard
 //include 'php/roles/admin_kick.php';
+
+// Set the editing UID so it doesnt save over the admins info if the viewingID is the admins.
+$editUID = '';
+if (isset($_SESSION['edit-uid'])){
+    $editUID = $_SESSION['edit-uid'];
+}
 
 echo
 '<!DOCTYPE html>
@@ -89,6 +95,8 @@ include '../php/nav_bar.php';
             $cohortNum = $_POST['cohort-num'];
             $status = $_POST['status'];
             $roles = $_POST['roles'];
+            $isNewPass = $_POST['new-pass-select'] === 'new';
+            echo $isNewPass;
 
             // sanitization
             $fname = strip_tags(filter_var($fname, FILTER_SANITIZE_ADD_SLASHES));
@@ -98,6 +106,7 @@ include '../php/nav_bar.php';
             $roles = strip_tags(filter_var($roles, FILTER_SANITIZE_ADD_SLASHES));
             $password = strip_tags($password);
             $passwordConfirm = strip_tags($passwordConfirm);
+
 
             // validation
 
@@ -125,29 +134,22 @@ include '../php/nav_bar.php';
                 return;
             }
 
-            // checks if email is already in use
-            $checkEmail = "SELECT * FROM users WHERE email = '$email'";
-            $resultCheckEmail = @mysqli_query($cnxn, $checkEmail);
-
-            if(mysqli_num_rows($resultCheckEmail) !== 0) {
-                echoError('Email already in use');
-                return;
-            }
-
             // password
-            if(strlen($password) < $MIN_PASSWORD || strlen($password) > $MAX_PASSWORD) {
-                echoError('Password error1');
-                return;
-            }
+            if ($isNewPass){
+                if((strlen($password) < $MIN_PASSWORD || strlen($password) > $MAX_PASSWORD)) {
+                    echoError('Password error1');
+                    return;
+                }
 
-            if($password !== $passwordConfirm) {
-                echoError('Password error2');
-                return;
-            }
+                if($password !== $passwordConfirm) {
+                    echoError('Password error2');
+                    return;
+                }
 
-            if(! preg_match("/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z\d!@#$%&*_\-.]{8,16}$/", $password)) {
-                echoError('Password error3');
-                return;
+                if(! preg_match("/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z\d!@#$%&*_\-.]{8,16}$/", $password)) {
+                    echoError('Password error3');
+                    return;
+                }
             }
 
             //  status
@@ -159,16 +161,29 @@ include '../php/nav_bar.php';
 
             $name = ucfirst($fname) . " " . ucfirst($lname);
 
-            $sql = "UPDATE `users` 
-                        SET `fname` = '$fname', `lname` = '$lname', `email` = '$email', `password` = '$password',
+            $hashPass = password_hash($passwordConfirm, PASSWORD_DEFAULT);
+
+            $sql = '';
+
+            if ($isNewPass){
+                $sql = "UPDATE `users` 
+                        SET `fname` = '$fname', `lname` = '$lname', `email` = '$email', `password` = '$hashPass',
                             `cohortNum` = '$cohortNum', `status` = '$status', `roles` = '$roles'
-                        WHERE `user_id` = '$viewingID';";
+                        WHERE `user_id` = '$editUID';";
+
+            }else{
+                $sql = "UPDATE `users` 
+                        SET `fname` = '$fname', `lname` = '$lname', `email` = '$email',
+                            `cohortNum` = '$cohortNum', `status` = '$status', `roles` = '$roles'
+                        WHERE `user_id` = '$editUID';";
+
+            }
 
             $result = @mysqli_query($cnxn, $sql);
 
             echo "
             <div class='container p-3'>
-            <h3 class='receipt-message p-3 mb-0'>Success! Your account has been edited.</h3>
+            <h3 class='receipt-message p-3 mb-0'>Success! Account has been edited.</h3>
             <div class='form-receipt-container p-3'>
                 <ul class='receipt-content list-group list-group-flush'>
                     <li class='list-group-item'>
@@ -188,9 +203,6 @@ include '../php/nav_bar.php';
                     </li>
                     <li class='list-group-item message-box'>
                         " . stripslashes($roles) . "
-                    </li>
-                    <li class='align-self-center'>
-                        <a class='link' href='../login.php'>Please Login</a>
                     </li>
                 </ul>
         

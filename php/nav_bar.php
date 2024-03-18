@@ -48,7 +48,6 @@ if (isset($_SESSION['user_id'])){
             <div class='modal-footer'>
                 <button type='button' class='btn btn-danger modal-close-secondary' data-bs-dismiss='modal'>Cancel</button>
                 <button type='submit' class='modal-delete'><a href='?logout=true'>Logout</a></button>
-
             </div>
         </div>
     </div>
@@ -88,11 +87,16 @@ function showWelcome(){
     global $firstName;
     global $location;
     $loggedIn = isset($_SESSION['user_id']);
+    $uID = -1;
+    if (isset($_SESSION['user_id'])){
+        $uID = $_SESSION['user_id'];
+    }
 
     // Set welcome message to user first name if logged in
     $welcomeMsg = $loggedIn ? 'Welcome, ' . $firstName . '!' : 'User';
 
     $loggedInDropdownItems = "<form method='post' action='user_edit.php'>  
+                                  <input type='hidden' name='user_id' value=$uID>
                                   <button class='btn-log-in-out'>
                                       <i class='fa-solid fa-gear pe-1'></i>Account
                                   </button>

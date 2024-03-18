@@ -590,7 +590,7 @@ while ($row = mysqli_fetch_assoc($announceResult)){
                         <button type='button' id="user-edit-modal-admin" class="btn btn-make-admin" data-bs-dismiss='modal'></button>
                         <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Close</button>
                         <form method="post" action="user_edit.php" target="_blank">
-                            <input id="edit-modal-user-id" type="hidden" name="user-id" value="">
+                            <input id="edit-modal-user-id" type="hidden" name="user_id" value="">
                             <button type="submit" class="modal-edit">Edit</button>
                         </form>
                     </div>
