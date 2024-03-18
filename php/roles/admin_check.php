@@ -11,9 +11,11 @@ if (isset($_SESSION['permission']) && $_SESSION['permission'] == 1){
 }else{
     // Redirect back to login if nobody is logged in
     header("Location:$indexLocation");
+    exit();
 }
 
 if ($permission !== '1'){
     // Redirect back to dashboard if a non admin user is logged in
     header("Location:$indexLocation");
+    exit();
 }

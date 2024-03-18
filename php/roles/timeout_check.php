@@ -11,6 +11,7 @@ $maxLoggedInTime = 28800;   // 28800 secs = 8 hours
 if ((time()-$_SESSION['login_time_stamp'] > $maxLoggedInTime) ||
     (time()-$_SESSION['idle_time_stamp'] > $maxIdleTime)){
     header("Location:$timedOutLocation");
+    exit();
 }else{
     $_SESSION['idle_time_stamp'] = time();
 }

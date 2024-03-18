@@ -1,5 +1,7 @@
 <?php
 session_start();
+ob_start();
+
 $location = '';
 $pageTitle = 'Login Page';
 
@@ -39,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! empty($_POST)) {
         $retrievedHashPass = $row['password'];
         $verifyPass = password_verify($plainPass, $retrievedHashPass);
 
-        if($row['email']===$email && $verifyPass){
+        if((strtolower($row['email'])===strtolower($email)) && $verifyPass){
             $_SESSION['user_id'] = $row['user_id'];
             $_SESSION['permission'] = $row['permission'];
             $_SESSION['fname'] = $row['fname'];
