@@ -12,11 +12,12 @@ const MAX_COHORT = 100;
 const MIN_CHARACTERS = 0;
 const MAX_CHARACTERS = 500;
 const STATUS = ["Seeking Internship", "Seeking Job", "Not Actively Searching"];
+let validatePass = true;
 
 function validateForm() {
     let isNameValid = validateName();
     let isEmailValid = validateEmail();
-    let isPasswordValid = validatePassword();
+    let isPasswordValid = (validatePass === false) || validatePassword();
     let isCohortNumValid = validateCohortNum();
     let isStatusValid = validateStatus();
     let isRolesValid = validateRoles();
@@ -183,30 +184,47 @@ function validateRoles() {
 }
 
 // event listeners
-firstName.addEventListener("focusout", (Event) => {
-    validateName();
-});
+if (firstName){
+    firstName.addEventListener("focusout", (Event) => {
+        validateName();
+    });
+}
 
-lastName.addEventListener("focusout", (Event) => {
-    validateName();
-});
+if (lastName){
+    lastName.addEventListener("focusout", (Event) => {
+        validateName();
+    });
+}
 
-email.addEventListener("focusout", (Event) => {
-    validateEmail();
-});
 
-password.addEventListener("focusout", (Event) => {
-    validatePassword();
-});
+if (email){
+    email.addEventListener("focusout", (Event) => {
+        validateEmail();
+    });
+}
 
-passwordConfirm.addEventListener("focusout", (Event) => {
-    validatePassword();
-});
 
-cohortNumber.addEventListener("focusout", (Event) => {
-    validateCohortNum();
-});
+if (password){
+    password.addEventListener("focusout", (Event) => {
+        validatePassword();
+    });
 
-roles.addEventListener("focusout", (Event) => {
-    validateRoles();
-});
+}
+
+if (passwordConfirm){
+    passwordConfirm.addEventListener("focusout", (Event) => {
+        validatePassword();
+    });
+}
+
+if (cohortNumber){
+    cohortNumber.addEventListener("focusout", (Event) => {
+        validateCohortNum();
+    });
+}
+
+if (roles){
+    roles.addEventListener("focusout", (Event) => {
+        validateRoles();
+    });
+}

@@ -1,11 +1,12 @@
 <?php
 session_start();
 $location = '';
+$pageTitle = 'Login Page';
 
-$indexLocation =  'http://localhost:63342/Sprint4/index.php'; // local (may need to change port number)
-//$indexLocation =  'https://dragonfly.greenriverdev.com/sprint5/index.php'; //cpanel
-$adminLocation =  'http://localhost:63342/Sprint4/admin_dashboard.php';
-//$adminLocation =  'https://dragonfly.greenriverdev.com/sprint5/admin_dashboard.php'; //cpanel
+global $indexLocation;
+global $adminLocation;
+include $location . 'page_locations.php';;
+
 
 if (isset($_SESSION['user_id'])){
     // Redirect Already Logged In Users to User Dashboard
@@ -58,26 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! empty($_POST)) {
     }
 }
 
-
-echo "
-    <!DOCTYPE html>
-    <html lang='en'>
-    <head>
-        <meta charset='UTF-8'>
-        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-        <title>Login Page</title>
-        <!-- Load theme from localstorage -->
-        <script src='js/themescript.js'></script>
-        <!-- Latest compiled and minified CSS -->
-        <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css' rel='stylesheet'>
-        <!-- Font awesome -->
-        <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'>
-        <link rel='stylesheet' href='styles/styles.css'/>
-        <!-- Latest compiled JavaScript -->
-        <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js'></script>
-    </head>
-    <body>";
-
+include 'header.php';
 include 'php/nav_bar.php';
 
 echo "<main>

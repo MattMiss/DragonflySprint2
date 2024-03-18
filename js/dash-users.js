@@ -35,40 +35,60 @@ $(window).on('load', () => {
 // List will reload if any User Filters are changed
 function setUserSearchListeners(){
     // User List Listeners
-    $('#users-search-bar').on('change keyup', (e) => {
-        userSearchTerm = e.target.value;
-        emptySortAndPopulateUsersList(false);
-    });
-
-    $('#user-status-select').on('change', (e) => {
-        userStatus = e.target.value;
-        emptySortAndPopulateUsersList(false);
-    })
-
-    $('#user-deleted-check').on('change', (e) => {
-        showDeletedUsers = e.target.checked;
-        toggleShowDeletedIcon();
-        emptySortAndPopulateUsersList(false);
-    })
+    const searchBar = $('#users-search-bar');
+    if (searchBar){
+        searchBar.on('change keyup', (e) => {
+            userSearchTerm = e.target.value;
+            emptySortAndPopulateUsersList(false);
+        });
+    }
+    const statusSelect = $('#user-status-select');
+    if (statusSelect){
+        statusSelect.on('change', (e) => {
+            userStatus = e.target.value;
+            emptySortAndPopulateUsersList(false);
+        })
+    }
+    const deletedUsersCheckbox = $('#user-deleted-check');
+    if (deletedUsersCheckbox){
+        deletedUsersCheckbox.on('change', (e) => {
+            showDeletedUsers = e.target.checked;
+            toggleShowDeletedIcon();
+            emptySortAndPopulateUsersList(false);
+        })
+    }
 }
 
 // Onclick Events for OrderBy buttons on each field
 // Clicking on a field button will cycle between ascending and descending
 function setUserFieldBtnListeners(){
-    $('#user-name-order-btn').on('click', () => {
-        toggleUserFieldOrder('#user-name-field-icon', 'fname');
-    });
+    const userNameOrderBtn = $('#user-name-order-btn');
+    if (userNameOrderBtn){
+        userNameOrderBtn.on('click', () => {
+            toggleUserFieldOrder('#user-name-field-icon', 'fname');
+        });
+    }
 
-    $('#user-email-order-btn').on('click', () => {
-        toggleUserFieldOrder('#user-email-field-icon', 'email');
-    });
+    const userEmailOrderBtn = $('#user-email-order-btn');
+    if (userEmailOrderBtn){
+        userEmailOrderBtn.on('click', () => {
+            toggleUserFieldOrder('#user-email-field-icon', 'email');
+        });
+    }
 
-    $('#user-status-order-btn').on('click', () => {
-        toggleUserFieldOrder('#user-status-field-icon', 'status');
-    });
-    $('#user-role-order-btn').on('click', () => {
-        toggleUserFieldOrder('#user-role-field-icon', 'permission');
-    })
+    const userStatusOrderBtn = $('#user-status-order-btn');
+    if (userStatusOrderBtn){
+        userStatusOrderBtn.on('click', () => {
+            toggleUserFieldOrder('#user-status-field-icon', 'status');
+        });
+    }
+
+    const userRoleOrderBtn = $('#user-role-order-btn');
+    if (userRoleOrderBtn){
+        userRoleOrderBtn.on('click', () => {
+            toggleUserFieldOrder('#user-role-field-icon', 'permission');
+        })
+    }
 }
 
 // Cycle through buttons depending on the field clicked Each field has 3 states.
@@ -160,12 +180,6 @@ function sortUsersByFilters(){
 
 // Create a user list item using the supplied userData
 function createUserFromData(userData) {
-
-    /*
-    $(editBtn).on('click', () => {
-        showAppModal(appData, statusReplace, clickableUrl);
-    })
-     */
     const deletedUser = userData.is_deleted === "1";
     const itemClass = "user-list-item" + (deletedUser ? " deleted-user" : "");
     const deletedIcon = deletedUser ? '<i class="fa-solid fa-user-slash deleted-user-icon"></i>' : "";
@@ -181,12 +195,6 @@ function createUserFromData(userData) {
             `<td class="table-status">${userData.status}</td>\n` +
             `</td>\n` +
             `</tr>`);
-
-    /*
-    user.on('click', () => {
-        //TODO: show user info
-    })
-     */
 
     const isUserAdmin = userData.permission === '1';
 

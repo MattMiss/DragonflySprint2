@@ -1,11 +1,10 @@
 const dateFormatChanged = new Event("dateFormatChanged");
 let darkModeSwitch;
 let dateFormatSelect = $('#date-format-select');
+let blackLogo = $('#grc-logo');
+let whiteLogo = $('#grc-logo-white');
 
 $(window).on('load', () => {
-    //console.log("Window loaded");
-    console.log(document.cookie);
-
     // Setup Dark Mode using Cookies
     setupCookieDarkMode();
 
@@ -17,16 +16,17 @@ $(window).on('load', () => {
 });
 
 function setupFormatSelect(){
-    dateFormatSelect.on('change', (e)=> {
-        setDateFormat(e.target.value);
-        setupDateFormat();
-        // Let any attached listeners know the date format has changed
-        document.dispatchEvent(dateFormatChanged);
-    })
+    if (dateFormatSelect){
+        dateFormatSelect.on('change', (e)=> {
+            setDateFormat(e.target.value);
+            setupDateFormat();
+            // Let any attached listeners know the date format has changed
+            document.dispatchEvent(dateFormatChanged);
+        })
+    }
 }
 
 function setDateFormat(format){
-    console.log(uID);
     switch(format){
         case 'mm-dd-yy':
             setCookieItem('date-format-' + uID, 'mm-dd-yy');
@@ -54,16 +54,17 @@ function setupCookieDarkMode(){
     }else
     {
         setCookieItem('theme', 'light');
+        setLogoTheme('light');
     }
 
 
 }
 
 function setCookieDarkMode(newTheme){
-    console.log("Changed to : " + newTheme);
     $(document.documentElement).attr('data-theme', newTheme);
     setCookieItem('theme', newTheme);
     theme = newTheme;
+    setLogoTheme(theme);
 }
 
 // Sets the cookie item at the max value (400 days). If user visits website within the 400 days, the cookie
@@ -74,6 +75,16 @@ function setCookieItem(key, value){
     dt.setTime(dt.getTime() + (400 * 24 * 60 * 60 * 1000));
     let expires = "expires=" + dt.toString();
     document.cookie = key + "=" + value + ";" + expires + ";path=/";
+}
+
+function setLogoTheme(theme){
+    if (theme === 'dark'){
+        whiteLogo.show();
+        blackLogo.hide();
+    }else if (theme === 'light'){
+        whiteLogo.hide();
+        blackLogo.show();
+    }
 }
 
 /*
