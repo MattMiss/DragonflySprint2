@@ -5,7 +5,9 @@ let dateFormat = 'yy-mm-dd';
 $(window).on('load', () => {
     // Check if there is a date format saved in cookies
     setupDateFormat();
-    dateFormatSelect.val(dateFormat);
+    if (dateFormatSelect){
+        dateFormatSelect.val(dateFormat);
+    }
 });
 
 // Returns the viewRole set by server

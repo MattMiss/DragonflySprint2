@@ -1,5 +1,7 @@
 <?php
 session_start();
+ob_start();
+
 $location = '';
 $pageTitle = 'Edit User';
 
@@ -7,6 +9,8 @@ global $db_location;
 global $cnxn;
 global $viewingID;
 
+// Log user out if idle time or logged in time is past max
+include 'php/roles/timeout_check.php';
 // Logout and return to login.php if ?logout=true
 include 'php/roles/logout_check.php';
 // Check for user_id in SESSION and redirect to login if null

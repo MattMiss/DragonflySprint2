@@ -1,5 +1,7 @@
 <?php
 session_start();
+ob_start();
+
 $location = '';
 $pageTitle = 'Session Timed Out';
 

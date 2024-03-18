@@ -7,13 +7,6 @@ $permission = 0;
 $firstName = '';
 
 
-if (isset($_SESSION['user_id'])){
-    $uID = $_SESSION['user_id'];
-
-    // Log user out if idle time or logged in time is past max
-    include 'php/roles/timeout_check.php';
-}
-
 if (isset($_SESSION['permission'])){
     $permission = $_SESSION['permission'];
 }
@@ -67,9 +60,9 @@ if (isset($_COOKIE['theme'])){
 <script>
     let uID = <?php echo $uID; ?>
 </script>
-<script src="../js/navbar.js"></script>
-
 <?php
+echo "<script src='{$location}js/navbar.js'></script>";
+
 function showAdminNav(){
     global $location;
 

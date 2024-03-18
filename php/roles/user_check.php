@@ -9,5 +9,6 @@ if (isset($_SESSION['user_id'])){
 }else{
     // Redirect back to login if nobody is logged in
     header("Location:$loginLocation");
+    exit();
 }
 ?>

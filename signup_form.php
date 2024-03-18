@@ -1,8 +1,16 @@
 <?php
 session_start();
+ob_start();
+
 $location = '';
 $pageTitle ='Signup Form';
 
+// If user is logged in, Log user out if idle time or logged in time is past max
+if (isset($_SESSION['user_id'])){
+    $uID = $_SESSION['user_id'];
+
+    include 'php/roles/timeout_check.php';
+}
 // Logout and return to login.php if ?logout=true
 include 'php/roles/logout_check.php';
 // Redirect users to user dashboard

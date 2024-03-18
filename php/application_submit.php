@@ -1,5 +1,7 @@
 <?php
 session_start();
+ob_start();
+
 $location = '../';
 $pageTitle = 'Application Submit';
 
@@ -8,6 +10,8 @@ global $cnxn;
 global $use_local;
 global $viewingID;
 
+// Log user out if idle time or logged in time is past max
+include '../php/roles/timeout_check.php';
 // Logout and return to login.php if ?logout=true
 include '../php/roles/logout_check.php';
 // Ensure a user is logged in
