@@ -191,30 +191,13 @@ function validateRoles() {
 }
 
 // event listeners
-if (firstName){
-    firstName.addEventListener("focusout", (Event) => {
-        validateName();
-    });
-}
+
 password.addEventListener("input", (Event) => {
-    const re = /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z\d!@#$%&*_\-.]$/;
     const numberExp = /\d/;
     let hasNumber = numberExp.test(password.value);
 
-if (lastName){
-    lastName.addEventListener("focusout", (Event) => {
-        validateName();
-    });
-}
     let isLength = password.value.length >= 8 && password.value.length <= 16;
     let areMatching = (password.value === passwordConfirm.value) && (password.value.length > 0);
-
-
-if (email){
-    email.addEventListener("focusout", (Event) => {
-        validateEmail();
-    });
-}
 
     console.log('here');
     if(hasNumber === true) {
@@ -248,11 +231,6 @@ if (email){
     }
 
 });
-if (cohortNumber){
-    cohortNumber.addEventListener("focusout", (Event) => {
-        validateCohortNum();
-    });
-}
 
 passwordConfirm.addEventListener("input", (Event) => {
     let areMatching = (password.value === passwordConfirm.value) && (password.value.length > 0);
