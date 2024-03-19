@@ -204,7 +204,7 @@ while ($row = mysqli_fetch_assoc($appReminders)) {
                 </div>
                 <div class="d-flex pt-2" id="new-app-container">
                     <div class="new-app-btn m-auto">
-                        <i class='fa-solid fa-pen pe-2'></i><a href='application_form.php'>New Application</a>
+                       <a href='application_form.php'><i class='fa-solid fa-pen pe-2'></i>New Application</a>
                     </div>
                 </div>
 

@@ -43,7 +43,7 @@ echo "<main>
         <div class='empty-form-msg pt-5 d-flex flex-column justify-content-center'>
             <h4 class='align-self-center'>You have been logged out due to inactivity. You will be redirected to the login screen shortly.</h4>
             <button class='btn-log-in-out m-auto pb-1' type='button'>
-               <i class='fa-solid fa-arrow-right-from-bracket pe-1'></i><a href='$loginLocation'>Login</a>
+               <a href='$loginLocation'><i class='fa-solid fa-arrow-right-from-bracket pe-1'></i>Login</a>
            </button>
         </div>
     </div>
