@@ -83,8 +83,8 @@ function showAnonNav(){
     global $location;
 
     echo "
-          <li><a href='$location signup_form.php' class='nav-link'>Sign-up</a></li>
-          <li><a href='$location contact_form.php' class='nav-link'>Contact</a></li>";
+          <li><a href='{$location}signup_form.php' class='nav-link'>Sign-up</a></li>
+          <li><a href='{$location}contact_form.php' class='nav-link'>Contact</a></li>";
 }
 
 function showWelcome(){
@@ -100,6 +100,7 @@ function showWelcome(){
     $welcomeMsg = $loggedIn ? 'Welcome, ' . $firstName . '!' : 'User';
 
     $userEditLoc = $location . 'user_edit.php';
+    $loginLoc = $location . 'login.php';
 
     $loggedInDropdownItems = "<form method='post' action='$userEditLoc'>  
                                   <input type='hidden' name='user_id' value=$uID>
@@ -115,7 +116,7 @@ function showWelcome(){
                                    <i class='fa-solid fa-gear pe-1'></i>Account
                                </button>
                                <button class='btn-log-in-out m-auto pb-1' type='button'>
-                                   <i class='fa-solid fa-arrow-right-from-bracket pe-1'></i><a href='$location login.php'>Login</a>
+                                   <i class='fa-solid fa-arrow-right-from-bracket pe-1'></i><a href='$loginLoc'>Login</a>
                                </button>";
     $dropdownItems = $loggedIn ? $loggedInDropdownItems : $loggedOutDropdownItems;
 
@@ -165,12 +166,4 @@ function showWelcome(){
         </div>
     ";
 }
-
-function showLoginButton(){
-    global $location;
-    echo "
-        <button class='btn-log-in-out m-auto pb-1' type='button'><a href='$location login.php'>Login</a></button>      
-    ";
-}
-
 ?>

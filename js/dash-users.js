@@ -209,7 +209,6 @@ function createUserFromData(userData) {
     if (userData.is_deleted === '0'){
         const isSelfOrDeleted = (results.userID == userData.user_id) || (userData.is_deleted === '1');
         const adminTooltip = isUserAdmin ? "Remove Admin Permission" : "Give Admin Permission";
-        console.log(adminTooltip);
         // Create an edit button and add an onclick listener to Open User Modal when edit button is clicked
         const makeAdminBtn = $(`<button class="app-button-inner btn btn-make-admin" data-bs-toggle="tooltip" title='${adminTooltip}'>${isUserAdmin ? 'Remove' : 'Make'} Admin</button>`);
         if (isSelfOrDeleted){
@@ -372,7 +371,7 @@ function showUserModal(userData, isUserAdmin) {
     $('#user-edit-modal-roles').text(userData.roles);
 
     // Fill in hidden ID
-    $('#edit-modal-user-id').val(userData.user_id);
+    $('#edit-modal-user-id').val(userData.id);
 
     // Fill in deleted or not value
     if (userData.is_deleted == 0) {
@@ -392,18 +391,12 @@ function showUserModal(userData, isUserAdmin) {
 
     $('#user-edit-modal-admin').on('click', () => {
         if (isUserAdmin) {
-            askToRemoveAdmin(userData.user_id, userData.fname, userData.lname);
+            askToRemoveAdmin(userData.id, userData.fname, userData.lname);
         } else {
-            askToMakeUserAdmin(userData.user_id, userData.fname, userData.lname);
+            askToMakeUserAdmin(userData.id, userData.fname, userData.lname);
         }
     })
 
-    // Self check, cannot remove admin from self
-    if (userID == userData.user_id){
-        $('#user-edit-modal-admin').attr('disabled', true);
-    } else {
-        $('#user-edit-modal-admin').attr('disabled', false);
-    }
 }
 
 // Open delete user modal and set the value for user id to delete

@@ -62,14 +62,6 @@ function setAppSearchListeners(){
         });
     }
 
-    const appStatusSelect = $('#app-status-select')
-    if (appStatusSelect){
-        appStatusSelect.on('change', (e) => {
-            targetStatus = e.target.value;
-            emptySortAndPopulateAppList(false);
-        });
-    }
-
     const appStartDate = $('#app-start-date');
     if (appStartDate){
         appStartDate.on('change', (e) => {
@@ -84,6 +76,17 @@ function setAppSearchListeners(){
             endDate = e.target.value;
             emptySortAndPopulateAppList(false);
         });
+    }
+
+    // Only show status for users
+    if (!isAdmin()){
+        const appStatusSelect = $('#app-status-select')
+        if (appStatusSelect){
+            appStatusSelect.on('change', (e) => {
+                targetStatus = e.target.value;
+                emptySortAndPopulateAppList(false);
+            });
+        }
     }
 }
 
@@ -195,10 +198,11 @@ function populateAppList(){
             '    <td></td>\n' +
             '</tr>';
     }
-
+    console.log(sortedApps);
     // Add Item that says "No Result" the app-list if there are no apps to show
     if (sortedApps.length === 0){
         appListDiv.append(noResults);
+        $('#more-apps').hide();
     }else{
         // Show the more button if there are still apps to show
         $('#more-apps').show();
@@ -298,7 +302,7 @@ function createAppFromData(appData){
                             <td class="table-date">${appDate}</td>
                             <td class="table-title">${appData.jname}</td>
                             <td class="table-employer">${appData.ename}</td>
-                            <td class="table-link"><a href="${appData.jurl}" target="_blank" rel="noopener noreferrer">Apply Link</a></td>
+                            <td class="table-link"><a href="${appData.jurl}" target="_blank" rel="noopener noreferrer">Apply Here</a></td>
                         </tr>`);
     }else{
         // Create a list item with the application data filled in for a USER

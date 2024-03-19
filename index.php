@@ -198,7 +198,7 @@ while ($row = mysqli_fetch_assoc($appReminders)) {
                     </tbody>
                 </table>
                 <div class="col text-center pt-2 pb-2 hidden" id="more-apps">
-                    <button type="button" class="submit-btn"  onclick="loadMoreApps()">More</button>
+                    <button type="button" class="more-apps-btn"  onclick="loadMoreApps()">Load More</button>
                 </div>
                 <div class="col d-flex justify-content-center pt-2" id="new-app-container">
                     <a class="submit-btn" href="application_form.php">New Application</a>
@@ -288,7 +288,7 @@ while ($row = mysqli_fetch_assoc($appReminders)) {
                         </li>
                         <li class='list-group-item pb-1'>
                             <span class='form-label'>URL:</span>
-                            <a id="edit-modal-url" href="" target="_blank" rel="noopener noreferrer">Apply Now!</a>
+                            <a id="edit-modal-url" href="" target="_blank" rel="noopener noreferrer">Application Link</a>
                         </li>
                         <li class='list-group-item'>
                             <span class='form-label'>Job Description: </span>

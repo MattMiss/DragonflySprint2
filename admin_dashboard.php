@@ -145,30 +145,16 @@ while ($row = mysqli_fetch_assoc($announceResult)){
             <div class="app-list-admin">
                 <h3>Recent Applications</h3>
                 <div class="row">
-                    <div class="col-md-4 col-sm-6 pt-2">
+                    <div class="col-sm-6 pt-2">
                         <div class="input-group input-group-sm">
                             <span class="input-group-text">Start Date</span>
                             <input type="date" class="form-control date-input" id="app-start-date" name="search-start-date">
                         </div>
                     </div>
-                    <div class="col-md-4 col-sm-6 pt-2">
+                    <div class="col-sm-6 pt-2">
                         <div class="input-group input-group-sm">
                             <span class="input-group-text">End Date</span>
                             <input type="date" class="form-control date-input" id="app-end-date" name="search-end-date">
-                        </div>
-                    </div>
-                    <div class="col-md-4 text-end pt-2">
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-text">Status</span>
-                            <select class="form-select status-select" id="app-status-select">
-                                <option selected value="any">Any</option>
-                                <option value="accepted">Accepted</option>
-                                <option value="applied">Applied</option>
-                                <option value="inactive">Inactive</option>
-                                <option value="interviewing">Interviewing</option>
-                                <option value="need-to-apply">Need-to-apply</option>
-                                <option value="rejected">Rejected</option>
-                            </select>
                         </div>
                     </div>
                 </div>
@@ -241,7 +227,7 @@ while ($row = mysqli_fetch_assoc($announceResult)){
                     </tbody>
                 </table>
                 <div class="col text-center pt-2 pb-2" id="more-apps">
-                    <button type="button" class="submit-btn"  onclick="loadMoreApps()">More</button>
+                    <button type="button" class="more-apps-btn"  onclick="loadMoreApps()">Load More</button>
                 </div>
             </div>
         </div>
@@ -511,7 +497,7 @@ while ($row = mysqli_fetch_assoc($announceResult)){
                                 </li>
                             <li class='list-group-item pb-1'>
                                 <span class='form-label'>URL:</span>
-                                <a id="edit-modal-url" href="" target="_blank" rel="noopener noreferrer">Apply Here</a>
+                                <a id="edit-modal-url" href="" target="_blank" rel="noopener noreferrer">Application Link</a>
                                 </li>
                             <li class='list-group-item'>
                                 <span class='form-label'>Job Description: </span>
