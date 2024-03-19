@@ -92,7 +92,7 @@ echo "<main>
                     <a href='signup_form.php'>Sign Up!</a>
                 </div>
                 <button type='submit' class='btn-log-in-out m-auto py-2 my-3'>
-                    <i class='fa-solid fa-arrow-right-from-bracket pe-1'></i><a href=''>Login</a>
+                    <i class='fa-solid fa-arrow-right-from-bracket pe-1'></i>Login
                 </button>
             </form>
         </div>

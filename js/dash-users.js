@@ -186,7 +186,6 @@ function sortUsersByFilters(){
 function createUserFromData(userData) {
     const deletedUser = userData.is_deleted === "1";
     const itemClass = "user-list-item" + (deletedUser ? " deleted-user" : "");
-    const deletedIcon = deletedUser ? '<i class="fa-solid fa-user-slash deleted-user-icon"></i>' : "";
 
     const role = userData.permission === '0' ? 'User' : 'Admin';
 
@@ -194,7 +193,7 @@ function createUserFromData(userData) {
     const user =
         $(`<tr class="user-list-item ${itemClass}" id="user-${userData.user_id}">\n` +
             `<td class="table-role">${role}</td>\n` +
-            `<td class="table-name">${deletedIcon}${userData.fname} ${userData.lname}</td>\n` +
+            `<td class="table-name">${userData.fname} ${userData.lname}</td>\n` +
             `<td class="table-email">${userData.email}</td>\n` +
             `<td class="table-status">${userData.status}</td>\n` +
             `</td>\n` +

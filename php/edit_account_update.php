@@ -133,6 +133,7 @@ if(! empty($_POST)) {
     // password
     if ($isNewPass){
         if((strlen($password) < $MIN_PASSWORD || strlen($password) > $MAX_PASSWORD)) {
+            echo "hiuwefh";
             echoError();
             return;
         }

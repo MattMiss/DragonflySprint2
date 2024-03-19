@@ -18,7 +18,7 @@ let validatePass = true;
 function validateForm() {
     let isNameValid = validateName();
     let isEmailValid = validateEmail();
-    let isPasswordValid = /* (validatePass === false) || */ validatePassword();
+    let isPasswordValid =  validatePassword();
     let isCohortNumValid = validateCohortNum();
     let isStatusValid = validateStatus();
     let isRolesValid = validateRoles();
@@ -110,7 +110,8 @@ function validatePassword() {
         passwordConfirm.classList.remove('form-input-error');
     }
 
-    return isValid;
+    // Return isValid if pass is a new pass. return true if no new pass is entered
+    return validatePass ? isValid : true;
 }
 
 // validates cohort number

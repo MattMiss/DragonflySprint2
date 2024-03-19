@@ -4,7 +4,7 @@ $(window).on('load', () => {
     validatePass = false;
    $('#user-edit-pass-select').on('change', (e) => {
        if (e.target.value === 'new'){
-            newPassDiv.removeClass('hidden');
+           newPassDiv.removeClass('hidden');
            passReqsDiv.removeClass('hidden');
            validatePass = true;
        }else if(e.target.value === 'same'){
