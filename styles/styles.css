@@ -623,7 +623,7 @@ table td {
 .app-list-item .btn-update:hover, .user-list-item .btn-update:hover, .admin-announcement .btn-update:hover, .modal-undo-delete:hover {
     background-color: #006225;
 }
-.btn-delete{
+.btn-delete, .btn-reset{
     width: 36px;
     height: 36px;
 }
@@ -638,6 +638,13 @@ table td {
     background-color: #b42c2c;
 }
 
+.btn-reset{
+    background-color: #bd9b56;
+}
+
+.btn-reset:hover{
+    background-color: #8a6d33;
+}
 
 /*********************** delete modal **************************/ /*********************** delete modal **************************/
 /*********************** delete modal **************************/ /*********************** delete modal **************************/

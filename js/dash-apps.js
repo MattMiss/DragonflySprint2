@@ -312,13 +312,13 @@ function createAppFromData(appData){
                             </td>
                         </tr>`);
         // Create an edit button and add an onclick listener to Open App Modal when edit button is clicked
-        const editBtn = $(`<button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>`);
+        const editBtn = $(`<button class="app-button-inner btn btn-sm btn-update" data-bs-toggle="tooltip" title="Edit Application"><i class="fa-solid fa-pen"></i></button>`);
         editBtn.on('click', () => {
             showAppModal(appData, statusReplace, clickableUrl);
         })
 
         // Create a delete button and add an onclick listener to ask to Delete App when delete button is clicked
-        const deleteBtn = $(`<button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i>`);
+        const deleteBtn = $(`<button class="app-button-inner btn btn-sm btn-delete" data-bs-toggle="tooltip" title="Delete Application"><i class="fa-solid fa-trash"></i>`);
         deleteBtn.on('click', () => {
             askToDeleteApplication(appData.application_id, appData.ename);
         })

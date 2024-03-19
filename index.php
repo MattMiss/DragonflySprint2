@@ -375,7 +375,8 @@ while ($row = mysqli_fetch_assoc($appReminders)) {
         appWasDeleted : <?php echo json_encode($appWasDeleted) ?>,
         userWasDeleted : false,
         userWasUnDeleted : false,
-        announceWasDeleted : false
+        announceWasDeleted : false,
+        passwordWasReset : false
     }
 </script>
 <script src="js/main.js"></script>

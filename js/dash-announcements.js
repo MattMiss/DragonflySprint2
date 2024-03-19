@@ -182,7 +182,7 @@ function createAnnounceFromData(announceData){
             `</tr>`);
 
     // Create a delete button and add an onclick listener to ask to Delete App when delete button is clicked
-    const deleteBtn = $(`<button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i>`);
+    const deleteBtn = $(`<button class="app-button-inner btn btn-sm btn-delete" data-bs-toggle="tooltip" title="Delete Announcement"><i class="fa-solid fa-trash"></i>`);
     deleteBtn.on('click', () => {
         askToDeleteAnnouncement(announceData);
     })

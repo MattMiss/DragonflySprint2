@@ -27,6 +27,10 @@ $appWasDeleted = false;
 $userWasDeleted = false;
 $userWasUnDeleted = false;
 $announceWasDeleted = false;
+$passwordWasReset = false;
+
+$defaultUserPass = "pass1234";
+$defaultAdminPass = "admin1234";
 
 // soft deletes a database entry
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -37,12 +41,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $appWasDeleted = true;
         $deleteAppResult = @mysqli_query($cnxn, $sqlDeleteApp);
     } elseif ($_POST["submit-from"] == 2) {
-        $id = $_POST["id"];
-        $operation = $_POST["operation"] === '1' ? 1 : 0;   // 1 for delete, 0 for undo-delete
         // Ensure a user is logged in
         include 'php/roles/user_check.php';
         // Ensure an admin is logged in
         include 'php/roles/admin_check.php';
+
+        $id = $_POST["id"];
+        $operation = $_POST["operation"] === '1' ? 1 : 0;   // 1 for delete, 0 for undo-delete
 
         $sqlDeleteUser = "UPDATE users SET is_deleted = $operation WHERE user_id = $id";
 
@@ -50,28 +55,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $userWasUnDeleted = $operation === 0;
         $deleteUserResult = @mysqli_query($cnxn, $sqlDeleteUser);
     }else if($_POST["submit-from"] == 3) {
-        $id = $_POST["id"];
-        $perm = $_POST["perm"];
-
         // Ensure a user is logged in
         include 'php/roles/user_check.php';
         // Ensure an admin is logged in
         include 'php/roles/admin_check.php';
+
+        $id = $_POST["id"];
+        $perm = $_POST["perm"];
 
         $sqlMakeUserAdmin = "UPDATE users SET permission = $perm WHERE user_id = $id";
         $makeAdminResult = @mysqli_query($cnxn, $sqlMakeUserAdmin);
 
     }else if($_POST["submit-from"] == 4) {
-        $announceID = $_POST["announcement-id"];
-
         // Ensure a user is logged in
         include 'php/roles/user_check.php';
         // Ensure an admin is logged in
         include 'php/roles/admin_check.php';
 
+        $announceID = $_POST["announcement-id"];
+
         $sqlDeleteAnnouncement = "UPDATE announcements SET is_deleted = 1 WHERE announcement_id = $announceID";
         $deletedAnnouncementResult = @mysqli_query($cnxn, $sqlDeleteAnnouncement);
         $announceWasDeleted = true;
+    }else if($_POST["submit-from"] == 5) {
+        // Ensure a user is logged in
+        include 'php/roles/user_check.php';
+        // Ensure an admin is logged in
+        include 'php/roles/admin_check.php';
+
+        $id = $_POST["id"];
+        $perm = $_POST["perm"];
+
+        if ($perm === '1'){
+            $hashDefaultPass = password_hash($defaultAdminPass, PASSWORD_DEFAULT);
+        }else{
+            $hashDefaultPass = password_hash($defaultUserPass, PASSWORD_DEFAULT);
+        }
+
+        $sqlResetUserPass = "UPDATE users SET password = '$hashDefaultPass' WHERE user_id = $id";
+        $resetUserPassResults = @mysqli_query($cnxn, $sqlResetUserPass);
+        $passwordWasReset = true;
     }
 }
 
@@ -711,7 +734,28 @@ while ($row = mysqli_fetch_assoc($announceResult)){
                 </div>
             </div>
         </div>
-
+        <!-- User Delete Modal -->
+        <div class='modal fade' id='reset-password-modal' tabindex='-1' role='dialog' aria-labelledby='reset-password-message' aria-hidden='true'>
+            <div class='modal-dialog modal-dialog-centered' role='document'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        <h4 class='modal-title' id='delete-warning'>Reset User Password?</h4>
+                    </div>
+                    <div class='modal-body'>
+                        <p>Are you sure you want to reset the password for <span id="user-reset-pass-name"></span> to the default password?</p>
+                    </div>
+                    <div class='modal-footer'>
+                        <form method='POST' action='#'>
+                            <input type='hidden' value='5' name='submit-from'>
+                            <input type='hidden' id="user-reset-pass-id" value='' name='id'>
+                            <input type='hidden' id="user-reset-pass-perm" value='' name='perm'>
+                            <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Cancel</button>
+                            <button type='submit' class='modal-delete'>Reset</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 </main>
 
 <?php include 'php/footer.php' ?>
@@ -727,7 +771,8 @@ while ($row = mysqli_fetch_assoc($announceResult)){
         appWasDeleted : <?php echo json_encode($appWasDeleted) ?>,
         userWasDeleted : <?php echo json_encode($userWasDeleted) ?>,
         userWasUnDeleted : <?php echo json_encode($userWasUnDeleted) ?>,
-        announceWasDeleted : <?php echo json_encode($announceWasDeleted) ?>
+        announceWasDeleted : <?php echo json_encode($announceWasDeleted) ?>,
+        passwordWasReset: <?php echo json_encode($passwordWasReset) ?>
     }
 </script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
