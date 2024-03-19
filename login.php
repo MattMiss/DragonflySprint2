@@ -74,22 +74,26 @@ echo "<main>
             <h3 class='form-header'>Login</h3>
             <div class='form-container'>
                 <div class='form-body'>
-            <form id='login-form' class='p-5' method='POST' action='#'>
+            <form id='login-form' class='p-3 p-md-4 p-lg-5' method='POST' action='#'>
                 <p style='color: red'>{$failedMsg}</p>
                 <div class='mb-4'>
                     <label for='input-email' class='form-label'>Email*</label>
-                    <input type='email' class='form-control' id='input-email' name='email' placeholder='e.g. example@email.com' required>
+                    <input type='email' class='form-control' id='input-email' name='email' 
+                    autocomplete='username' placeholder='e.g. example@email.com' required>
                 </div>
                 
                 <div class='mb-4'>
                     <label for='input-password' class='form-label'>Password*</label>
-                    <input type='password' class='form-control' id='input-password' name='password' minlength='8' maxlength='16' required>
+                    <input type='password' class='form-control' id='input-password' name='password' 
+                    autocomplete='current-password' minlength='8' maxlength='16' required>
                 </div>
                 <div class='d-flex justify-content-end gap-2'>
                     <span>Don't have an account? </span>
                     <a href='signup_form.php'>Sign Up!</a>
                 </div>
-                <button type='submit' class='submit-btn pt-1'>Login</button>
+                <button type='submit' class='btn-log-in-out m-auto py-2 my-3'>
+                    <i class='fa-solid fa-arrow-right-from-bracket pe-1'></i><a href=''>Login</a>
+                </button>
             </form>
         </div>
     </main>";

@@ -279,6 +279,9 @@ nav .nav-link:hover {
     padding: 4px 8px;
     width: 80px;
 }
+.btn-log-in-out i{
+    color: var(--submit-text-color) !important;
+}
 
 .btn-log-in-out:disabled{
     background-color: var(--disabled-btn-bg-color) !important;
@@ -623,7 +626,7 @@ table td {
 .app-list-item .btn-update:hover, .user-list-item .btn-update:hover, .admin-announcement .btn-update:hover, .modal-undo-delete:hover {
     background-color: #006225;
 }
-.btn-delete{
+.btn-delete, .btn-reset{
     width: 36px;
     height: 36px;
 }
@@ -638,6 +641,30 @@ table td {
     background-color: #b42c2c;
 }
 
+.btn-reset{
+    background-color: #bd9b56;
+}
+
+.btn-reset:hover{
+    background-color: #8a6d33;
+}
+
+.more-apps-btn {
+    background-color: #0b65c4;
+    border: 1px solid #0b65c4;
+    border-radius: 2px;
+    color: white;
+    font-weight: 600;
+    padding: 7px 10px 7px 10px;
+}
+
+.more-apps-btn:hover {
+    background-color: #033a94;
+    border: 1px solid  #033a94;
+    border-radius: 2px;
+    padding: 7px 10px 7px 10px;
+    transition: .75s;
+}
 
 /*********************** delete modal **************************/ /*********************** delete modal **************************/
 /*********************** delete modal **************************/ /*********************** delete modal **************************/
@@ -956,6 +983,10 @@ a {
     width: 200px;
 }
 
+#user-edit-modal-roles{
+    word-break: break-all;
+}
+
 
 /* announcements table*/
 .job-url {
@@ -1153,10 +1184,6 @@ a {
     cursor: pointer;
 }
 
-#more-apps-btn{
-    width: 100%;
-    height: 50px;
-}
 
 .hidden{
     display: none;
@@ -1221,21 +1248,6 @@ a {
         width: 80%;
         margin: auto auto 25px;
     }
-    #new-app-container, #update-account-container {
-        width: 50%;
-    }
-    /*.app-button-inner {*/
-    /*    padding-left: 2px;*/
-    /*    padding-right: 2px;*/
-    /*}*/
-
-    /* nav mobile 993px */
-
-    /*nav {*/
-    /*    a, .dropdown-item {*/
-    /*        font-size: 1.7rem !important;*/
-    /*    }*/
-    /*}*/
 
     #dark-mode-list-item > div {
         padding-top: 0;
@@ -1337,7 +1349,6 @@ a {
     .app-job-col, .app-user-col, .app-email-col{
         width: 15%;
     }
-
 
     .user-name-col, .user-email-col, .user-status-col, .announce-url-col{
         width: 33%;

@@ -30,6 +30,8 @@ $(window).on('load', () => {
         showToast("User was deleted!", 2000, '#e54a4a');
     }else if (results.userWasUnDeleted) {
         showToast("User was brought back!", 2000, '#6CB443');
+    }else if (results.passwordWasReset) {
+        showToast("Password was reset!", 2000, '#6CB443');
     }
 });
 
@@ -203,37 +205,58 @@ function createUserFromData(userData) {
     // Show edit and delete btn div is viewRole is a USER and nothing is viewRole is ADMIN
     const btnDiv = $('<td class="app-button-outer table-btns"></td>');
 
-    // Create an edit button and add an onclick listener to Open User Modal when edit button is clicked
-    const makeAdminBtn = $(`<button class="app-button-inner btn btn-make-admin">${isUserAdmin ? 'Remove' : 'Make'} Admin</button>`);
-    if (results.userID == userData.user_id || userData.is_deleted === '1'){
-        makeAdminBtn.attr('disabled', true);
-    }
-    makeAdminBtn.on('click', () => {
-        if (isUserAdmin){
-            askToRemoveAdmin(userData.user_id, userData.fname, userData.lname);
-        }else{
-            askToMakeUserAdmin(userData.user_id, userData.fname, userData.lname);
-        }
-    })
 
     if (userData.is_deleted === '0'){
+        const isSelfOrDeleted = (results.userID == userData.user_id) || (userData.is_deleted === '1');
+        const adminTooltip = isUserAdmin ? "Remove Admin Permission" : "Give Admin Permission";
         // Create an edit button and add an onclick listener to Open User Modal when edit button is clicked
-        const editBtn = $(`<button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>`);
-        editBtn.on('click', () => {
-            showUserModal(userData, isUserAdmin);
-        })
+        const makeAdminBtn = $(`<button class="app-button-inner btn btn-make-admin" data-bs-toggle="tooltip" title='${adminTooltip}'>${isUserAdmin ? 'Remove' : 'Make'} Admin</button>`);
+        if (isSelfOrDeleted){
+            makeAdminBtn.attr('disabled', true);
+        }else{
+            makeAdminBtn.on('click', () => {
+                if (isUserAdmin){
+                    askToRemoveAdmin(userData.user_id, userData.fname, userData.lname);
+                }else{
+                    askToMakeUserAdmin(userData.user_id, userData.fname, userData.lname);
+                }
+            })
+        }
+        // Create a reset user pass button and add an onclick listener to open user modal when the reset button is clicked
+        const resetPassBtn = $(`<button class="app-button-inner btn btn-sm btn-reset" data-bs-toggle="tooltip" title="Reset Password"><i class="fa-solid fa-key"></i></button>`);
+        if (isSelfOrDeleted){
+            resetPassBtn.attr('disabled', true);
+        }else{
+            resetPassBtn.on('click', () => {
+                showResetPassModal(userData.user_id, userData.fname, userData.lname, userData.permission);
+            })
+        }
+        // Create an edit button and add an onclick listener to Open User Modal when edit button is clicked
+        const editBtn = $(`<button class="app-button-inner btn btn-sm btn-update" data-bs-toggle="tooltip" title="Edit User"><i class="fa-solid fa-pen"></i></button>`);
+        if (isSelfOrDeleted) {
+            editBtn.attr('disabled', true);
+        }else{
+            editBtn.on('click', () => {
+                showUserModal(userData, isUserAdmin);
+            })
+        }
         // Create a delete button and add an onclick listener to ask to Delete App when delete button is clicked
-        const deleteBtn = $(`<button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i>`);
-        deleteBtn.on('click', () => {
-            askToDeleteUser(userData.user_id, userData.fname, userData.lname);
-        })
+        const deleteBtn = $(`<button class="app-button-inner btn btn-sm btn-delete" data-bs-toggle="tooltip" title="Delete User"><i class="fa-solid fa-trash"></i>`);
+        if (isSelfOrDeleted) {
+            deleteBtn.attr('disabled', true);
+        }else{
+            deleteBtn.on('click', () => {
+                askToDeleteUser(userData.user_id, userData.fname, userData.lname);
+            })
+        }
         btnDiv.append(makeAdminBtn);
+        btnDiv.append(resetPassBtn);
         btnDiv.append(editBtn);
         btnDiv.append(deleteBtn);
     }else{
         // User is deleted
         // Create a delete button and add an onclick listener to ask to Delete App when delete button is clicked
-        const unDeleteBtn = $(`<button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-reply"></i>`);
+        const unDeleteBtn = $(`<button class="app-button-inner btn btn-sm btn-update" data-bs-toggle="tooltip" title="Undo Delete User"><i class="fa-solid fa-reply"></i>`);
         unDeleteBtn.on('click', () => {
             askToUndoDeleteUser(userData.user_id, userData.fname, userData.lname);
         })
@@ -348,7 +371,7 @@ function showUserModal(userData, isUserAdmin) {
     $('#user-edit-modal-roles').text(userData.roles);
 
     // Fill in hidden ID
-    $('#edit-modal-user-id').val(userData.user_id);
+    $('#edit-modal-user-id').val(userData.id);
 
     // Fill in deleted or not value
     if (userData.is_deleted == 0) {
@@ -368,18 +391,12 @@ function showUserModal(userData, isUserAdmin) {
 
     $('#user-edit-modal-admin').on('click', () => {
         if (isUserAdmin) {
-            askToRemoveAdmin(userData.user_id, userData.fname, userData.lname);
+            askToRemoveAdmin(userData.id, userData.fname, userData.lname);
         } else {
-            askToMakeUserAdmin(userData.user_id, userData.fname, userData.lname);
+            askToMakeUserAdmin(userData.id, userData.fname, userData.lname);
         }
     })
 
-    // Self check, cannot remove admin from self
-    if (userID == userData.user_id){
-        $('#user-edit-modal-admin').attr('disabled', true);
-    } else {
-        $('#user-edit-modal-admin').attr('disabled', false);
-    }
 }
 
 // Open delete user modal and set the value for user id to delete
@@ -435,6 +452,19 @@ function askToRemoveAdmin(userID, userFName, userLName){
     // THis will be sent to POST as the userID to delete
     $('#toggle-admin-user-id').val(userID);
     $('#toggle-admin-user-perm').val(0);
+}
+
+// Open make reset user pass modal and fill the user id in
+function showResetPassModal(userID, userFName, userLName, permission){
+    // Open the reset pass modal
+    $('#reset-password-modal').modal('show');
+
+    // Set the value of the hidden input for delete-user-id
+    // THis will be sent to POST as the userID to delete
+    $('#user-reset-pass-id').val(userID);
+    $('#user-reset-pass-perm').val(permission);
+    $('#user-reset-pass-name').text(`${userFName} ${userLName}`)
+
 }
 
 // Toggle the eye and eye-slash icon on and off
