@@ -77,7 +77,8 @@ include 'php/nav_bar.php' ?>
                     <div class="mb-3">
                         <label for="input-email" class="form-label">Email*</label>
                         <input type="email" class="form-control" id="input-email" name="email"
-                               placeholder="e.g. example@email.com" maxlength="60" required
+                               autocomplete="username" placeholder="e.g. example@email.com"
+                               maxlength="60" required
                                value="<?php echo $email?>">
                         <small id="email-note">Note: an @greenriver.edu email is preferred</small>
                         <small id="email-error" class="warning">Please enter a valid email</small>
@@ -94,12 +95,12 @@ include 'php/nav_bar.php' ?>
                     <div class="row mb-3 hidden" id="user-edit-new-pass">
                         <div class="col">
                             <label for="input-password" class="form-label">New Password*</label>
-                            <input type="password" class="form-control" id="input-password" name="password" minlength="8" maxlength="16" value="">
+                            <input type="password" class="form-control" id="input-password" autocomplete="new-password" name="password" minlength="8" maxlength="16" value="">
                         </div>
 
                         <div class="col">
                             <label for="input-password-confirm" class="form-label">Re-enter New Password*</label>
-                            <input type="password" class="form-control" id="input-password-confirm" name="password-confirm" minlength="8" maxlength="16" value="">
+                            <input type="password" class="form-control" id="input-password-confirm" autocomplete="new-password" name="password-confirm" minlength="8" maxlength="16" value="">
                         </div>
                         <small id="password-error" class="warning">Please enter a valid password, refer to the requirements below</small>
                     </div>

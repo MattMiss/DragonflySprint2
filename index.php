@@ -198,11 +198,16 @@ while ($row = mysqli_fetch_assoc($appReminders)) {
                     </tbody>
                 </table>
                 <div class="col text-center pt-2 pb-2 hidden" id="more-apps">
-                    <button type="button" class="more-apps-btn"  onclick="loadMoreApps()">Load More</button>
+                    <button type='button' class='more-apps-btn m-auto py-2 my-3' onclick='loadMoreApps()'>
+                        <i class='fa-solid fa-plus pe-2'></i><a>Load More</a>
+                    </button>
                 </div>
-                <div class="col d-flex justify-content-center pt-2" id="new-app-container">
-                    <a class="submit-btn" href="application_form.php">New Application</a>
+                <div class="d-flex pt-2" id="new-app-container">
+                    <div class="new-app-btn m-auto">
+                        <i class='fa-solid fa-pen pe-2'></i><a href='application_form.php'>New Application</a>
+                    </div>
                 </div>
+
             </div>
 
             <div class="reminders col ">

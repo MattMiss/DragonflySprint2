@@ -100,8 +100,8 @@ if(! empty($_POST)) {
                         <li class='list-group-item'>
                             <span class='form-label'>Employer Name:</span> $ename
                         </li>
-                        <li class='list-group-item'>
-                            <span class='form-label'>Job Url:</span> $jurl
+                        <li class='list-group-item url'>
+                            <span class='form-label'>Job Url:</span> <a href='$jurl'>Apply Link</a>
                         </li>
                         <li class='list-group-item'>
                             <span class='form-label'>Job Description:</span> $jdescription
