@@ -27,16 +27,20 @@ include '../header.php';
 include '../php/nav_bar.php';
 ?>
 <main>
-    <div class="container p-3" id="main-container">
+    <div class="container p-3 text-center" id="main-container">
 <?php
 
 function echoError() {
     echo "
-            <div class='form-error'>
+            <div class='form-error pt-5'>
                 <h3>Sign-up failed, please try again.</h3>
                 <a class='link' href='../signup_form.php'>Go to sign-up form</a>
             </div>
+            </div>
+            </main>
          ";
+
+    include '../php/footer.php';
 }
 
 if(! empty($_POST)) {
@@ -93,27 +97,23 @@ if(! empty($_POST)) {
     // names
     if (! (strlen($fname) >= $MIN_NAME && strlen($fname) <= $MAX_NAME) || ! (strlen($lname) >= $MIN_NAME && strlen($lname) <= $MAX_NAME)) {
         echoError();
-        echo "<script>console.log('Error Names');</script>";
         return;
     }
 
     // cohort number
     if(! ($cohortNum >= $MIN_COHORT_NUM && $cohortNum <= $MAX_COHORT_NUM)) {
-        echo "<script>console.log('Error Cohort');</script>";
         echoError();
         return;
     }
 
     // roles
     if(! (strlen($roles) >= $MIN_ROLES && strlen($roles) <= $MAX_ROLES)) {
-        echo "<script>console.log('Error Roles');</script>";
         echoError();
         return;
     }
 
     // email
     if(! preg_match("/[^\s@]+@[^\s@]+\.[^\s@]+/", $email) ) {
-        echo "<script>console.log('Error Email');</script>";
         echoError();
         return;
     }
@@ -123,26 +123,22 @@ if(! empty($_POST)) {
     $resultCheckEmail = @mysqli_query($cnxn, $checkEmail);
 
     if(mysqli_num_rows($resultCheckEmail) !== 0) {
-        echo "<script>console.log('Error Email Already Exists');</script>";
         echoError();
         return;
     }
 
     // password
     if(strlen($plainPassword) < $MIN_PASSWORD || strlen($plainPassword) > $MAX_PASSWORD) {
-        echo "<script>console.log('Error Password Length');</script>";
         echoError();
         return;
     }
 
     if($plainPassword !== $passwordConfirm) {
-        echo "<script>console.log('Error Password Confirm');</script>";
         echoError();
         return;
     }
 
     if(! preg_match("/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z\d!@#$%&*_\-.]{8,16}$/", $plainPassword)) {
-        echo "<script>console.log('Error Password Regex');</script>";
         echoError();
         return;
     }
@@ -150,7 +146,6 @@ if(! empty($_POST)) {
     //  status
 
     if(! in_array($status, $RADIO_VALUES)) {
-        echo "<script>console.log('Error Radio Values');</script>";
         echoError();
         return;
     }
@@ -167,9 +162,9 @@ if(! empty($_POST)) {
     $result = @mysqli_query($cnxn, $sql);
 
     echo "
-            <div class='container p-3'>
+            <div class='container p-md-3 p-sm-2'>
             <h3 class='receipt-message p-3 mb-0'>Success! Your account has been created.</h3>
-            <div class='form-receipt-container p-3'>
+            <div class='form-receipt-container p-md-3 p-sm-2'>
                 <ul class='receipt-content list-group list-group-flush'>
                     <li class='list-group-item'>
                         <span class='form-label'>Name:</span> $name
