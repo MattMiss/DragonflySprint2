@@ -424,9 +424,9 @@ nav .nav-link:hover {
     }
 
     input:checked {
-        background-color: #D14900 !important;
-        border-color: #D14900;
-        box-shadow: 0 0 0 3px rgba(209, 73, 0, 0.43);
+        background-color: var(--header-color) !important;
+        border-color: var(--header-color) ;
+        box-shadow: 0 0 0 3px rgba(108, 180, 67, 0.27);
     }
 
     i {

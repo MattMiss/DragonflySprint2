@@ -25,6 +25,15 @@ function validateForm() {
 
     let isValid = isNameValid && isEmailValid && isPasswordValid && isCohortNumValid && isStatusValid && isRolesValid;
 
+    if(isValid === false) {
+
+        window.scroll({
+            top: 70,
+            left: 100,
+            behavior: "smooth",
+        });
+    }
+
     return isValid;
 }
 
