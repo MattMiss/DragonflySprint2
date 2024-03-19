@@ -39,6 +39,7 @@ include 'php/nav_bar.php'
                 <form  onsubmit="return validateForm()" method="POST" action="php/signup_submit.php" class="my-3">
                     <div class="mb-3">
                         <label for="name" class="form-label">Name*</label>
+                        <small id="name-error" class="warning">Please enter your first and last name</small>
                         <div class="row">
                             <div class="col-sm">
                                 <input type="text" id="input-first-name" class="form-control" name="firstName" placeholder="First name"
@@ -49,16 +50,13 @@ include 'php/nav_bar.php'
                                        aria-label="Last name" maxlength="30">
                             </div>
                         </div>
-                        <small id="name-error" class="warning">Please enter your first and last name</small>
                     </div>
 
                     <div class="mb-4">
                         <label for="input-email" class="form-label">Email*</label>
-                        <input type="email" class="form-control" id="input-email" name="email"
-                               placeholder="e.g. example@email.com" maxlength="60">
-
-                        <small id="email-note">Note: an @greenriver.edu email is preferred</small>
                         <small id="email-error" class="warning">Please enter a valid email</small>
+                        <input type="email" class="form-control" id="input-email" name="email" placeholder="e.g. example@email.com" maxlength="60">
+                        <small id="email-note">Note: an @greenriver.edu email is preferred</small>
                     </div>
 
                     <div class="row">
@@ -70,24 +68,24 @@ include 'php/nav_bar.php'
                             <label for="input-password-confirm" class="form-label">Re-enter Password*</label>
                             <input type="text" class="form-control" id="input-password-confirm" name="password-confirm" minlength="8" maxlength="16">
                         </div>
-
                         <small id="password-error" class="warning">Please enter a valid password, refer to the requirements below</small>
                     </div>
-                    <ul class="mb-3">
-                        <li>Between 8-16 characters</li>
-                        <li>Must include at least 1 number</li>
-                        <li>Both passwords must match</li>
-                        <li>OPTIONAL: include special characters: !@#$%&*_-.</li>
+                    <ul class="mb-3 list-unstyled">
+                        <li><i class="fa-solid fa-circle-xmark requirement" style="color: #D14900"></i>&ensp; Between 8-16 characters</li>
+                        <li><i class="fa-solid fa-circle-xmark requirement" style="color: #D14900"></i>&ensp; Must include at least 1 number</li>
+                        <li><i class="fa-solid fa-circle-xmark requirement" style="color: #D14900"></i>&ensp; Both passwords must match</li>
+                        <li><i class="fa-solid fa-circle-minus" style="color: #939393"></i>&ensp; Can include special characters: !@#$%&*_-.</li>
                     </ul>
 
                     <div class="mb-3">
                         <label for="input-cohort-num" class="form-label">Cohort Number*</label>
-                        <input type="number" class="form-control" id="input-cohort-num" name="cohort-num" min="1" max="100" placeholder="1-100">
                         <small id="cohort-error" class="warning">Please enter a number between 1 and 100</small>
+                        <input type="number" class="form-control" id="input-cohort-num" name="cohort-num" min="1" max="100" placeholder="1-100">
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Status*</label>
+                        <small id="status-error" class="warning">Please select a status</small>
                         <div class="form-check">
                             <input type="radio" class="form-check-input" id="seekingInternship" name="status" value="Seeking Internship">
                             <label for="seekingInternship" class="form-check-label">Seeking Internship</label>
@@ -100,11 +98,11 @@ include 'php/nav_bar.php'
                             <input type="radio" class="form-check-input" id="notSearching" name="status" value="Not Actively Searching">
                             <label for="notSearching" class="form-check-label">Not Actively Searching</label>
                         </div>
-                        <small id="status-error" class="warning">Please select a status</small>
                     </div>
 
                     <div class="mb-3">
                         <label for="input-roles" class="form-label">What roles are you looking for?</label>
+                        <small id="roles-error" class="warning">You have exceeded the maximum character limit of 500</small>
                         <textarea class="form-control" id="input-roles" name="roles"
                                   minlength="0" maxlength="500" placeholder="Type here..."></textarea>
                         <small id="roles-error" class="warning">You have exceeded the maximum character limit of 500</small>

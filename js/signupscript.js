@@ -7,6 +7,7 @@ const passwordConfirm = document.getElementById("input-password-confirm");
 const cohortNumber = document.getElementById("input-cohort-num");
 const status = document.querySelectorAll("input[name='status']");
 const roles = document.getElementById("input-roles");
+const passwordList = document.getElementsByClassName('requirement');
 const MIN_COHORT = 1;
 const MAX_COHORT = 100;
 const MIN_CHARACTERS = 0;
@@ -42,13 +43,21 @@ function validateName() {
     // decides which message to display (if any)
     if(isValid === true) {
         nameError.style.visibility = "hidden";
+        firstName.classList.remove("form-input-error");
+        lastName.classList.remove("form-input-error");
     } else {
         if(isFirstValid === false && isLastValid === false) {
             nameError.innerText = nameMessage;
+            firstName.classList.add("form-input-error");
+            lastName.classList.add("form-input-error");
         } else if(isFirstValid === false) {
             nameError.innerText = firstNameMessage;
+            firstName.classList.add("form-input-error");
+            lastName.classList.remove("form-input-error");
         } else if(isLastValid === false) {
             nameError.innerText = lastNameMessage;
+            lastName.classList.add("form-input-error");
+            firstName.classList.remove("form-input-error");
         }
 
         nameError.style.visibility = "visible";
@@ -60,24 +69,16 @@ function validateName() {
 // validates email
 function validateEmail() {
     let re = /[^\s@]+@[^\s@]+\.[^\s@]+/;
-    let isValidFormat = re.test(email.value);
-    let isEmpty = email.value.length === 0;
-    let isValid = isEmpty === false && isValidFormat === true;
+    let isValid = re.test(email.value);
 
     const emailError = document.getElementById("email-error");
-    const emailEmptyMessage = "Please enter your email";
-    const invalidFormatMessage = "Please enter a valid email";
 
     if(isValid === true) {
         emailError.style.visibility = "hidden";
+        email.setAttribute("class", "form-control");
     } else {
-        if(isEmpty === true) {
-            emailError.innerText = emailEmptyMessage;
-        } else {
-            emailError.innerText = invalidFormatMessage;
-        }
-
         emailError.style.visibility = "visible";
+        email.setAttribute("class", "form-control form-input-error");
     }
 
     return isValid;
@@ -91,8 +92,12 @@ function validatePassword() {
 
     if(isValid === false) {
         passwordError.style.visibility = "visible";
+        password.classList.add('form-input-error');
+        passwordConfirm.classList.add('form-input-error');
     } else {
         passwordError.style.visibility = "hidden";
+        password.classList.remove('form-input-error');
+        passwordConfirm.classList.remove('form-input-error');
     }
 
     return isValid;
@@ -106,8 +111,10 @@ function validateCohortNum() {
 
     if(isValid === false) {
         cohortError.style.visibility = "visible";
+        cohortNumber.classList.add('form-input-error');
     } else {
         cohortError.style.visibility = "hidden";
+        cohortNumber.classList.remove('form-input-error');
     }
 
     return isValid;
@@ -115,7 +122,7 @@ function validateCohortNum() {
 
 // validate status
 function validateStatus() {
-    let isValid = false
+    let isValid = true;
     let isValidStatus = false;
     let checked = 0;
 
@@ -157,6 +164,8 @@ function validateStatus() {
     }
 
     isValid = isValidStatus === true && checked === 1;
+    console.log(isValid);
+
     const statusError = document.getElementById("status-error");
 
     if(isValid === false) {
@@ -182,31 +191,58 @@ function validateRoles() {
     return isValid;
 }
 
-// event listeners
-firstName.addEventListener("focusout", (Event) => {
-    validateName();
+password.addEventListener("input", (Event) => {
+    const re = /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z\d!@#$%&*_\-.]$/;
+    const numberExp = /\d/;
+    let hasNumber = numberExp.test(password.value);
+
+    let isLength = password.value.length >= 8 && password.value.length <= 16;
+    let areMatching = (password.value === passwordConfirm.value) && (password.value.length > 0);
+
+
+    console.log('here');
+    if(hasNumber === true) {
+        passwordList[1].classList.remove("fa-circle-xmark");
+        passwordList[1].classList.add("fa-circle-check");
+        passwordList[1].style.color = "#6cb443";
+    } else {
+        passwordList[1].classList.remove("fa-circle-check");
+        passwordList[1].classList.add("fa-circle-xmark");
+        passwordList[1].style.color = "#D14900";
+    }
+
+    if (isLength === true) {
+        passwordList[0].classList.remove("fa-circle-xmark");
+        passwordList[0].classList.add("fa-circle-check");
+        passwordList[0].style.color = "#6cb443";
+    } else {
+        passwordList[0].classList.remove("fa-circle-check");
+        passwordList[0].classList.add("fa-circle-xmark");
+        passwordList[0].style.color = "#D14900";
+    }
+
+    if (areMatching === true) {
+        passwordList[2].classList.remove("fa-circle-xmark");
+        passwordList[2].classList.add("fa-circle-check");
+        passwordList[2].style.color = "#6cb443";
+    } else {
+        passwordList[2].classList.remove("fa-circle-check");
+        passwordList[2].classList.add("fa-circle-xmark");
+        passwordList[2].style.color = "#D14900";
+    }
+
 });
 
-lastName.addEventListener("focusout", (Event) => {
-    validateName();
-});
+passwordConfirm.addEventListener("input", (Event) => {
+    let areMatching = (password.value === passwordConfirm.value) && (password.value.length > 0);
 
-email.addEventListener("focusout", (Event) => {
-    validateEmail();
-});
-
-password.addEventListener("focusout", (Event) => {
-    validatePassword();
-});
-
-passwordConfirm.addEventListener("focusout", (Event) => {
-    validatePassword();
-});
-
-cohortNumber.addEventListener("focusout", (Event) => {
-    validateCohortNum();
-});
-
-roles.addEventListener("focusout", (Event) => {
-    validateRoles();
+    if (areMatching === true) {
+        passwordList[2].classList.remove("fa-circle-xmark");
+        passwordList[2].classList.add("fa-circle-check");
+        passwordList[2].style.color = "#6cb443";
+    } else {
+        passwordList[2].classList.remove("fa-circle-check");
+        passwordList[2].classList.add("fa-circle-xmark");
+        passwordList[2].style.color = "#D14900";
+    }
 });

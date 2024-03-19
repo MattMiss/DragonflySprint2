@@ -458,13 +458,18 @@ nav .nav-link:hover {
 .warning {
     color: #D14900;
 }
+
+.form-input-error {
+    border-color: rgb(209, 73, 0, 1) !important;
+    box-shadow: 0 0 5px rgb(209, 73, 0, 1) !important;
+}
+
 #name-error {
     visibility: hidden;
 }
 
 #email-error {
     visibility: hidden;
-    display: block;
 }
 
 #password-error {
