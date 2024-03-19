@@ -31,8 +31,9 @@ if(! empty($_POST)) {
     // removing
     foreach ($_POST as $key => $value) {
         $value = trim($value);
+        $value = strip_tags(filter_var($value, FILTER_SANITIZE_ADD_SLASHES));
 
-        if (empty($value)){
+        if (strlen($value) > 0 && strlen(trim($value)) == 0){
             if($key !== 'job-description' && $key !== 'follow-updates'){
                 $finished++;
                 if ($finished == 1) {
@@ -75,12 +76,12 @@ if(! empty($_POST)) {
         $jname = strip_tags(filter_var($jname, FILTER_SANITIZE_ADD_SLASHES));
         $ename = strip_tags(filter_var($ename, FILTER_SANITIZE_ADD_SLASHES));
         $jurl = strip_tags(filter_var($jurl, FILTER_SANITIZE_ADD_SLASHES));
+        $jdescription = strip_tags(filter_var($jdescription, FILTER_SANITIZE_ADD_SLASHES));
         $adate = filter_var($adate, FILTER_SANITIZE_NUMBER_INT);
         $astatus = strip_tags(filter_var($astatus, FILTER_SANITIZE_ADD_SLASHES));
         $fupdates = strip_tags(filter_var($fupdates, FILTER_SANITIZE_ADD_SLASHES));
         $followupdate = filter_var($followupdate, FILTER_SANITIZE_NUMBER_INT);
 
-        // TODO: Replace user_id = 1 with the user_id of user creating the app
         $sql = "INSERT INTO `applications` (`user_id`, `jname`, `ename`, `jurl`, `jdescription`, `adate`, `astatus`, `fupdates`, 
                 `followupdate`) VALUES ($viewingID, '$jname', '$ename', '$jurl', '$jdescription', '$adate', '$astatus', '$fupdates',
                                         '$followupdate')";
