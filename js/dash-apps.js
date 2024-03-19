@@ -46,7 +46,7 @@ $(window).on('load', () => {
     populateAppReminders();
 
     if (results.appWasDeleted){
-        showToast("Application was deleted!", 2000);
+        showToast("Application was deleted!", 2000, '#e54a4a');
     }
 });
 

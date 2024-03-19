@@ -27,7 +27,9 @@ $(window).on('load', () => {
     }
 
     if (results.userWasDeleted) {
-        showToast("User was deleted!", 2000);
+        showToast("User was deleted!", 2000, '#e54a4a');
+    }else if (results.userWasUnDeleted) {
+        showToast("User was brought back!", 2000, '#6CB443');
     }
 });
 
@@ -198,9 +200,12 @@ function createUserFromData(userData) {
 
     const isUserAdmin = userData.permission === '1';
 
+    // Show edit and delete btn div is viewRole is a USER and nothing is viewRole is ADMIN
+    const btnDiv = $('<td class="app-button-outer table-btns"></td>');
+
     // Create an edit button and add an onclick listener to Open User Modal when edit button is clicked
     const makeAdminBtn = $(`<button class="app-button-inner btn btn-make-admin">${isUserAdmin ? 'Remove' : 'Make'} Admin</button>`);
-    if (results.userID == userData.user_id){
+    if (results.userID == userData.user_id || userData.is_deleted === '1'){
         makeAdminBtn.attr('disabled', true);
     }
     makeAdminBtn.on('click', () => {
@@ -211,23 +216,33 @@ function createUserFromData(userData) {
         }
     })
 
-    // Create an edit button and add an onclick listener to Open User Modal when edit button is clicked
-    const editBtn = $(`<button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>`);
-    editBtn.on('click', () => {
-        showUserModal(userData, isUserAdmin);
-    })
+    if (userData.is_deleted === '0'){
+        // Create an edit button and add an onclick listener to Open User Modal when edit button is clicked
+        const editBtn = $(`<button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>`);
+        editBtn.on('click', () => {
+            showUserModal(userData, isUserAdmin);
+        })
+        // Create a delete button and add an onclick listener to ask to Delete App when delete button is clicked
+        const deleteBtn = $(`<button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i>`);
+        deleteBtn.on('click', () => {
+            askToDeleteUser(userData.user_id, userData.fname, userData.lname);
+        })
+        btnDiv.append(makeAdminBtn);
+        btnDiv.append(editBtn);
+        btnDiv.append(deleteBtn);
+    }else{
+        // User is deleted
+        // Create a delete button and add an onclick listener to ask to Delete App when delete button is clicked
+        const unDeleteBtn = $(`<button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-reply"></i>`);
+        unDeleteBtn.on('click', () => {
+            askToUndoDeleteUser(userData.user_id, userData.fname, userData.lname);
+        })
+        btnDiv.append(unDeleteBtn);
+    }
 
-    // Create a delete button and add an onclick listener to ask to Delete App when delete button is clicked
-    const deleteBtn = $(`<button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i>`);
-    deleteBtn.on('click', () => {
-        askToDeleteUser(userData.user_id, userData.fname, userData.lname);
-    })
 
-    // Show edit and delete btn div is viewRole is a USER and nothing is viewRole is ADMIN
-    const btnDiv = $('<td class="app-button-outer table-btns"></td>');
-    btnDiv.append(makeAdminBtn);
-    btnDiv.append(editBtn);
-    btnDiv.append(deleteBtn);
+
+
     // Add button div to app
     user.append(btnDiv);
     userListDiv.append(user);
@@ -378,6 +393,19 @@ function askToDeleteUser(userID, userFName, userLName){
     // THis will be sent to POST as the userID to delete
     $('#delete-user-id').val(userID);
 }
+
+// Open delete user modal and set the value for user id to delete
+function askToUndoDeleteUser(userID, userFName, userLName){
+    // Open the user delete modal
+    $('#user-undo-delete-modal').modal('show');
+
+    $('#user-undo-delete-modal-name').text(`${userFName} ${userLName}`)
+
+    // Set the value of the hidden input for delete-user-id
+    // THis will be sent to POST as the userID to delete
+    $('#undo-delete-user-id').val(userID);
+}
+
 
 // Open make user admin modal and fill in user info
 function askToMakeUserAdmin(userID, userFName, userLName){

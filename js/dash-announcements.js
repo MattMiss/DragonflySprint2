@@ -43,7 +43,7 @@ $(window).on('load', () => {
     populateMyRemindersList();
 
     if (results.announceWasDeleted){
-        showToast("Announcement was deleted!", 2000);
+        showToast("Announcement was deleted!", 2000, '#e54a4a');
     }
 });
 

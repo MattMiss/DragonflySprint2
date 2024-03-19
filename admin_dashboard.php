@@ -25,6 +25,7 @@ include $db_location;
 
 $appWasDeleted = false;
 $userWasDeleted = false;
+$userWasUnDeleted = false;
 $announceWasDeleted = false;
 
 // soft deletes a database entry
@@ -37,15 +38,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $deleteAppResult = @mysqli_query($cnxn, $sqlDeleteApp);
     } elseif ($_POST["submit-from"] == 2) {
         $id = $_POST["id"];
-
+        $operation = $_POST["operation"] === '1' ? 1 : 0;   // 1 for delete, 0 for undo-delete
         // Ensure a user is logged in
         include 'php/roles/user_check.php';
         // Ensure an admin is logged in
         include 'php/roles/admin_check.php';
 
-        $sqlDeleteUser = "UPDATE users SET is_deleted = 1 WHERE user_id = $id";
-        $userWasDeleted = true;
-        //echo $sql4;
+        $sqlDeleteUser = "UPDATE users SET is_deleted = $operation WHERE user_id = $id";
+
+        $userWasDeleted = $operation === 1;
+        $userWasUnDeleted = $operation === 0;
         $deleteUserResult = @mysqli_query($cnxn, $sqlDeleteUser);
     }else if($_POST["submit-from"] == 3) {
         $id = $_POST["id"];
@@ -599,8 +601,32 @@ while ($row = mysqli_fetch_assoc($announceResult)){
                         <form method='POST' action='#'>
                             <input type='hidden' value='2' name='submit-from'>
                             <input type='hidden' id="delete-user-id" value='' name='id'>
+                            <input type='hidden' value='1' name='operation'>
                             <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Cancel</button>
                             <button type='submit' class='modal-delete'>Delete User</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Undo Delete Modal -->
+        <div class='modal fade' id='user-undo-delete-modal' tabindex='-1' role='dialog' aria-labelledby='delete-app-message' aria-hidden='true'>
+            <div class='modal-dialog modal-dialog-centered' role='document'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        <h4 class='modal-title' id='undo-delete-warning'>Undo Delete??</h4>
+                    </div>
+                    <div class='modal-body'>
+                        <p>Are you sure you want to bring back <span id="user-undo-delete-modal-name"></span>?</p>
+                    </div>
+                    <div class='modal-footer'>
+                        <form method='POST' action='#'>
+                            <input type='hidden' value='2' name='submit-from'>
+                            <input type='hidden' id="undo-delete-user-id" value='' name='id'>
+                            <input type='hidden' value='0' name='operation'>
+                            <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Cancel</button>
+                            <button type='submit' class='modal-undo-delete'>Undo Delete</button>
                         </form>
                     </div>
                 </div>
@@ -700,6 +726,7 @@ while ($row = mysqli_fetch_assoc($announceResult)){
         userID : <?php echo $viewingID ?>,
         appWasDeleted : <?php echo json_encode($appWasDeleted) ?>,
         userWasDeleted : <?php echo json_encode($userWasDeleted) ?>,
+        userWasUnDeleted : <?php echo json_encode($userWasUnDeleted) ?>,
         announceWasDeleted : <?php echo json_encode($announceWasDeleted) ?>
     }
 </script>

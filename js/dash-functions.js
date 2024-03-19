@@ -32,11 +32,12 @@ function setupDateFormat(){
 }
 
 // Shows a div with a message at the top of the screen. Removes the div after supplied timeout time
-function showToast(message, length) {
+function showToast(message, length, color) {
     const toastContainer = $('#toastContainer');
 
     toastContainer.addClass('alert-show');
     toastContainer.removeClass('alert-hide');
+    toastContainer.css('background-color', color);
     $('#toastText').text(message);
     setTimeout(() => {
         toastContainer.removeClass('alert-show');
