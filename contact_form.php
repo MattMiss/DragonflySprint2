@@ -25,23 +25,31 @@ include 'php/nav_bar.php' ?>
             <div class="form-container">
                 <div class="form-body">
                     <form method="post" action="php/contact_submit.php" onsubmit="return validateForm()" name="contact" class="my-3">
-                        <label for="name" class="form-label">Name*</label>
-                        <div id="name" class="row mb-4">
-                            <div class="col-sm">
-                                <input type="text" class="form-control" name="firstName" placeholder="First name" aria-label="First name" required>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name*</label>
+                            <small id="contact-name-error" class="warning ps-1" style="visibility: hidden">Please enter your first and last name</small>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <input type="text" id="contact-first-name" class="form-control" name="firstName" placeholder="First name"
+                                           aria-label="First name" maxlength="30">
+                                </div>
+                                <div class="col-sm pt-sm-0 pt-2">
+                                    <input type="text" id="contact-last-name" class="form-control" name="lastName" placeholder="Last name"
+                                           aria-label="Last name" maxlength="30">
+                                </div>
                             </div>
-                            <div class="col-sm pt-sm-0 pt-2">
-                                <input type="text" class="form-control" name="lastName" placeholder="Last name" aria-label="Last name" required>
-                            </div>
-                        </div>
-                        <div class="mb-4">
-                            <label for="input-email" class="form-label">Email*</label>
-                            <input type="email" class="form-control" id="input-email" name="email" placeholder="e.g. example@email.com" required>
                         </div>
 
                         <div class="mb-4">
-                            <label for="input-message" class="form-label">Message*</label>
-                            <textarea class="form-control" id="input-message" name="message" placeholder="Type your message here..." rows="4" minlength="25" maxlength="1000" required></textarea>
+                            <label for="contact-email" class="form-label">Email*</label>
+                            <small id="contact-email-error" class="warning ps-1" style="visibility: hidden">Please enter a valid email</small>
+                            <input type="email" class="form-control" id="contact-email" name="email" placeholder="e.g. example@email.com">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="contact-message" class="form-label">Message*</label>
+                            <small id="contact-message-error" class="warning ps-1" style="visibility: hidden">Please enter a message between 25 and 1000 characters</small>
+                            <textarea class="form-control" id="contact-message" name="message" placeholder="Type your message here..." rows="4" minlength="25" maxlength="1000"></textarea>
                         </div>
 
 

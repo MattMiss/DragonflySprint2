@@ -18,7 +18,7 @@ let validatePass = true;
 function validateForm() {
     let isNameValid = validateName();
     let isEmailValid = validateEmail();
-    let isPasswordValid = (validatePass === false) || validatePassword();
+    let isPasswordValid = /* (validatePass === false) || */ validatePassword();
     let isCohortNumValid = validateCohortNum();
     let isStatusValid = validateStatus();
     let isRolesValid = validateRoles();

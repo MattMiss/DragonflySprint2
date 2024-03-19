@@ -29,7 +29,7 @@ include 'php/nav_bar.php'
                 <form  onsubmit="return validateForm()" method="POST" action="php/signup_submit.php" class="my-3">
                     <div class="mb-3">
                         <label for="name" class="form-label">Name*</label>
-                        <small id="name-error" class="warning">Please enter your first and last name</small>
+                        <small id="name-error" class="warning ps-1">Please enter your first and last name</small>
                         <div class="row">
                             <div class="col-sm">
                                 <input type="text" id="input-first-name" class="form-control" name="firstName" placeholder="First name"
@@ -44,7 +44,7 @@ include 'php/nav_bar.php'
 
                     <div class="mb-4">
                         <label for="input-email" class="form-label">Email*</label>
-                        <small id="email-error" class="warning">Please enter a valid email</small>
+                        <small id="email-error" class="warning ps-1">Please enter a valid email</small>
                         <input type="email" class="form-control" id="input-email" name="email" placeholder="e.g. example@email.com" maxlength="60">
                         <small id="email-note">Note: an @greenriver.edu email is preferred</small>
                     </div>
@@ -69,13 +69,13 @@ include 'php/nav_bar.php'
 
                     <div class="mb-3">
                         <label for="input-cohort-num" class="form-label">Cohort Number*</label>
-                        <small id="cohort-error" class="warning">Please enter a number between 1 and 100</small>
+                        <small id="cohort-error" class="warning ps-1">Please enter a number between 1 and 100</small>
                         <input type="number" class="form-control" id="input-cohort-num" name="cohort-num" min="1" max="100" placeholder="1-100">
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Status*</label>
-                        <small id="status-error" class="warning">Please select a status</small>
+                        <small id="status-error" class="warning ps-1">Please select a status</small>
                         <div class="form-check">
                             <input type="radio" class="form-check-input" id="seekingInternship" name="status" value="Seeking Internship">
                             <label for="seekingInternship" class="form-check-label">Seeking Internship</label>

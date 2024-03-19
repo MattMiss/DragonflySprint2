@@ -448,6 +448,7 @@ nav .nav-link:hover {
     color: var(--header-color);
     font-weight: 600;
     min-width: 200px;
+    display: inline !important;
 }
 
 .submit-btn {
