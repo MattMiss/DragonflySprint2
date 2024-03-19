@@ -59,18 +59,26 @@ $appsResult = @mysqli_query($cnxn, $sqlApps);
 $announceResult = @mysqli_query($cnxn, $sqlRecentAnnounce);
 $appReminders = @mysqli_query($cnxn, $sqlRecentApps);
 
-$apps[] = [];
+$myApps[] = [];
+$myAnnouncements[] = [];
+$myAppReminders[] = [];
 
+$appCount = 0;
 while ($row = mysqli_fetch_assoc($appsResult)) {
-    $myApps[] = $row;
+    $myApps[$appCount] = $row;
+    $appCount++;
 }
 
+$announceCount = 0;
 while ($row = mysqli_fetch_assoc($announceResult)) {
-    $myAnnouncements[] = $row;
+    $myAnnouncements[$announceCount] = $row;
+    $announceCount++;
 }
 
+$appReminderCount = 0;
 while ($row = mysqli_fetch_assoc($appReminders)) {
-    $myAppReminders[] = $row;
+    $myAppReminders[$appReminderCount] = $row;
+    $appReminderCount++;
 }
 
 ?>
@@ -189,7 +197,7 @@ while ($row = mysqli_fetch_assoc($appReminders)) {
 
                     </tbody>
                 </table>
-                <div class="col text-center pt-2 pb-2" id="more-apps">
+                <div class="col text-center pt-2 pb-2 hidden" id="more-apps">
                     <button type="button" class="submit-btn"  onclick="loadMoreApps()">More</button>
                 </div>
                 <div class="col d-flex justify-content-center pt-2" id="new-app-container">
@@ -320,7 +328,7 @@ while ($row = mysqli_fetch_assoc($appReminders)) {
 
     <!-- View Announcement Modal -->
     <div class='modal fade' id='view-announcement-modal' tabindex='-1' role='dialog' aria-labelledby='view-announcement' aria-hidden='true'>
-        <div class='modal-dialog' role='document'>
+        <div class='modal-dialog modal-dialog-centered' role='document'>
             <div class='modal-content'>
                 <div class='modal-header'>
                     <h5 class='modal-title' id='view-announce-title'>$title</h5>

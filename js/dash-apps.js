@@ -214,13 +214,12 @@ function populateAppList(){
 }
 
 function populateAppReminders(){
-    if (sortedAppReminders.length === 0){
+    if (sortedAppReminders.length === 1 && sortedAppReminders[0].length === 0){
         const noResults =   `<div class="reminder">
-                                        <p>No Recent Announcements</p>
+                                        <p>No Recent Followups</p>
                                     </div>`;
         myAppRemindersDiv.append(noResults);
     }else{
-
         sortedAppReminders.forEach((appReminder) => {
            createMyAppReminderFromData(appReminder);
         });

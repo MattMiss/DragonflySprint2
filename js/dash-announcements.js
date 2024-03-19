@@ -155,7 +155,7 @@ function populateAnnouncementList(){
 }
 
 function populateMyRemindersList(){
-    if (sortedMyAnnouncements.length === 0){
+    if (sortedMyAnnouncements.length === 1 && sortedMyAnnouncements[0].length === 0){
         const noResults =   `<div class="reminder">
                                             <p>No Recent Announcements</p>
                                         </div>`;

@@ -75,7 +75,7 @@ if(! empty($_POST)) {
 
         $title = $_POST['announcement-title'];
         $jobType = $_POST['job-or-intern'];
-        $location = $_POST['location'];
+        $jobLocation = $_POST['location'];
         $employer = $_POST['employer'];
         $addltext = $_POST['additional-text'];
         $url = $_POST['announcement-url'];
@@ -90,7 +90,7 @@ if(! empty($_POST)) {
         // sanitization
         $title = strip_tags(filter_var($title, FILTER_SANITIZE_ADD_SLASHES));
         $jobType = strip_tags(filter_var($jobType, FILTER_SANITIZE_ADD_SLASHES));
-        $location = strip_tags(filter_var($location, FILTER_SANITIZE_ADD_SLASHES));
+        $jobLocation = strip_tags(filter_var($jobLocation, FILTER_SANITIZE_ADD_SLASHES));
         $employer = strip_tags(filter_var($employer, FILTER_SANITIZE_ADD_SLASHES));
         $addltext = strip_tags(filter_var($addltext, FILTER_SANITIZE_ADD_SLASHES));
         $url = strip_tags(filter_var($url, FILTER_SANITIZE_ADD_SLASHES));
@@ -99,7 +99,7 @@ if(! empty($_POST)) {
 
         // run queries
         $sql = "INSERT INTO announcements (title, job_type, location, ename, additional_info, jurl, sent_to, date_created, is_deleted) 
-                VALUES ('$title', '$jobType', '$location', '$employer', '$addltext', '$url', '$sendToSelect', '$today', 0)";
+                VALUES ('$title', '$jobType', '$jobLocation', '$employer', '$addltext', '$url', '$sendToSelect', '$today', 0)";
         $result = @mysqli_query($cnxn, $sql);
 
         $sql2 = "SELECT fname, lname, email, permission, status FROM users WHERE is_deleted = 0";
@@ -120,7 +120,7 @@ if(! empty($_POST)) {
         $headers = 'From: ' . $from . "\r\n" .
             'Reply-To: ' . $from . "\r\n" .
             'X-Mailer: PHP/' . phpversion();
-        $message = "Location: " . $location .
+        $message = "Location: " . $jobLocation .
             "\nURL: ". $url .
             "\nAdditional Info: \n" . $addltext;
 
@@ -173,7 +173,7 @@ if(! empty($_POST)) {
                         <span class='form-label'>Job Type:</span> $jobType
                     </li>
                     <li class='list-group-item text-break'>
-                        <span class='form-label'>Location:</span> $location
+                        <span class='form-label'>Location:</span> $jobLocation
                     </li>
                     <li class='list-group-item text-break'>
                         <span class='form-label'>Employer:</span> $employer
