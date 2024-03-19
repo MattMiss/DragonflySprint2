@@ -1,12 +1,17 @@
 <?php
 session_start();
+ob_start();
+
 $location = '../';
+$pageTitle = 'Application Submit';
 
 global $db_location;
 global $cnxn;
 global $use_local;
 global $viewingID;
 
+// Log user out if idle time or logged in time is past max
+include '../php/roles/timeout_check.php';
 // Logout and return to login.php if ?logout=true
 include '../php/roles/logout_check.php';
 // Ensure a user is logged in
@@ -14,25 +19,7 @@ include '../php/roles/user_check.php';
 // Redirect admins to admin dashboard
 include '../php/roles/admin_kick.php';
 
-echo
-'<!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Application Submit</title>
-        <!-- Load theme from localstorage -->
-        <script src="../js/themescript.js"></script>
-        <!-- Latest compiled and minified CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Font awesome -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-        <link rel="stylesheet" href="../styles/styles.css"/>
-        <!-- Latest compiled JavaScript -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    </head>
-<body>';
-
+include '../header.php';
 include '../php/nav_bar.php' ?>
 
 <main>
@@ -44,8 +31,9 @@ if(! empty($_POST)) {
     // removing
     foreach ($_POST as $key => $value) {
         $value = trim($value);
+        $value = strip_tags(filter_var($value, FILTER_SANITIZE_ADD_SLASHES));
 
-        if (empty($value)){
+        if (strlen($value) > 0 && strlen(trim($value)) == 0){
             if($key !== 'job-description' && $key !== 'follow-updates'){
                 $finished++;
                 if ($finished == 1) {
@@ -88,12 +76,12 @@ if(! empty($_POST)) {
         $jname = strip_tags(filter_var($jname, FILTER_SANITIZE_ADD_SLASHES));
         $ename = strip_tags(filter_var($ename, FILTER_SANITIZE_ADD_SLASHES));
         $jurl = strip_tags(filter_var($jurl, FILTER_SANITIZE_ADD_SLASHES));
+        $jdescription = strip_tags(filter_var($jdescription, FILTER_SANITIZE_ADD_SLASHES));
         $adate = filter_var($adate, FILTER_SANITIZE_NUMBER_INT);
         $astatus = strip_tags(filter_var($astatus, FILTER_SANITIZE_ADD_SLASHES));
         $fupdates = strip_tags(filter_var($fupdates, FILTER_SANITIZE_ADD_SLASHES));
         $followupdate = filter_var($followupdate, FILTER_SANITIZE_NUMBER_INT);
 
-        // TODO: Replace user_id = 1 with the user_id of user creating the app
         $sql = "INSERT INTO `applications` (`user_id`, `jname`, `ename`, `jurl`, `jdescription`, `adate`, `astatus`, `fupdates`, 
                 `followupdate`) VALUES ($viewingID, '$jname', '$ename', '$jurl', '$jdescription', '$adate', '$astatus', '$fupdates',
                                         '$followupdate')";
@@ -107,28 +95,28 @@ if(! empty($_POST)) {
                 <div class='form-receipt-container p-3'>
                     <ul class='receipt-content list-group list-group-flush'>
                         <li class='list-group-item'>
-                            Name: $jname
+                            <span class='form-label'>Name:</span> $jname
                         </li>
                         <li class='list-group-item'>
-                            Employer Name: $ename
+                            <span class='form-label'>Employer Name:</span> $ename
+                        </li>
+                        <li class='list-group-item url'>
+                            <span class='form-label'>Job Url:</span> <a href='$jurl'>Apply Link</a>
                         </li>
                         <li class='list-group-item'>
-                            Job Url: $jurl
+                            <span class='form-label'>Job Description:</span> $jdescription
                         </li>
                         <li class='list-group-item'>
-                            Job Description: $jdescription
+                            <span class='form-label'>App Date:</span> $adate
                         </li>
                         <li class='list-group-item'>
-                            App Date: $adate
+                            <span class='form-label'>Application Status:</span> ". str_replace('-', ' ', $astatus) ."
                         </li>
                         <li class='list-group-item'>
-                            Application Status: ". str_replace('-', ' ', $astatus) ."
+                            <span class='form-label'>Followup Updates:</span> $fupdates
                         </li>
                         <li class='list-group-item'>
-                            Followup Updates: $fupdates
-                        </li>
-                        <li class='list-group-item'>
-                            Followup Date: $followupdate
+                            <span class='form-label'>Followup Date:</span> $followupdate
                         </li>
                         <li class='align-self-center'>
                             <a class='link' href='../index.php'>Return home</a>

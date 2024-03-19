@@ -1,31 +1,22 @@
 <?php
 session_start();
-$location = '../';
+ob_start();
 
+$location = '../';
+$pageTitle = 'Contact Submit';
+
+// If user is logged in, Log user out if idle time or logged in time is past max
+if (isset($_SESSION['user_id'])){
+    $uID = $_SESSION['user_id'];
+
+    include '../php/roles/timeout_check.php';
+}
 // Logout and return to login.php if ?logout=true
 include '../php/roles/logout_check.php';
 // Redirect admins to admin dashboard
 include '../php/roles/admin_kick.php';
 
-echo
-'<!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Contact Submit</title>
-        <!-- Load theme from localstorage -->
-        <script src="../js/themescript.js"></script>
-        <!-- Latest compiled and minified CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Font awesome -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-        <link rel="stylesheet" href="../styles/styles.css"/>
-        <!-- Latest compiled JavaScript -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    </head>
-<body>';
-
+include '../header.php';
 include '../php/nav_bar.php' ?>
 <main>
     <div class="container p-3" id="main-container">
@@ -100,10 +91,10 @@ if(! empty($_POST)) {
                     <div class='form-receipt-container p-3'>
                         <ul class='receipt-content list-group list-group-flush'>
                             <li class='list-group-item'>
-                                Name: $name
+                                <span class='form-label'>Name:</span> $name
                             </li>
                             <li class='list-group-item'>
-                                Email: $email
+                                <span class='form-label'>Email:</span> $email
                             </li>
                             <li class='list-group-item'>
                                 $message 

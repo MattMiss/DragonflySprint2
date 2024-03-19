@@ -1,11 +1,13 @@
 const ADMIN = 1;
-let viewRole = role;
+let viewRole = results.role;
 let dateFormat = 'yy-mm-dd';
 
 $(window).on('load', () => {
     // Check if there is a date format saved in cookies
     setupDateFormat();
-    dateFormatSelect.val(dateFormat);
+    if (dateFormatSelect){
+        dateFormatSelect.val(dateFormat);
+    }
 });
 
 // Returns the viewRole set by server
@@ -23,20 +25,19 @@ function setupDateFormat(){
         const name = cookies[i].split('=')[0];
         const value = cookies[i].split('=')[1];
         // Set the theme if one exists
-        if (name === 'date-format'){
+        if (name === 'date-format-' + uID){
             dateFormat = value;
-            console.log("Found cookies");
-            console.log(dateFormat);
         }
     }
 }
 
 // Shows a div with a message at the top of the screen. Removes the div after supplied timeout time
-function showToast(message, length) {
+function showToast(message, length, color) {
     const toastContainer = $('#toastContainer');
 
     toastContainer.addClass('alert-show');
     toastContainer.removeClass('alert-hide');
+    toastContainer.css('background-color', color);
     $('#toastText').text(message);
     setTimeout(() => {
         toastContainer.removeClass('alert-show');
@@ -76,7 +77,6 @@ function getFormattedURL(url){
 }
 
 function getFormattedDate(date, format){
-    const d = new Date(date);
     const parts = date.split('-');
     let dateString = '';
 
@@ -91,6 +91,5 @@ function getFormattedDate(date, format){
             dateString = parts[1] + '-' + parts[2] + '-' + parts[0][2] + parts[0][3];
             break;
     }
-    console.log(dateString);
     return dateString;
 }

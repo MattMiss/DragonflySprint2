@@ -1,4 +1,5 @@
-let sortedApps = apps;
+let sortedApps = results.myApps;
+let sortedAppReminders = results.myAppReminders;
 let tempApps;
 let targetStatus = 'any';
 let searchTerm = '';
@@ -16,14 +17,19 @@ let lastAppFieldClicked = null;
 let appShowingCnt = 0;
 const APP_MAX_LOAD_CNT = 10;
 let appCntToLoad = APP_MAX_LOAD_CNT;
+let curAppListDirection = '';
+let curAppListField = '';
 const appListDiv = $('#dash-apps-list');
+const myAppRemindersDiv = $('#my-app-reminders');
 
 $(window).on('load', () => {
     appCntToLoad = APP_MAX_LOAD_CNT;
 
+    // Repopulate lists with the new date format that was selected
     document.addEventListener('dateFormatChanged', (e)=>{
-        console.log("Date Changed");
         emptySortAndPopulateAppList(false);
+        emptyAppReminders();
+        populateAppReminders();
     }, true)
 
 
@@ -35,8 +41,12 @@ $(window).on('load', () => {
     toggleAppFieldOrder('#date-field-icon', 'adate');
     toggleAppFieldOrder('#date-field-icon', 'adate');
 
-    if (appWasDeleted){
-        showToast("Application was deleted!", 2000);
+    // Empty and Add any app reminders for the user
+    emptyAppReminders();
+    populateAppReminders();
+
+    if (results.appWasDeleted){
+        showToast("Application was deleted!", 2000, '#e54a4a');
     }
 });
 
@@ -44,65 +54,93 @@ $(window).on('load', () => {
 // Set up listeners for User Filter StartDate, EndDate, SearchTerm, and Selected Status
 // List will reload if any User Filters are changed
 function setAppSearchListeners(){
-    // App List Listeners
-    $('#app-search-bar').on('change keyup', (e) => {
-        searchTerm = e.target.value;
-        emptySortAndPopulateAppList(false);
-    });
+    const appSearchBar = $('#app-search-bar');
+    if (appSearchBar){
+        appSearchBar.on('change keyup', (e) => {
+            searchTerm = e.target.value;
+            emptySortAndPopulateAppList(false);
+        });
+    }
 
-    $('#app-status-select').on('change', (e) => {
-        targetStatus = e.target.value;
-        emptySortAndPopulateAppList(false);
-    });
+    const appStartDate = $('#app-start-date');
+    if (appStartDate){
+        appStartDate.on('change', (e) => {
+            startDate = e.target.value;
+            emptySortAndPopulateAppList(false);
+        });
+    }
 
-    $('#app-start-date').on('change', (e) => {
-        startDate = e.target.value;
-        emptySortAndPopulateAppList(false);
-    });
+    const appEndDate = $('#app-end-date');
+    if (appEndDate){
+        appEndDate.on('change', (e) => {
+            endDate = e.target.value;
+            emptySortAndPopulateAppList(false);
+        });
+    }
 
-    $('#app-end-date').on('change', (e) => {
-        endDate = e.target.value;
-        emptySortAndPopulateAppList(false);
-    });
+    // Only show status for users
+    if (!isAdmin()){
+        const appStatusSelect = $('#app-status-select')
+        if (appStatusSelect){
+            appStatusSelect.on('change', (e) => {
+                targetStatus = e.target.value;
+                emptySortAndPopulateAppList(false);
+            });
+        }
+    }
 }
 
 // Onclick Events for OrderBy buttons on each field
 // Clicking on a field button will cycle between ascending and descending
 function setAppFieldBtnListeners(){
-    $('#date-order-btn').on('click', () => {
-        toggleAppFieldOrder('#date-field-icon', 'adate');
-    });
+    const dateOrderBtn = $('#date-order-btn');
+    if (dateOrderBtn){
+        dateOrderBtn.on('click', () => {
+            toggleAppFieldOrder('#date-field-icon', 'adate');
+        });
+    }
 
-    $('#job-order-btn').on('click', () => {
-        toggleAppFieldOrder('#job-field-icon', 'jname');
-    });
+    const jobOrderBtn = $('#job-order-btn');
+    if (jobOrderBtn){
+        jobOrderBtn.on('click', () => {
+            toggleAppFieldOrder('#job-field-icon', 'jname');
+        });
+    }
 
-    $('#employer-order-btn').on('click', () => {
-        toggleAppFieldOrder('#employer-field-icon', 'ename');
-    });
+    const employerOrderBtn = $('#employer-order-btn');
+    if (employerOrderBtn){
+        employerOrderBtn.on('click', () => {
+            toggleAppFieldOrder('#employer-field-icon', 'ename');
+        });
+    }
 
-    $('#status-order-btn').on('click', () => {
-        toggleAppFieldOrder('#status-field-icon', 'astatus');
-    });
+    const statusOrderBtn = $('#status-order-btn');
+    if (statusOrderBtn){
+        statusOrderBtn.on('click', () => {
+            toggleAppFieldOrder('#status-field-icon', 'astatus');
+        });
+    }
 
     // Set click listeners for user and email if role is admin
     if (isAdmin()){
-        $('#user-order-btn').on('click', () => {
-            toggleAppFieldOrder('#user-field-icon', 'fname');
-        });
-        $('#email-order-btn').on('click', () => {
-            toggleAppFieldOrder('#email-field-icon', 'email');
-        });
+        const userOrderBtn = $('#user-order-btn');
+        if (userOrderBtn){
+            userOrderBtn.on('click', () => {
+                toggleAppFieldOrder('#user-field-icon', 'fname');
+            });
+        }
+        const emailOrderBtn = $('#email-order-btn');
+        if (emailOrderBtn){
+            emailOrderBtn.on('click', () => {
+                toggleAppFieldOrder('#email-field-icon', 'email');
+            });
+        }
     }
 }
 
 // Cycle through buttons depending on the field clicked Each field has 3 states.
 // [0 = no order, shows up and down arrows][1 = asc order, shows up arrow][2 = dsc order, shows down arrow]
 function toggleAppFieldOrder(clickedFieldIconName, clickedField){
-    //console.log("Toggling Field order: " + clickedField);
-    // If field is different from last field, reset last field (show both up and down arrows)
-    //console.log("Last Field Click: " + lastAppFieldClicked);
-
     // Show Field Buttons for previously clicked field buttons but only if field button is not null or the
     // same as the previously clicked button
     if (lastAppFieldClicked && (lastAppFieldClicked !== clickedFieldIconName)){
@@ -146,9 +184,7 @@ function populateAppList(){
         noResults =
             '<tr class="app-list-item">\n' +
             '    <td></td>\n' +
-            '    <td></td>\n' +
-            '    <td></td>\n' +
-            '    <td>No Results</td>\n' +
+            '    <td class="text-end">No Results</td>\n' +
             '    <td></td>\n' +
             '    <td></td>\n' +
             '</tr>';
@@ -162,10 +198,10 @@ function populateAppList(){
             '    <td></td>\n' +
             '</tr>';
     }
-
     // Add Item that says "No Result" the app-list if there are no apps to show
     if (sortedApps.length === 0){
         appListDiv.append(noResults);
+        $('#more-apps').hide();
     }else{
         // Show the more button if there are still apps to show
         $('#more-apps').show();
@@ -180,18 +216,34 @@ function populateAppList(){
     }
 }
 
+function populateAppReminders(){
+    if (sortedAppReminders.length === 1 && sortedAppReminders[0].length === 0){
+        const noResults =   `<div class="reminder">
+                                        <p>No Recent Followups</p>
+                                    </div>`;
+        myAppRemindersDiv.append(noResults);
+    }else{
+        sortedAppReminders.forEach((appReminder) => {
+           createMyAppReminderFromData(appReminder);
+        });
+    }
+}
+
 // Remove children from application list
 function emptyAppList(){
     appListDiv.empty();
     appShowingCnt = 0;
 }
 
+function emptyAppReminders(){
+    myAppRemindersDiv.empty();
+}
+
 // Searches through all apps and adds apps that pass the filters into sortedApps
 // sortedApps will be ordered by how the apps are ordered in the database
 function sortAppsByUserFilters(){
-    //console.log(apps);
     tempApps = [];
-    apps.forEach(singleApp => {
+    results.myApps.forEach(singleApp => {
         // Return if app has no data
         if (singleApp.length === 0) return;
 
@@ -229,7 +281,6 @@ function sortAppsByUserFilters(){
         }
     })
     sortedApps = tempApps;
-    //console.log(sortedApps);
 }
 
 // Create an application list item using the supplied appData
@@ -246,43 +297,37 @@ function createAppFromData(appData){
 
     if (isAdmin()){
         // Create a list item with the application data filled in for an ADMIN
-        app = $(`<tr class="app-list-item" id="app-${appData.application_id}">\n` +
-            `<td>${appDate}</td>\n` +
-            `<td>${appData.jname}</td>\n` +
-            `<td>${appData.ename}</td>\n` +
-            `<td><a href="${appData.jurl}" target="_blank" rel="noopener noreferrer">Apply Link</a></td>\n` +
-            //`<td>${appData.fname} ${appData.lname}</td>\n` +
-            //`<td>${appData.email}</td>\n` +
-            //`<td class="status status-${appData.astatus}">\n` +
-            //`    <i class="fa-solid fa-circle"></i>\n` +
-            //`    <span style="text-transform: capitalize">` + statusReplace + `</span>\n` +
-            //`</td>\n` +
-            `</tr>`);
+        app = $(`<tr class="app-list-item" id="app-${appData.application_id}">
+                            <td class="table-date">${appDate}</td>
+                            <td class="table-title">${appData.jname}</td>
+                            <td class="table-employer">${appData.ename}</td>
+                            <td class="table-link"><a href="${appData.jurl}" target="_blank" rel="noopener noreferrer">Apply Here</a></td>
+                        </tr>`);
     }else{
         // Create a list item with the application data filled in for a USER
-        app = $(`<tr class="app-list-item" id="app-${appData.application_id}">\n` +
-            `<td>${appDate}</td>\n` +
-            `<td>${appData.jname}</td>\n` +
-            `<td>${appData.ename}</td>\n` +
-            `<td class="status status-${appData.astatus}">\n` +
-            `    <i class="fa-solid fa-circle"></i>\n` +
-            `    <span style="text-transform: capitalize">` + statusReplace + `</span>\n` +
-            `</td>\n` +
-            `</tr>`);
+        app = $(`<tr class="app-list-item" id="app-${appData.application_id}">
+                            <td class="table-date">${appDate}</td>
+                            <td class="table-title">${appData.jname}</td>
+                            <td class="table-employer">${appData.ename}</td>
+                            <td class="table-status status status-${appData.astatus}">
+                                <i class="fa-solid fa-circle"></i>
+                                <span style="text-transform: capitalize">` + statusReplace + `</span>
+                            </td>
+                        </tr>`);
         // Create an edit button and add an onclick listener to Open App Modal when edit button is clicked
-        const editBtn = $(`<button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>`);
+        const editBtn = $(`<button class="app-button-inner btn btn-sm btn-update" data-bs-toggle="tooltip" title="Edit Application"><i class="fa-solid fa-pen"></i></button>`);
         editBtn.on('click', () => {
             showAppModal(appData, statusReplace, clickableUrl);
         })
 
         // Create a delete button and add an onclick listener to ask to Delete App when delete button is clicked
-        const deleteBtn = $(`<button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i>`);
+        const deleteBtn = $(`<button class="app-button-inner btn btn-sm btn-delete" data-bs-toggle="tooltip" title="Delete Application"><i class="fa-solid fa-trash"></i>`);
         deleteBtn.on('click', () => {
             askToDeleteApplication(appData.application_id, appData.ename);
         })
 
         // Show edit and delete btn div is viewRole is a USER and nothing is viewRole is ADMIN
-        const btnDiv = $('<td class="app-button-outer"></td>');
+        const btnDiv = $('<td class="app-button-outer table-btns"></td>');
         btnDiv.append(editBtn);
         btnDiv.append(deleteBtn);
         // Add button div to app
@@ -301,36 +346,55 @@ function createAppFromData(appData){
     appShowingCnt++;
 }
 
+// Create an App Reminder for the Followups section
+function createMyAppReminderFromData(appReminderData){
+    const followupDate = getFormattedDate(appReminderData.followupdate, dateFormat);
+
+    // Create a list item with the application data filled in
+    const appReminder =
+        $(`<div class='reminder'>
+                    <i class='fa-regular fa-comment'></i>
+                    <button class='reminder-modal-btn text-start' type='button' onclick='showFollowUpApp(${JSON.stringify(appReminderData)})' >${appReminderData.jname} at <span>${appReminderData.ename}</span></button>
+                    <p>Follow-up Date: <span>${followupDate}</span></p>
+                </div>`);
+
+    myAppRemindersDiv.append(appReminder);
+}
+
 // Empty the app-list, Sort by clickedField, then populate the app-list
 // If sortBySpecificField is true, then sort apps using the provided field type
-function emptySortAndPopulateAppList(sortBySpecificField = false, selectedFieldIndex, clickedFieldIconName, clickedField){
+function emptySortAndPopulateAppList(newFieldWasClicked = false, selectedFieldIndex, clickedFieldIconName, clickedField){
     // Empty out the app list
     emptyAppList();
     // Sort apps by the inputs
     sortAppsByUserFilters();
     // Sort by a specific field if true, otherwise skip this
-    if (sortBySpecificField){
+    if (newFieldWasClicked){
+        curAppListField = clickedField;
         switch (selectedFieldIndex){
             case 2:
                 $(clickedFieldIconName).removeClass().addClass('fa-solid fa-sort-down');
-                sortListByField(sortedApps,'dsc', clickedField);
+                curAppListDirection = 'dsc';
+                sortListByField(sortedApps, curAppListDirection, curAppListField);
                 break;
             case 1:
                 $(clickedFieldIconName).removeClass().addClass('fa-solid fa-sort-up');
-                sortListByField(sortedApps, 'asc', clickedField);
+                curAppListDirection = 'asc';
+                sortListByField(sortedApps, curAppListDirection, curAppListField);
                 break;
             case 0:
             default:
                 $(clickedFieldIconName).removeClass().addClass('fa-solid fa-sort');
                 break;
         }
+    }else{
+        sortListByField(sortedApps, curAppListDirection, curAppListField);
     }
     populateAppList();
 }
 
 // Load more apps by increasing the app count to load by APP_MAX_LOAD_CNT and then refresh the list
 function loadMoreApps(){
-    console.log("Loading more Apps");
     appCntToLoad += APP_MAX_LOAD_CNT;
     emptyAppList();
     populateAppList();
@@ -344,20 +408,15 @@ function showFollowUpApp(appData){
 
 // Open the edit-modal and fill in the data from the appData
 function showAppModal(appData, status, formattedUrl){
-    console.log(appData);
-
     $('#edit-modal').modal('show');
 
-    console.log(status);
-    console.log(formattedUrl);
-
     // Fill in modal info
-    $('#edit-modal-adate').text(appData.adate);
+    $('#edit-modal-adate').text(getFormattedDate(appData.adate, dateFormat));
     $('#edit-modal-jname').text(appData.jname);
     $('#edit-modal-ename').text(appData.ename);
     $('#edit-modal-description').text(appData.jdescription)
     $('#edit-modal-astatus').text(status);
-    $('#edit-modal-fdate').text(appData.followupdate);
+    $('#edit-modal-fdate').text(getFormattedDate(appData.followupdate, dateFormat));
     $('#edit-modal-updates').text(appData.fupdates);
     $('#edit-modal-appid').val(appData.application_id);
 

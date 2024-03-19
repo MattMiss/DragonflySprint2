@@ -1,11 +1,16 @@
 <?php
 session_start();
+ob_start();
+
 $location = '';
+$pageTitle = 'Admin Dashboard';
 
 global $db_location;
 global $cnxn;
 global $viewingID;
 
+// Log user out if idle time or logged in time is past max
+include 'php/roles/timeout_check.php';
 // Logout and return to login.php if ?logout=true
 include 'php/roles/logout_check.php';
 // Ensure a user is logged in
@@ -13,32 +18,19 @@ include 'php/roles/user_check.php';
 // Ensure an admin is logged in
 include 'php/roles/admin_check.php';
 
-echo '
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <!-- Load theme from localstorage -->
-    <script src="js/themescript.js"></script>
-    <!-- Latest compiled and minified CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="styles/styles.css"/>
-    <!-- Latest compiled JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</head>
-<body>';
-
+include 'header.php';
 include 'php/nav_bar.php';
 include 'db_picker.php';
 include $db_location;
 
 $appWasDeleted = false;
 $userWasDeleted = false;
+$userWasUnDeleted = false;
 $announceWasDeleted = false;
+$passwordWasReset = false;
+
+$defaultUserPass = "pass1234";
+$defaultAdminPass = "admin1234";
 
 // soft deletes a database entry
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -49,40 +41,60 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $appWasDeleted = true;
         $deleteAppResult = @mysqli_query($cnxn, $sqlDeleteApp);
     } elseif ($_POST["submit-from"] == 2) {
-        $id = $_POST["id"];
-
         // Ensure a user is logged in
         include 'php/roles/user_check.php';
         // Ensure an admin is logged in
         include 'php/roles/admin_check.php';
 
-        $sqlDeleteUser = "UPDATE users SET is_deleted = 1 WHERE user_id = $id";
-        $userWasDeleted = true;
-        //echo $sql4;
+        $id = $_POST["id"];
+        $operation = $_POST["operation"] === '1' ? 1 : 0;   // 1 for delete, 0 for undo-delete
+
+        $sqlDeleteUser = "UPDATE users SET is_deleted = $operation WHERE user_id = $id";
+
+        $userWasDeleted = $operation === 1;
+        $userWasUnDeleted = $operation === 0;
         $deleteUserResult = @mysqli_query($cnxn, $sqlDeleteUser);
     }else if($_POST["submit-from"] == 3) {
-        $id = $_POST["id"];
-        $perm = $_POST["perm"];
-
         // Ensure a user is logged in
         include 'php/roles/user_check.php';
         // Ensure an admin is logged in
         include 'php/roles/admin_check.php';
+
+        $id = $_POST["id"];
+        $perm = $_POST["perm"];
 
         $sqlMakeUserAdmin = "UPDATE users SET permission = $perm WHERE user_id = $id";
         $makeAdminResult = @mysqli_query($cnxn, $sqlMakeUserAdmin);
 
     }else if($_POST["submit-from"] == 4) {
-        $announceID = $_POST["announcement-id"];
-
         // Ensure a user is logged in
         include 'php/roles/user_check.php';
         // Ensure an admin is logged in
         include 'php/roles/admin_check.php';
 
+        $announceID = $_POST["announcement-id"];
+
         $sqlDeleteAnnouncement = "UPDATE announcements SET is_deleted = 1 WHERE announcement_id = $announceID";
         $deletedAnnouncementResult = @mysqli_query($cnxn, $sqlDeleteAnnouncement);
         $announceWasDeleted = true;
+    }else if($_POST["submit-from"] == 5) {
+        // Ensure a user is logged in
+        include 'php/roles/user_check.php';
+        // Ensure an admin is logged in
+        include 'php/roles/admin_check.php';
+
+        $id = $_POST["id"];
+        $perm = $_POST["perm"];
+
+        if ($perm === '1'){
+            $hashDefaultPass = password_hash($defaultAdminPass, PASSWORD_DEFAULT);
+        }else{
+            $hashDefaultPass = password_hash($defaultUserPass, PASSWORD_DEFAULT);
+        }
+
+        $sqlResetUserPass = "UPDATE users SET password = '$hashDefaultPass' WHERE user_id = $id";
+        $resetUserPassResults = @mysqli_query($cnxn, $sqlResetUserPass);
+        $passwordWasReset = true;
     }
 }
 
@@ -99,25 +111,25 @@ $announceResult = @mysqli_query($cnxn, $sqlAnnounce);
 $usersResult = @mysqli_query($cnxn, $sqlUsers);
 
 // Fill in apps array
-$apps[] = array();
-$users[] = array();
-$announcements[] = array();
+$myApps[] = [];
+$allUsers[] = [];
+$allAnnouncements[] = [];
 
 $appCount = 0;
 while ($row = mysqli_fetch_assoc($appsResult)) {
-    $apps[$appCount] = $row;
+    $myApps[$appCount] = $row;
     $appCount++;
 }
 
 $userCount = 0;
 while ($row = mysqli_fetch_assoc($usersResult)) {
-    $users[$userCount] = $row;
+    $allUsers[$userCount] = $row;
     $userCount++;
 }
 
 $announceCount = 0;
 while ($row = mysqli_fetch_assoc($announceResult)){
-    $announcements[$announceCount] = $row;
+    $allAnnouncements[$announceCount] = $row;
     $announceCount++;
 }
 
@@ -133,30 +145,16 @@ while ($row = mysqli_fetch_assoc($announceResult)){
             <div class="app-list-admin">
                 <h3>Recent Applications</h3>
                 <div class="row">
-                    <div class="col-md-4 pt-2">
+                    <div class="col-sm-6 pt-2">
                         <div class="input-group input-group-sm">
                             <span class="input-group-text">Start Date</span>
                             <input type="date" class="form-control date-input" id="app-start-date" name="search-start-date">
                         </div>
                     </div>
-                    <div class="col-md-4 pt-2">
+                    <div class="col-sm-6 pt-2">
                         <div class="input-group input-group-sm">
                             <span class="input-group-text">End Date</span>
                             <input type="date" class="form-control date-input" id="app-end-date" name="search-end-date">
-                        </div>
-                    </div>
-                    <div class="col-md-4 text-end pt-2">
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-text">Status</span>
-                            <select class="form-select status-select" id="app-status-select">
-                                <option selected value="any">Any</option>
-                                <option value="accepted">Accepted</option>
-                                <option value="applied">Applied</option>
-                                <option value="inactive">Inactive</option>
-                                <option value="interviewing">Interviewing</option>
-                                <option value="need-to-apply">Need-to-apply</option>
-                                <option value="rejected">Rejected</option>
-                            </select>
                         </div>
                     </div>
                 </div>
@@ -173,7 +171,7 @@ while ($row = mysqli_fetch_assoc($announceResult)){
 
 <!--                start of app table -->
                 <table class="dash-table admin-app">
-                    <thead>
+                    <thead class="table-head">
                     <tr>
                         <th scope="col" class="app-date-col">
                             <div class="row clickable" id="date-order-btn">
@@ -215,17 +213,10 @@ while ($row = mysqli_fetch_assoc($announceResult)){
                                 </div>
                             </div>
                         </th>
-                        <th scope="col" class="app-status-col" id="status-order-btn">
-                            <div class="row clickable">
+                        <th scope="col" class="app-url-col">
+                            <div class="row">
                                 <div class="col-auto pe-0 my-auto">
                                     URL
-                                </div>
-                                <div class="col-auto ps-2 my-auto">
-                                    <div class="order-icons">
-                                        <div class="order-icons">
-                                            <i class="fa-solid fa-sort" id="status-field-icon"></i>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </th>
@@ -236,20 +227,107 @@ while ($row = mysqli_fetch_assoc($announceResult)){
                     </tbody>
                 </table>
                 <div class="col text-center pt-2 pb-2" id="more-apps">
-                    <button type="button" class="submit-btn"  onclick="loadMoreApps()">More</button>
+                    <button type="button" class="more-apps-btn"  onclick="loadMoreApps()">Load More</button>
                 </div>
             </div>
         </div>
 
         <div class="row dashboard-top">
-            <div class="reminders-list pt-4">
+            <div class="announcements-list pt-4">
                 <h3>Announcements</h3>
+                <div class="row">
+                    <div class="col-md-4 col-sm-6 pt-2">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Start Date</span>
+                            <input type="date" class="form-control date-input" id="announce-start-date" name="announce-search-start-date">
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6 pt-2">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">End Date</span>
+                            <input type="date" class="form-control date-input" id="announce-end-date" name="announce-search-end-date">
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-end pt-2">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">Job Type</span>
+                            <select class="form-select job-type-select" id="announce-job-type-select">
+                                <option selected value="both">Both</option>
+                                <option value="job">Job</option>
+                                <option value="internship">Internship</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col py-2">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </span>
+                            <input id="announce-search-bar" type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                </div>
                 <table class="dash-table admin-announcement">
-                    <thead>
+                    <thead class="table-head">
                         <tr>
-                            <th scope="col" class="announce-date-col">Date</th>
-                            <th scope="col" class="announce-position-col">Position</th>
-                            <th scope="col" class="announce-employer-col">Employer</th>
+                            <th scope="col" class="announce-date-col">
+                                <div class="row clickable" id="announce-date-order-btn">
+                                    <div class="col-auto pe-0 my-auto">
+                                        Date
+                                    </div>
+                                    <div class="col-auto ps-2 my-auto">
+                                        <div class="order-icons">
+                                            <div class="order-icons">
+                                                <i class="fa-solid fa-sort" id="announce-date-field-icon"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th>
+                            <th scope="col" class="announce-position-col">
+                                <div class="row clickable" id="announce-title-order-btn">
+                                    <div class="col-auto pe-0 my-auto">
+                                        Position
+                                    </div>
+                                    <div class="col-auto ps-2 my-auto">
+                                        <div class="order-icons">
+                                            <div class="order-icons">
+                                                <i class="fa-solid fa-sort" id="announce-title-field-icon"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th>
+                            <th scope="col" class="announce-employer-col">
+                                <div class="row clickable" id="announce-employer-order-btn">
+                                    <div class="col-auto pe-0 my-auto">
+                                        Employer
+                                    </div>
+                                    <div class="col-auto ps-2 my-auto">
+                                        <div class="order-icons">
+                                            <div class="order-icons">
+                                                <i class="fa-solid fa-sort" id="announce-employer-field-icon"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th>
+                            <th scope="col" class="announce-job-type-col">
+                                <div class="row clickable" id="announce-job-type-order-btn">
+                                    <div class="col-auto pe-0 my-auto">
+                                        Job Type
+                                    </div>
+                                    <div class="col-auto ps-2 my-auto">
+                                        <div class="order-icons">
+                                            <div class="order-icons">
+                                                <i class="fa-solid fa-sort" id="announce-job-type-field-icon"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th>
                             <th scope="col" class="announce-url-col">URL</th>
                             <th scope="col" class="w-btn"></th>
                         </tr>
@@ -304,7 +382,7 @@ while ($row = mysqli_fetch_assoc($announceResult)){
                     </div>
                 </div>
                 <table class="dash-table admin-user">
-                    <thead>
+                    <thead class="table-head">
                     <tr>
                         <th scope="col" class="user-role-col">
                             <div class="row clickable" id="user-role-order-btn">
@@ -419,7 +497,7 @@ while ($row = mysqli_fetch_assoc($announceResult)){
                                 </li>
                             <li class='list-group-item pb-1'>
                                 <span class='form-label'>URL:</span>
-                                <a id="edit-modal-url" href="" target="_blank" rel="noopener noreferrer">Apply Here</a>
+                                <a id="edit-modal-url" href="" target="_blank" rel="noopener noreferrer">Application Link</a>
                                 </li>
                             <li class='list-group-item'>
                                 <span class='form-label'>Job Description: </span>
@@ -510,7 +588,7 @@ while ($row = mysqli_fetch_assoc($announceResult)){
                         <button type='button' id="user-edit-modal-admin" class="btn btn-make-admin" data-bs-dismiss='modal'></button>
                         <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Close</button>
                         <form method="post" action="user_edit.php" target="_blank">
-                            <input id="edit-modal-user-id" type="hidden" name="user-id" value="">
+                            <input id="edit-modal-user-id" type="hidden" name="user_id" value="">
                             <button type="submit" class="modal-edit">Edit</button>
                         </form>
                     </div>
@@ -532,8 +610,32 @@ while ($row = mysqli_fetch_assoc($announceResult)){
                         <form method='POST' action='#'>
                             <input type='hidden' value='2' name='submit-from'>
                             <input type='hidden' id="delete-user-id" value='' name='id'>
+                            <input type='hidden' value='1' name='operation'>
                             <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Cancel</button>
                             <button type='submit' class='modal-delete'>Delete User</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Undo Delete Modal -->
+        <div class='modal fade' id='user-undo-delete-modal' tabindex='-1' role='dialog' aria-labelledby='delete-app-message' aria-hidden='true'>
+            <div class='modal-dialog modal-dialog-centered' role='document'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        <h4 class='modal-title' id='undo-delete-warning'>Undo Delete??</h4>
+                    </div>
+                    <div class='modal-body'>
+                        <p>Are you sure you want to bring back <span id="user-undo-delete-modal-name"></span>?</p>
+                    </div>
+                    <div class='modal-footer'>
+                        <form method='POST' action='#'>
+                            <input type='hidden' value='2' name='submit-from'>
+                            <input type='hidden' id="undo-delete-user-id" value='' name='id'>
+                            <input type='hidden' value='0' name='operation'>
+                            <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Cancel</button>
+                            <button type='submit' class='modal-undo-delete'>Undo Delete</button>
                         </form>
                     </div>
                 </div>
@@ -565,7 +667,7 @@ while ($row = mysqli_fetch_assoc($announceResult)){
 
         <!-- View Announcement Modal -->
         <div class='modal fade' id='view-announcement-modal' tabindex='-1' role='dialog' aria-labelledby='view-announcement' aria-hidden='true'>
-            <div class='modal-dialog' role='document'>
+            <div class='modal-dialog modal-dialog-centered' role='document'>
                 <div class='modal-content'>
                     <div class='modal-header'>
                         <h5 class='modal-title' id='view-announce-title'>$title</h5>
@@ -618,19 +720,46 @@ while ($row = mysqli_fetch_assoc($announceResult)){
                 </div>
             </div>
         </div>
-
+        <!-- User Delete Modal -->
+        <div class='modal fade' id='reset-password-modal' tabindex='-1' role='dialog' aria-labelledby='reset-password-message' aria-hidden='true'>
+            <div class='modal-dialog modal-dialog-centered' role='document'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        <h4 class='modal-title' id='delete-warning'>Reset User Password?</h4>
+                    </div>
+                    <div class='modal-body'>
+                        <p>Are you sure you want to reset the password for <span id="user-reset-pass-name"></span> to the default password?</p>
+                    </div>
+                    <div class='modal-footer'>
+                        <form method='POST' action='#'>
+                            <input type='hidden' value='5' name='submit-from'>
+                            <input type='hidden' id="user-reset-pass-id" value='' name='id'>
+                            <input type='hidden' id="user-reset-pass-perm" value='' name='perm'>
+                            <button type='button' class='modal-close-secondary' data-bs-dismiss='modal'>Cancel</button>
+                            <button type='submit' class='modal-delete'>Reset</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 </main>
 
 <?php include 'php/footer.php' ?>
 <script>
-    let apps = <?php echo json_encode($apps) ?>;
-    let users = <?php echo json_encode($users) ?>;
-    let announcements = <?php echo json_encode($announcements) ?>;
-    let role = <?php echo $role ?>;
-    let userID = <?php echo $viewingID ?>;
-    let appWasDeleted = <?php echo json_encode($appWasDeleted) ?>;
-    let userWasDeleted = <?php echo json_encode($userWasDeleted) ?>;
-    let announceWasDeleted = <?php echo json_encode($announceWasDeleted) ?>;
+    const results = {
+        myApps : <?php echo json_encode($myApps) ?>,
+        myAnnouncements : [],
+        myAppReminders : [],
+        allAnnouncements : [<?php echo json_encode($allAnnouncements) ?>],
+        role : <?php echo $role ?>,
+        allUsers : <?php echo json_encode($allUsers) ?>,
+        userID : <?php echo $viewingID ?>,
+        appWasDeleted : <?php echo json_encode($appWasDeleted) ?>,
+        userWasDeleted : <?php echo json_encode($userWasDeleted) ?>,
+        userWasUnDeleted : <?php echo json_encode($userWasUnDeleted) ?>,
+        announceWasDeleted : <?php echo json_encode($announceWasDeleted) ?>,
+        passwordWasReset: <?php echo json_encode($passwordWasReset) ?>
+    }
 </script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="js/main.js"></script>

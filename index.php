@@ -1,11 +1,16 @@
 <?php
 session_start();
+ob_start();
+
 $location = '';
+$pageTitle = 'User Dashboard Homepage';
 
 global $cnxn;
 global $viewingID;
 global $db_location;
 
+// Log user out if idle time or logged in time is past max
+include 'php/roles/timeout_check.php';
 // Logout and return to login.php if ?logout=true
 include 'php/roles/logout_check.php';
 // Check for user_id in SESSION and redirect to login if null
@@ -13,25 +18,7 @@ include 'php/roles/user_check.php';
 // Redirect admins to admin dashboard
 include 'php/roles/admin_kick.php';
 
-echo '
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard Homepage</title>
-    <!-- Load theme from localstorage -->
-    <script src="js/themescript.js"></script>
-    <!-- Latest compiled and minified CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="styles/styles.css"/>
-    <!-- Latest compiled JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</head>
-<body>';
-
+include 'header.php';
 include 'php/nav_bar.php';
 include 'db_picker.php';
 include $db_location;
@@ -72,10 +59,26 @@ $appsResult = @mysqli_query($cnxn, $sqlApps);
 $announceResult = @mysqli_query($cnxn, $sqlRecentAnnounce);
 $appReminders = @mysqli_query($cnxn, $sqlRecentApps);
 
-$apps[] = [];
+$myApps[] = [];
+$myAnnouncements[] = [];
+$myAppReminders[] = [];
 
+$appCount = 0;
 while ($row = mysqli_fetch_assoc($appsResult)) {
-    $apps[] = $row;
+    $myApps[$appCount] = $row;
+    $appCount++;
+}
+
+$announceCount = 0;
+while ($row = mysqli_fetch_assoc($announceResult)) {
+    $myAnnouncements[$announceCount] = $row;
+    $announceCount++;
+}
+
+$appReminderCount = 0;
+while ($row = mysqli_fetch_assoc($appReminders)) {
+    $myAppReminders[$appReminderCount] = $row;
+    $appReminderCount++;
 }
 
 ?>
@@ -128,7 +131,7 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
                     </div>
                 </div>
                 <table class="dash-table">
-                    <thead>
+                    <thead class="table-head">
                     <tr>
 
                         <th scope="col" class="app-date-col">
@@ -189,15 +192,22 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
                     </tr>
                     </thead>
                     <tbody class="table-body" id="dash-apps-list">
+
                         <!-- List gets populated with applications from the database here-->
+
                     </tbody>
                 </table>
-                <div class="col text-center pt-2 pb-2" id="more-apps">
-                    <button type="button" class="submit-btn"  onclick="loadMoreApps()">More</button>
+                <div class="col text-center pt-2 pb-2 hidden" id="more-apps">
+                    <button type='button' class='more-apps-btn m-auto py-2 my-3' onclick='loadMoreApps()'>
+                        <i class='fa-solid fa-plus pe-2'></i><a>Load More</a>
+                    </button>
                 </div>
-                <div class="col d-flex justify-content-center pt-2" id="new-app-container">
-                    <a class="submit-btn" href="application_form.php">New Application</a>
+                <div class="d-flex pt-2" id="new-app-container">
+                    <div class="new-app-btn m-auto">
+                        <i class='fa-solid fa-pen pe-2'></i><a href='application_form.php'>New Application</a>
+                    </div>
                 </div>
+
             </div>
 
             <div class="reminders col ">
@@ -205,16 +215,20 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
                 <div>
                     <h6>Announcements</h6>
                     <hr>
-                    <?php
-                    createAppAnnouncements($announceResult);
-                    ?>
+                    <div id="my-announcements">
+
+                        <!-- List gets populated with announcements from the database here-->
+
+                    </div>
                 </div>
                 <div style="padding-top: 20px;">
                     <h6>Follow Up</h6>
                     <hr>
-                    <?php
-                    createAppReminders($appReminders);
-                    ?>
+                    <div id="my-app-reminders">
+
+                        <!-- List gets populated with application follow-up reminders from the database here-->
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -279,7 +293,7 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
                         </li>
                         <li class='list-group-item pb-1'>
                             <span class='form-label'>URL:</span>
-                            <a id="edit-modal-url" href="" target="_blank" rel="noopener noreferrer">Apply Now!</a>
+                            <a id="edit-modal-url" href="" target="_blank" rel="noopener noreferrer">Application Link</a>
                         </li>
                         <li class='list-group-item'>
                             <span class='form-label'>Job Description: </span>
@@ -319,7 +333,7 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
 
     <!-- View Announcement Modal -->
     <div class='modal fade' id='view-announcement-modal' tabindex='-1' role='dialog' aria-labelledby='view-announcement' aria-hidden='true'>
-        <div class='modal-dialog' role='document'>
+        <div class='modal-dialog modal-dialog-centered' role='document'>
             <div class='modal-content'>
                 <div class='modal-header'>
                     <h5 class='modal-title' id='view-announce-title'>$title</h5>
@@ -356,12 +370,19 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="js/contactscript.js"></script>
 <script>
-    let apps = <?php echo json_encode($apps) ?>;
-    let announcements = [];
-    let role = <?php echo $role ?>; users='';
-    let appWasDeleted = <?php echo json_encode($appWasDeleted) ?>;
-    let userWasDeleted = false;
-    let announceWasDeleted = false;
+    const results = {
+        myApps : <?php echo json_encode($myApps) ?>,
+        myAnnouncements : <?php echo json_encode($myAnnouncements) ?>,
+        myAppReminders : <?php echo json_encode($myAppReminders) ?>,
+        allAnnouncements : [],
+        role : <?php echo $role ?>,
+        users : '',
+        appWasDeleted : <?php echo json_encode($appWasDeleted) ?>,
+        userWasDeleted : false,
+        userWasUnDeleted : false,
+        announceWasDeleted : false,
+        passwordWasReset : false
+    }
 </script>
 <script src="js/main.js"></script>
 <script src="js/dash-functions.js"></script>
@@ -369,73 +390,3 @@ while ($row = mysqli_fetch_assoc($appsResult)) {
 <script src="js/dash-announcements.js"></script>
 </body>
 </html>
-
-<?php
-function createAppAnnouncements($info) {
-    $isEmpty = true;
-    while ($row = mysqli_fetch_assoc($info)) {
-        $id = $row["announcement_id"];
-        $title = $row["title"];
-        $jtype = $row["job_type"];
-        $location = $row["location"];
-        $ename = $row["ename"];
-        $jobInfo = $row["additional_info"];
-        $jurl = $row["jurl"];
-        $recipient = $row["sent_to"];
-        $date = $row["date_created"];
-        $announce = json_encode($row);
-        $isEmpty = false;
-        //            $app_info = json_encode($row);
-
-        echo "
-            <div class='reminder'>
-                <i class='fa-regular fa-comment'></i>
-                <button class='announcement-modal-btn text-start' type='button' onclick='showViewAnnouncementModal($announce)' >$title $jtype at <span>$ename</span></button>
-                <p>Date Created: <span>$date</span></p>
-            </div>
-            ";
-    }
-    // Show text is no announcements
-    if ($isEmpty){
-        echo "
-            <div class='reminder'>  
-                <p>No Recent Announcements</p>
-            </div>
-        ";
-    }
-}
-
-function createAppReminders($info) {
-    $isEmpty = true;
-    while ($row = mysqli_fetch_assoc($info)) {
-        $id = $row["application_id"];
-        $jobName = $row["jname"];
-        $ename = $row["ename"];
-        $jurl = $row["jurl"];
-        $adate = $row["adate"];
-        $followupdate = $row["followupdate"];
-        $astatus = $row['astatus'];
-        $jdescription = $row['jdescription'];
-        $fupdates = $row['fupdates'];
-        $data = json_encode($row);
-        $isEmpty = false;
-        //$app_info = json_encode($row);
-
-        echo "
-            <div class='reminder'>
-                <i class='fa-regular fa-comment'></i>
-                <button class='reminder-modal-btn text-start' type='button' onclick='showFollowUpApp($data)'>$jobName at <span>$ename</span></button>
-                <p>Follow-up Date: <span>$followupdate</span></p>
-            </div>
-            ";
-    }
-    // Show text is no announcements
-    if ($isEmpty){
-        echo "
-            <div class='reminder'>  
-                <p>No Follow-ups Needed</p>
-            </div>
-        ";
-    }
-}
-?>

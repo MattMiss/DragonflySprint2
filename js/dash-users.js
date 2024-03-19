@@ -1,14 +1,17 @@
-let sortedUsers = users;
+let sortedUsers = results.allUsers;
 let tempUsers;
 let userStatus = 'any';
 let userSearchTerm = '';
 let userFieldButtonState = {
+    "permission" : 0,
     "fname" : 0,
     "email" : 0,
     "status" : 0
 }
 let lastUserFieldClicked = null;
 let showDeletedUsers = false;
+let curUserListDirection = '';
+let curUserListField = '';
 const userListDiv = $('#dash-users-list');
 
 $(window).on('load', () => {
@@ -23,8 +26,12 @@ $(window).on('load', () => {
         toggleUserFieldOrder('#user-name-field-icon', 'fname');
     }
 
-    if (userWasDeleted) {
-        showToast("User was deleted!", 2000);
+    if (results.userWasDeleted) {
+        showToast("User was deleted!", 2000, '#e54a4a');
+    }else if (results.userWasUnDeleted) {
+        showToast("User was brought back!", 2000, '#6CB443');
+    }else if (results.passwordWasReset) {
+        showToast("Password was reset!", 2000, '#6CB443');
     }
 });
 
@@ -32,49 +39,65 @@ $(window).on('load', () => {
 // List will reload if any User Filters are changed
 function setUserSearchListeners(){
     // User List Listeners
-    $('#users-search-bar').on('change keyup', (e) => {
-        userSearchTerm = e.target.value;
-        emptySortAndPopulateUsersList(false);
-    });
-
-    $('#user-status-select').on('change', (e) => {
-        userStatus = e.target.value;
-        emptySortAndPopulateUsersList(false);
-    })
-
-    $('#user-deleted-check').on('change', (e) => {
-        showDeletedUsers = e.target.checked;
-        toggleShowDeletedIcon();
-        emptySortAndPopulateUsersList(false);
-    })
+    const searchBar = $('#users-search-bar');
+    if (searchBar){
+        searchBar.on('change keyup', (e) => {
+            userSearchTerm = e.target.value;
+            emptySortAndPopulateUsersList(false);
+        });
+    }
+    const statusSelect = $('#user-status-select');
+    if (statusSelect){
+        statusSelect.on('change', (e) => {
+            userStatus = e.target.value;
+            emptySortAndPopulateUsersList(false);
+        })
+    }
+    const deletedUsersCheckbox = $('#user-deleted-check');
+    if (deletedUsersCheckbox){
+        deletedUsersCheckbox.on('change', (e) => {
+            showDeletedUsers = e.target.checked;
+            toggleShowDeletedIcon();
+            emptySortAndPopulateUsersList(false);
+        })
+    }
 }
 
 // Onclick Events for OrderBy buttons on each field
 // Clicking on a field button will cycle between ascending and descending
 function setUserFieldBtnListeners(){
-    $('#user-name-order-btn').on('click', () => {
-        toggleUserFieldOrder('#user-name-field-icon', 'fname');
-    });
+    const userNameOrderBtn = $('#user-name-order-btn');
+    if (userNameOrderBtn){
+        userNameOrderBtn.on('click', () => {
+            toggleUserFieldOrder('#user-name-field-icon', 'fname');
+        });
+    }
 
-    $('#user-email-order-btn').on('click', () => {
-        toggleUserFieldOrder('#user-email-field-icon', 'email');
-    });
+    const userEmailOrderBtn = $('#user-email-order-btn');
+    if (userEmailOrderBtn){
+        userEmailOrderBtn.on('click', () => {
+            toggleUserFieldOrder('#user-email-field-icon', 'email');
+        });
+    }
 
-    $('#user-status-order-btn').on('click', () => {
-        toggleUserFieldOrder('#user-status-field-icon', 'status');
-    });
-    $('#user-role-order-btn').on('click', () => {
-        toggleUserFieldOrder('#user-role-field-icon', 'permission');
-    })
+    const userStatusOrderBtn = $('#user-status-order-btn');
+    if (userStatusOrderBtn){
+        userStatusOrderBtn.on('click', () => {
+            toggleUserFieldOrder('#user-status-field-icon', 'status');
+        });
+    }
+
+    const userRoleOrderBtn = $('#user-role-order-btn');
+    if (userRoleOrderBtn){
+        userRoleOrderBtn.on('click', () => {
+            toggleUserFieldOrder('#user-role-field-icon', 'permission');
+        })
+    }
 }
 
 // Cycle through buttons depending on the field clicked Each field has 3 states.
 // [0 = no order, shows up and down arrows][1 = asc order, shows up arrow][2 = dsc order, shows down arrow]
 function toggleUserFieldOrder(clickedFieldIconName, clickedField){
-    //console.log("Toggling Field order: " + clickedField);
-    // If field is different from last field, reset last field (show both up and down arrows)
-    //console.log("Last Field Click: " + lastAppFieldClicked);
-
     // Show Field Buttons for previously clicked field buttons but only if field button is not null or the
     // same as the previously clicked button
     if (lastUserFieldClicked && (lastUserFieldClicked !== clickedFieldIconName)){
@@ -111,6 +134,7 @@ function populateUsersList(){
     if (sortedUsers.length === 0){
         const noResults = '<tr class="user-list-item">\n' +
             '<td></td>\n' +
+            '<td></td>\n' +
             '<td class="text-center">No Users</td>\n' +
             '<td></td>\n' +
             '<td></td>\n' +
@@ -131,9 +155,8 @@ function emptyUsersList(){
 // Searches through all users and adds users that pass the filters into sortedUsers
 // sortedUsers will be ordered by how the users are ordered in the database
 function sortUsersByFilters(){
-    //console.log(users);
     tempUsers = [];
-    users.forEach(singleUser => {
+    results.allUsers.forEach(singleUser => {
         // Return if app has no data
         if (singleUser.length === 0) return;
         // Only show items that match the dropdown status or if the "any" status is selected
@@ -157,17 +180,10 @@ function sortUsersByFilters(){
         }
     })
     sortedUsers = tempUsers;
-    //console.log(sortedUsers);
 }
 
 // Create a user list item using the supplied userData
 function createUserFromData(userData) {
-
-    /*
-    $(editBtn).on('click', () => {
-        showAppModal(appData, statusReplace, clickableUrl);
-    })
-     */
     const deletedUser = userData.is_deleted === "1";
     const itemClass = "user-list-item" + (deletedUser ? " deleted-user" : "");
     const deletedIcon = deletedUser ? '<i class="fa-solid fa-user-slash deleted-user-icon"></i>' : "";
@@ -176,52 +192,80 @@ function createUserFromData(userData) {
 
     // Create a list item with the application data filled in
     const user =
-        $(`<tr class="${itemClass}" id="user-${userData.user_id}">\n` +
-            `<td>${role}</td>\n` +
-            `<td>${deletedIcon}${userData.fname} ${userData.lname}</td>\n` +
-            `<td>${userData.email}</td>\n` +
-            `<td>${userData.status}</td>\n` +
+        $(`<tr class="user-list-item ${itemClass}" id="user-${userData.user_id}">\n` +
+            `<td class="table-role">${role}</td>\n` +
+            `<td class="table-name">${deletedIcon}${userData.fname} ${userData.lname}</td>\n` +
+            `<td class="table-email">${userData.email}</td>\n` +
+            `<td class="table-status">${userData.status}</td>\n` +
             `</td>\n` +
             `</tr>`);
 
-    /*
-    user.on('click', () => {
-        //TODO: show user info
-    })
-     */
-
     const isUserAdmin = userData.permission === '1';
 
-    // Create an edit button and add an onclick listener to Open User Modal when edit button is clicked
-    const makeAdminBtn = $(`<button class="app-button-inner btn btn-make-admin">${isUserAdmin ? 'Remove' : 'Make'} Admin</button>`);
-    if (userID == userData.user_id){
-        makeAdminBtn.attr('disabled', true);
-    }
-    makeAdminBtn.on('click', () => {
-        if (isUserAdmin){
-            askToRemoveAdmin(userData.user_id, userData.fname, userData.lname);
-        }else{
-            askToMakeUserAdmin(userData.user_id, userData.fname, userData.lname);
-        }
-    })
-
-    // Create an edit button and add an onclick listener to Open User Modal when edit button is clicked
-    const editBtn = $(`<button class="app-button-inner btn btn-sm btn-update"><i class="fa-solid fa-pen"></i></button>`);
-    editBtn.on('click', () => {
-        showUserModal(userData, isUserAdmin);
-    })
-
-    // Create a delete button and add an onclick listener to ask to Delete App when delete button is clicked
-    const deleteBtn = $(`<button class="app-button-inner btn btn-sm btn-delete"><i class="fa-solid fa-trash"></i>`);
-    deleteBtn.on('click', () => {
-        askToDeleteUser(userData.user_id, userData.fname, userData.lname);
-    })
-
     // Show edit and delete btn div is viewRole is a USER and nothing is viewRole is ADMIN
-    const btnDiv = $('<td class="app-button-outer"></td>');
-    btnDiv.append(makeAdminBtn);
-    btnDiv.append(editBtn);
-    btnDiv.append(deleteBtn);
+    const btnDiv = $('<td class="app-button-outer table-btns"></td>');
+
+
+    if (userData.is_deleted === '0'){
+        const isSelfOrDeleted = (results.userID == userData.user_id) || (userData.is_deleted === '1');
+        const adminTooltip = isUserAdmin ? "Remove Admin Permission" : "Give Admin Permission";
+        // Create an edit button and add an onclick listener to Open User Modal when edit button is clicked
+        const makeAdminBtn = $(`<button class="app-button-inner btn btn-make-admin" data-bs-toggle="tooltip" title='${adminTooltip}'>${isUserAdmin ? 'Remove' : 'Make'} Admin</button>`);
+        if (isSelfOrDeleted){
+            makeAdminBtn.attr('disabled', true);
+        }else{
+            makeAdminBtn.on('click', () => {
+                if (isUserAdmin){
+                    askToRemoveAdmin(userData.user_id, userData.fname, userData.lname);
+                }else{
+                    askToMakeUserAdmin(userData.user_id, userData.fname, userData.lname);
+                }
+            })
+        }
+        // Create a reset user pass button and add an onclick listener to open user modal when the reset button is clicked
+        const resetPassBtn = $(`<button class="app-button-inner btn btn-sm btn-reset" data-bs-toggle="tooltip" title="Reset Password"><i class="fa-solid fa-key"></i></button>`);
+        if (isSelfOrDeleted){
+            resetPassBtn.attr('disabled', true);
+        }else{
+            resetPassBtn.on('click', () => {
+                showResetPassModal(userData.user_id, userData.fname, userData.lname, userData.permission);
+            })
+        }
+        // Create an edit button and add an onclick listener to Open User Modal when edit button is clicked
+        const editBtn = $(`<button class="app-button-inner btn btn-sm btn-update" data-bs-toggle="tooltip" title="Edit User"><i class="fa-solid fa-pen"></i></button>`);
+        if (isSelfOrDeleted) {
+            editBtn.attr('disabled', true);
+        }else{
+            editBtn.on('click', () => {
+                showUserModal(userData, isUserAdmin);
+            })
+        }
+        // Create a delete button and add an onclick listener to ask to Delete App when delete button is clicked
+        const deleteBtn = $(`<button class="app-button-inner btn btn-sm btn-delete" data-bs-toggle="tooltip" title="Delete User"><i class="fa-solid fa-trash"></i>`);
+        if (isSelfOrDeleted) {
+            deleteBtn.attr('disabled', true);
+        }else{
+            deleteBtn.on('click', () => {
+                askToDeleteUser(userData.user_id, userData.fname, userData.lname);
+            })
+        }
+        btnDiv.append(makeAdminBtn);
+        btnDiv.append(resetPassBtn);
+        btnDiv.append(editBtn);
+        btnDiv.append(deleteBtn);
+    }else{
+        // User is deleted
+        // Create a delete button and add an onclick listener to ask to Delete App when delete button is clicked
+        const unDeleteBtn = $(`<button class="app-button-inner btn btn-sm btn-update" data-bs-toggle="tooltip" title="Undo Delete User"><i class="fa-solid fa-reply"></i>`);
+        unDeleteBtn.on('click', () => {
+            askToUndoDeleteUser(userData.user_id, userData.fname, userData.lname);
+        })
+        btnDiv.append(unDeleteBtn);
+    }
+
+
+
+
     // Add button div to app
     user.append(btnDiv);
     userListDiv.append(user);
@@ -282,33 +326,38 @@ function createUserFromData(userData) {
 
 // Empty the user-list, Sort by clickedField, then populate the user-list
 // If sortBySpecificField is true, then sort users using the provided field type
-function emptySortAndPopulateUsersList(sortBySpecificField = false, selectedFieldIndex, clickedFieldIconName, clickedField){
+function emptySortAndPopulateUsersList(newFieldWasClicked = false, selectedFieldIndex, clickedFieldIconName, clickedField){
     // Empty out the user list
     emptyUsersList();
     // Sort users by the inputs
     sortUsersByFilters();
     // Sort by a specific field if true, otherwise skip this
-    if (sortBySpecificField){
+    if (newFieldWasClicked){
+        curUserListField = clickedField;
         switch (selectedFieldIndex){
             case 2:
                 $(clickedFieldIconName).removeClass().addClass('fa-solid fa-sort-down');
-                sortListByField(sortedUsers, 'dsc', clickedField);
+                curUserListDirection = 'dsc';
+                sortListByField(sortedUsers, curUserListDirection, curUserListField);
                 break;
             case 1:
                 $(clickedFieldIconName).removeClass().addClass('fa-solid fa-sort-up');
-                sortListByField(sortedUsers, 'asc', clickedField);
+                curUserListDirection = 'asc';
+                sortListByField(sortedUsers, curUserListDirection, curUserListField);
                 break;
             case 0:
             default:
                 $(clickedFieldIconName).removeClass().addClass('fa-solid fa-sort');
                 break;
         }
+    }else {
+        // Sort List by the same field already selected (sorts list without changing the arrow direction icons)
+        sortListByField(sortedUsers, curUserListDirection, curUserListField);
     }
     populateUsersList();
 }
 
 function showUserModal(userData, isUserAdmin) {
-    //console.log(userData);
     // Open user edit modal
     $('#user-edit-modal').modal('show');
 
@@ -322,7 +371,7 @@ function showUserModal(userData, isUserAdmin) {
     $('#user-edit-modal-roles').text(userData.roles);
 
     // Fill in hidden ID
-    $('#edit-modal-user-id').val(userData.user_id);
+    $('#edit-modal-user-id').val(userData.id);
 
     // Fill in deleted or not value
     if (userData.is_deleted == 0) {
@@ -342,18 +391,12 @@ function showUserModal(userData, isUserAdmin) {
 
     $('#user-edit-modal-admin').on('click', () => {
         if (isUserAdmin) {
-            askToRemoveAdmin(userData.user_id, userData.fname, userData.lname);
+            askToRemoveAdmin(userData.id, userData.fname, userData.lname);
         } else {
-            askToMakeUserAdmin(userData.user_id, userData.fname, userData.lname);
+            askToMakeUserAdmin(userData.id, userData.fname, userData.lname);
         }
     })
 
-    // Self check, cannot remove admin from self
-    if (userID == userData.user_id){
-        $('#user-edit-modal-admin').attr('disabled', true);
-    } else {
-        $('#user-edit-modal-admin').attr('disabled', false);
-    }
 }
 
 // Open delete user modal and set the value for user id to delete
@@ -367,6 +410,19 @@ function askToDeleteUser(userID, userFName, userLName){
     // THis will be sent to POST as the userID to delete
     $('#delete-user-id').val(userID);
 }
+
+// Open delete user modal and set the value for user id to delete
+function askToUndoDeleteUser(userID, userFName, userLName){
+    // Open the user delete modal
+    $('#user-undo-delete-modal').modal('show');
+
+    $('#user-undo-delete-modal-name').text(`${userFName} ${userLName}`)
+
+    // Set the value of the hidden input for delete-user-id
+    // THis will be sent to POST as the userID to delete
+    $('#undo-delete-user-id').val(userID);
+}
+
 
 // Open make user admin modal and fill in user info
 function askToMakeUserAdmin(userID, userFName, userLName){
@@ -396,6 +452,19 @@ function askToRemoveAdmin(userID, userFName, userLName){
     // THis will be sent to POST as the userID to delete
     $('#toggle-admin-user-id').val(userID);
     $('#toggle-admin-user-perm').val(0);
+}
+
+// Open make reset user pass modal and fill the user id in
+function showResetPassModal(userID, userFName, userLName, permission){
+    // Open the reset pass modal
+    $('#reset-password-modal').modal('show');
+
+    // Set the value of the hidden input for delete-user-id
+    // THis will be sent to POST as the userID to delete
+    $('#user-reset-pass-id').val(userID);
+    $('#user-reset-pass-perm').val(permission);
+    $('#user-reset-pass-name').text(`${userFName} ${userLName}`)
+
 }
 
 // Toggle the eye and eye-slash icon on and off

@@ -1,13 +1,16 @@
-
-
 <?php
 session_start();
+ob_start();
+
 $location = '';
+$pageTitle = 'Admin Announcement';
 
 global $db_location;
 global $cnxn;
 global $viewingID;
 
+// Log user out if idle time or logged in time is past max
+include 'php/roles/timeout_check.php';
 // Logout and return to login.php if ?logout=true
 include 'php/roles/logout_check.php';
 // Ensure a user is logged in
@@ -15,25 +18,7 @@ include 'php/roles/user_check.php';
 // Ensure an admin is logged in
 include 'php/roles/admin_check.php';
 
-echo
-'<!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Admin Announcement</title>
-        <!-- Load theme from localstorage -->
-        <script src="js/themescript.js"></script>
-        <!-- Latest compiled and minified CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Font awesome -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-        <link rel="stylesheet" href="styles/styles.css"/>
-        <!-- Latest compiled JavaScript -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    </head>
-<body>';
-
+include 'header.php';
 include 'php/nav_bar.php';
 include 'db_picker.php';
 include $db_location;
@@ -80,6 +65,21 @@ include $db_location;
                     <label for="announcement-url" class="form-label">URL*</label>
                     <input type="url" class="form-control" id="announcement-url" name="announcement-url"
                            placeholder="e.g. https://www.example.com" required>
+                </div>
+                <div class="mb-4">
+                    <label for="announce-send-to-select" class="form-label">Send Announcement To</label>
+                    <select class="form-select" id="announce-send-to-select" name="send-to-select">
+                        <option selected value="all">Everyone</option>
+                        <option value="interns">Users Looking For Internships</option>
+                        <option value="jobs">Users Looking For Jobs</option>
+                        <option value="admins">Admins Only</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="discard-inactive-users" id="discard-inactive-users" value="true" checked>
+                        <label class="form-check-label" for="discard-inactive-users">Leave out users who are not actively searching</label>
+                    </div>
                 </div>
                 <input type="hidden" id="first-name" name="first-name" value="default">
                 <input type="hidden" id="last-name" name="last-name" value="default">

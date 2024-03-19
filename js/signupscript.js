@@ -13,11 +13,12 @@ const MAX_COHORT = 100;
 const MIN_CHARACTERS = 0;
 const MAX_CHARACTERS = 500;
 const STATUS = ["Seeking Internship", "Seeking Job", "Not Actively Searching"];
+let validatePass = true;
 
 function validateForm() {
     let isNameValid = validateName();
     let isEmailValid = validateEmail();
-    let isPasswordValid = validatePassword();
+    let isPasswordValid = (validatePass === false) || validatePassword();
     let isCohortNumValid = validateCohortNum();
     let isStatusValid = validateStatus();
     let isRolesValid = validateRoles();
@@ -164,8 +165,6 @@ function validateStatus() {
     }
 
     isValid = isValidStatus === true && checked === 1;
-    console.log(isValid);
-
     const statusError = document.getElementById("status-error");
 
     if(isValid === false) {
@@ -191,14 +190,31 @@ function validateRoles() {
     return isValid;
 }
 
+// event listeners
+if (firstName){
+    firstName.addEventListener("focusout", (Event) => {
+        validateName();
+    });
+}
 password.addEventListener("input", (Event) => {
     const re = /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z\d!@#$%&*_\-.]$/;
     const numberExp = /\d/;
     let hasNumber = numberExp.test(password.value);
 
+if (lastName){
+    lastName.addEventListener("focusout", (Event) => {
+        validateName();
+    });
+}
     let isLength = password.value.length >= 8 && password.value.length <= 16;
     let areMatching = (password.value === passwordConfirm.value) && (password.value.length > 0);
 
+
+if (email){
+    email.addEventListener("focusout", (Event) => {
+        validateEmail();
+    });
+}
 
     console.log('here');
     if(hasNumber === true) {
@@ -232,6 +248,11 @@ password.addEventListener("input", (Event) => {
     }
 
 });
+if (cohortNumber){
+    cohortNumber.addEventListener("focusout", (Event) => {
+        validateCohortNum();
+    });
+}
 
 passwordConfirm.addEventListener("input", (Event) => {
     let areMatching = (password.value === passwordConfirm.value) && (password.value.length > 0);

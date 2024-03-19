@@ -1,12 +1,21 @@
 <?php
 session_start();
+ob_start();
+
 $location = '../';
+$pageTitle = 'Signup Submit';
 
 global $db_location;
 global $cnxn;
 global $use_local;
 global $viewingID;
 
+// If user is logged in, Log user out if idle time or logged in time is past max
+if (isset($_SESSION['user_id'])){
+    $uID = $_SESSION['user_id'];
+
+    include '../php/roles/timeout_check.php';
+}
 // Logout and return to login.php if ?logout=true
 include '../php/roles/logout_check.php';
 // Redirect users to user dashboard
@@ -14,38 +23,24 @@ include '../php/roles/user_kick.php';
 // Redirect admins to admin dashboard
 include '../php/roles/admin_kick.php';
 
-echo
-'<!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Sign-up Submit</title>
-        <!-- Load theme from localstorage -->
-        <script src="../js/themescript.js"></script>
-        <!-- Latest compiled and minified CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Font awesome -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-        <link rel="stylesheet" href="../styles/styles.css"/>
-        <!-- Latest compiled JavaScript -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    </head>
-<body>';
-
+include '../header.php';
 include '../php/nav_bar.php';
 ?>
 <main>
-    <div class="container p-3" id="main-container">
+    <div class="container p-3 text-center" id="main-container">
 <?php
 
 function echoError() {
     echo "
-            <div class='form-error'>
+            <div class='form-error pt-5'>
                 <h3>Sign-up failed, please try again.</h3>
                 <a class='link' href='../signup_form.php'>Go to sign-up form</a>
             </div>
+            </div>
+            </main>
          ";
+
+    include '../php/footer.php';
 }
 
 if(! empty($_POST)) {
@@ -54,6 +49,7 @@ if(! empty($_POST)) {
         $value = trim($value);
 
         if (empty($value)) {
+            echo "<script>console.log('Empty _POST Value');</script>";
             echoError();
             return;
         }
@@ -81,7 +77,7 @@ if(! empty($_POST)) {
     $fname = $_POST['firstName'];
     $lname = $_POST['lastName'];
     $email = $_POST['email'];
-    $password = $_POST['password'];
+    $plainPassword = $_POST['password'];
     $passwordConfirm = $_POST['password-confirm'];
     $cohortNum = $_POST['cohort-num'];
     $status = $_POST['status'];
@@ -93,7 +89,7 @@ if(! empty($_POST)) {
     $email = filter_var($email, FILTER_SANITIZE_EMAIL);
     $cohortNum = filter_var($cohortNum, FILTER_SANITIZE_NUMBER_INT);
     $roles = strip_tags(filter_var($roles, FILTER_SANITIZE_ADD_SLASHES));
-    $password = strip_tags($password);
+    $plainPassword = strip_tags($plainPassword);
     $passwordConfirm = strip_tags($passwordConfirm);
 
     // validation
@@ -105,13 +101,13 @@ if(! empty($_POST)) {
     }
 
     // cohort number
-    if(! $cohortNum >= $MIN_COHORT_NUM && ! $cohortNum <= $MAX_COHORT_NUM) {
+    if(! ($cohortNum >= $MIN_COHORT_NUM && $cohortNum <= $MAX_COHORT_NUM)) {
         echoError();
         return;
     }
 
     // roles
-    if(! strlen($roles) >= $MIN_ROLES && ! strlen($roles) <= $MAX_ROLES) {
+    if(! (strlen($roles) >= $MIN_ROLES && strlen($roles) <= $MAX_ROLES)) {
         echoError();
         return;
     }
@@ -132,17 +128,17 @@ if(! empty($_POST)) {
     }
 
     // password
-    if(strlen($password) < $MIN_PASSWORD || strlen($password) > $MAX_PASSWORD) {
+    if(strlen($plainPassword) < $MIN_PASSWORD || strlen($plainPassword) > $MAX_PASSWORD) {
         echoError();
         return;
     }
 
-    if($password !== $passwordConfirm) {
+    if($plainPassword !== $passwordConfirm) {
         echoError();
         return;
     }
 
-    if(! preg_match("/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z\d!@#$%&*_\-.]{8,16}$/", $password)) {
+    if(! preg_match("/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z\d!@#$%&*_\-.]{8,16}$/", $plainPassword)) {
         echoError();
         return;
     }
@@ -156,32 +152,34 @@ if(! empty($_POST)) {
 
     $name = ucfirst($fname) . " " . ucfirst($lname);
 
+    $hashPass = password_hash($plainPassword, PASSWORD_DEFAULT);
+
     $sql = "INSERT INTO `users` (`fname`, `lname`, `email`, `password`, `cohortNum`, `status`, `roles`) VALUES ('$fname', 
-            '$lname', '$email', '$password', '$cohortNum', '$status', '$roles')";
+            '$lname', '$email', '$hashPass', '$cohortNum', '$status', '$roles')";
 
     //echo $sql;
 
     $result = @mysqli_query($cnxn, $sql);
 
     echo "
-            <div class='container p-3'>
+            <div class='container p-md-3 p-sm-2'>
             <h3 class='receipt-message p-3 mb-0'>Success! Your account has been created.</h3>
-            <div class='form-receipt-container p-3'>
+            <div class='form-receipt-container p-md-3 p-sm-2'>
                 <ul class='receipt-content list-group list-group-flush'>
                     <li class='list-group-item'>
-                        Name: $name
+                        <span class='form-label'>Name:</span> $name
                     </li>
                     <li class='list-group-item'>
-                        Email: $email
+                        <span class='form-label'>Email:</span> $email
                     </li>
                     <li class='list-group-item'>
-                        Password: " . str_pad('',strlen($password),'*') . "
+                        <span class='form-label'>Password:</span> " . str_pad('',strlen($plainPassword),'*') . "
                     </li>
                     <li class='list-group-item'>
-                        Cohort Number: $cohortNum
+                        <span class='form-label'>Cohort Number:</span> $cohortNum
                     </li>
                     <li class='list-group-item'>
-                        Status: $status
+                        <span class='form-label'>Status:</span> $status
                     </li>
                     <li class='list-group-item message-box'>
                         " . stripslashes($roles) . "
@@ -209,4 +207,3 @@ if(! empty($_POST)) {
 <script src="../js/signupscript.js"></script>
 </body>
 </html>
-

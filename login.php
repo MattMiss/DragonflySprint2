@@ -1,11 +1,14 @@
 <?php
 session_start();
-$location = '';
+ob_start();
 
-$indexLocation =  'http://localhost:63342/Sprint4/index.php'; // local (may need to change port number)
-//$indexLocation =  'https://dragonfly.greenriverdev.com/sprint5/index.php'; //cpanel
-$adminLocation =  'http://localhost:63342/Sprint4/admin_dashboard.php';
-//$adminLocation =  'https://dragonfly.greenriverdev.com/sprint5/admin_dashboard.php'; //cpanel
+$location = '';
+$pageTitle = 'Login Page';
+
+global $indexLocation;
+global $adminLocation;
+include $location . 'page_locations.php';;
+
 
 if (isset($_SESSION['user_id'])){
     // Redirect Already Logged In Users to User Dashboard
@@ -22,23 +25,31 @@ include $db_location;
 
 // get user email, id and password from db
 $email = "";
-$pass = "";
+$plainPass = "";
 $failedMsg = "";
 $isLogin = true;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && ! empty($_POST)) {
     $email = $_POST['email'];
-    $pass = $_POST['password'];
-    $sqlUserPass = "SELECT `user_id`, `email`, password, permission, fname  FROM users WHERE `email`='$email' AND `password`='$pass' AND `users`.is_deleted = 0 ";
+    $plainPass = $_POST['password'];
+    $sqlUserPass = "SELECT `user_id`, `email`, password, permission, fname  FROM users WHERE `email`='$email' AND `users`.is_deleted = 0 ";
 
     $result = mysqli_query($cnxn, $sqlUserPass);
 
     if(mysqli_num_rows($result)===1) {
         $row = mysqli_fetch_assoc($result);
-        if($row['email']===$email && $row['password']===$pass){
+        $retrievedHashPass = $row['password'];
+        $verifyPass = password_verify($plainPass, $retrievedHashPass);
+
+        if((strtolower($row['email'])===strtolower($email)) && $verifyPass){
             $_SESSION['user_id'] = $row['user_id'];
             $_SESSION['permission'] = $row['permission'];
             $_SESSION['fname'] = $row['fname'];
+
+            // Set Max Logged In Time and Idle Logout Time
+            $_SESSION['login_time_stamp'] = time();
+            $_SESSION['idle_time_stamp'] = time();
+
             if ($row['permission'] === '0'){
                 // Redirect Users to User Dashboard
                 header("Location:$indexLocation");
@@ -55,26 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! empty($_POST)) {
     }
 }
 
-
-echo "
-    <!DOCTYPE html>
-    <html lang='en'>
-    <head>
-        <meta charset='UTF-8'>
-        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-        <title>Login Page</title>
-        <!-- Load theme from localstorage -->
-        <script src='js/themescript.js'></script>
-        <!-- Latest compiled and minified CSS -->
-        <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css' rel='stylesheet'>
-        <!-- Font awesome -->
-        <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'>
-        <link rel='stylesheet' href='styles/styles.css'/>
-        <!-- Latest compiled JavaScript -->
-        <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js'></script>
-    </head>
-    <body>";
-
+include 'header.php';
 include 'php/nav_bar.php';
 
 echo "<main>
@@ -82,22 +74,26 @@ echo "<main>
             <h3 class='form-header'>Login</h3>
             <div class='form-container'>
                 <div class='form-body'>
-            <form id='login-form' class='p-5' method='POST' action='#'>
+            <form id='login-form' class='p-3 p-md-4 p-lg-5' method='POST' action='#'>
                 <p style='color: red'>{$failedMsg}</p>
                 <div class='mb-4'>
                     <label for='input-email' class='form-label'>Email*</label>
-                    <input type='email' class='form-control' id='input-email' name='email' placeholder='e.g. example@email.com' required>
+                    <input type='email' class='form-control' id='input-email' name='email' 
+                    autocomplete='username' placeholder='e.g. example@email.com' required>
                 </div>
                 
                 <div class='mb-4'>
                     <label for='input-password' class='form-label'>Password*</label>
-                    <input type='password' class='form-control' id='input-password' name='password' minlength='8' maxlength='16' required>
+                    <input type='password' class='form-control' id='input-password' name='password' 
+                    autocomplete='current-password' minlength='8' maxlength='16' required>
                 </div>
                 <div class='d-flex justify-content-end gap-2'>
                     <span>Don't have an account? </span>
                     <a href='signup_form.php'>Sign Up!</a>
                 </div>
-                <button type='submit' class='submit-btn pt-1'>Login</button>
+                <button type='submit' class='btn-log-in-out m-auto py-2 my-3'>
+                    <i class='fa-solid fa-arrow-right-from-bracket pe-1'></i><a href=''>Login</a>
+                </button>
             </form>
         </div>
     </main>";

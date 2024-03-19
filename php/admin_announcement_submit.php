@@ -1,11 +1,16 @@
 <?php
 session_start();
+ob_start();
+
 $location = '../';
+$pageTitle = 'Admin Announcement Submit';
 
 global $cnxn;
 global $db_location;
 global $use_local;
 
+// Log user out if idle time or logged in time is past max
+include '../php/roles/timeout_check.php';
 // Logout and return to login.php if ?logout=true
 include '../php/roles/logout_check.php';
 // Ensure a user is logged in
@@ -13,25 +18,7 @@ include '../php/roles/user_check.php';
 // Ensure an admin is logged in
 include '../php/roles/admin_check.php';
 
-echo
-'<!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Admin Announcement Submit</title>
-        <!-- Load theme from localstorage -->
-        <script src="../js/themescript.js"></script>
-        <!-- Latest compiled and minified CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Font awesome -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-        <link rel="stylesheet" href="../styles/styles.css"/>
-        <!-- Latest compiled JavaScript -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    </head>
-<body>';
-
+include '../header.php';
 include '../php/nav_bar.php';
 
 
@@ -88,10 +75,14 @@ if(! empty($_POST)) {
 
         $title = $_POST['announcement-title'];
         $jobType = $_POST['job-or-intern'];
-        $location = $_POST['location'];
+        $jobLocation = $_POST['location'];
         $employer = $_POST['employer'];
         $addltext = $_POST['additional-text'];
         $url = $_POST['announcement-url'];
+
+        $sendToSelect = $_POST['send-to-select'];
+        $discardInactiveUsers = isset($_POST['discard-inactive-users']) && ($_POST['discard-inactive-users'] === 'true');
+
         // $sentto = $_POST['sent-to'];
 //        $fname = $_POST['first-name'] == 'default' ? '' : $_POST['first-name'];
 //        $lname = $_POST['last-name'] == 'default' ? '' : $_POST['last-name'];
@@ -99,7 +90,7 @@ if(! empty($_POST)) {
         // sanitization
         $title = strip_tags(filter_var($title, FILTER_SANITIZE_ADD_SLASHES));
         $jobType = strip_tags(filter_var($jobType, FILTER_SANITIZE_ADD_SLASHES));
-        $location = strip_tags(filter_var($location, FILTER_SANITIZE_ADD_SLASHES));
+        $jobLocation = strip_tags(filter_var($jobLocation, FILTER_SANITIZE_ADD_SLASHES));
         $employer = strip_tags(filter_var($employer, FILTER_SANITIZE_ADD_SLASHES));
         $addltext = strip_tags(filter_var($addltext, FILTER_SANITIZE_ADD_SLASHES));
         $url = strip_tags(filter_var($url, FILTER_SANITIZE_ADD_SLASHES));
@@ -108,10 +99,10 @@ if(! empty($_POST)) {
 
         // run queries
         $sql = "INSERT INTO announcements (title, job_type, location, ename, additional_info, jurl, sent_to, date_created, is_deleted) 
-                VALUES ('$title', '$jobType', '$location', '$employer', '$addltext', '$url', 'all', '$today', 0)";
+                VALUES ('$title', '$jobType', '$jobLocation', '$employer', '$addltext', '$url', '$sendToSelect', '$today', 0)";
         $result = @mysqli_query($cnxn, $sql);
 
-        $sql2 = "SELECT fname, lname, email FROM users WHERE is_deleted = 0";
+        $sql2 = "SELECT fname, lname, email, permission, status FROM users WHERE is_deleted = 0";
         $result2 = @mysqli_query($cnxn, $sql2);
 
 
@@ -129,10 +120,9 @@ if(! empty($_POST)) {
         $headers = 'From: ' . $from . "\r\n" .
             'Reply-To: ' . $from . "\r\n" .
             'X-Mailer: PHP/' . phpversion();
-        $message = "Location: " . $location .
+        $message = "Location: " . $jobLocation .
             "\nURL: ". $url .
             "\nAdditional Info: \n" . $addltext;
-
 
         $isSent = false;
 
@@ -140,16 +130,34 @@ if(! empty($_POST)) {
         if($result2) {
             // loops throw result2 array
             foreach ($result2 as $row) {
-                $fname = $row['fname'];
-                $lname = $row['lname'];
-                $email = $row['email'];
+                $includeUser = false;
+                $permission = $row['permission'];
 
-                $name = $fname . " " . $lname; // user's name
-                $to = $name . "<" . $email . ">"; // user's name and email
-
-                if(mail($to, $subject, $message, $headers)) {
-                    $isSent = true;
+                if ($sendToSelect === 'all'){
+                    if (!($discardInactiveUsers && ($row['status'] === 'Not Actively Searching'))){
+                        $includeUser = true;
+                    }
+                }else if (($permission === '1') && ($sendToSelect === 'admins')) {
+                    $includeUser = true;
+                }else if (($sendToSelect === 'jobs') && ($row['status'] === 'Seeking Job')){
+                    $includeUser = true;
+                }else if (($sendToSelect === 'interns') && ($row['status'] === 'Seeking Internship')){
+                    $includeUser = true;
                 }
+
+                if ($includeUser){
+                    $fname = $row['fname'];
+                    $lname = $row['lname'];
+                    $email = $row['email'];
+
+                    $name = $fname . " " . $lname; // user's name
+                    $to = $name . "<" . $email . ">"; // user's name and email
+
+                    if(mail($to, $subject, $message, $headers)) {
+                        $isSent = true;
+                    }
+                }
+
             }
         }
 
@@ -159,22 +167,22 @@ if(! empty($_POST)) {
             <div class='form-receipt-container p-3'>
                 <ul class='receipt-content list-group list-group-flush'>
                     <li class='list-group-item text-break'>
-                        Title: $title
+                        <span class='form-label'>Title:</span> $title
                     </li>
                     <li class='list-group-item text-break'>
-                        Job Type: $jobType
+                        <span class='form-label'>Job Type:</span> $jobType
                     </li>
                     <li class='list-group-item text-break'>
-                        Location: $location
+                        <span class='form-label'>Location:</span> $jobLocation
                     </li>
                     <li class='list-group-item text-break'>
-                        Employer: $employer
+                        <span class='form-label'>Employer:</span> $employer
                     </li>
                     <li class='list-group-item text-break'>
-                        More Information: $addltext
+                        <span class='form-label'>More Information:</span> $addltext
                     </li>
                     <li class='list-group-item text-break'>
-                        URL: $url
+                        <span class='form-label'>URL:</span> $url
                     </li>
                     <!--
                     <li class='list-group-item text-break'>
