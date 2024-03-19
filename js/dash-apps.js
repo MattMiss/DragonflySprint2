@@ -198,7 +198,6 @@ function populateAppList(){
             '    <td></td>\n' +
             '</tr>';
     }
-    console.log(sortedApps);
     // Add Item that says "No Result" the app-list if there are no apps to show
     if (sortedApps.length === 0){
         appListDiv.append(noResults);

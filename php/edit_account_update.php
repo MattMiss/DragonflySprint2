@@ -46,7 +46,6 @@ if(! empty($_POST)) {
     $isNewPass = $_POST['new-pass-select'] === 'new';
 
     if ($isNewPass){
-        // removing
         foreach ($_POST as $value) {
             $value = trim($value);
             if (empty($value)) {
@@ -55,12 +54,14 @@ if(! empty($_POST)) {
             }
         }
     }else{
-        // Check everything but the password field
-        if (empty(trim($_POST['firstName'])) || empty(trim($_POST['lastName'])) ||
-            empty(trim($_POST['email'])) || empty(trim($_POST['cohort-num'])) ||
-            empty(trim($_POST['status'])) || empty(trim($_POST['roles']))){
-            echoError();
-            return;
+        foreach ($_POST as $key => $value) {
+            $value = trim($value);
+            if (empty($value)) {
+                if ($key !== 'password' && $key !== 'password-confirm') {
+                    echoError();
+                    return;
+                }
+            }
         }
     }
 
@@ -190,7 +191,7 @@ if(! empty($_POST)) {
 
     echo "
              <main>
-                <div class='container p-3' id='main-container'>
+                <div class='container p-md-3 p-2' id='main-container'>
                     <h3 class='receipt-message p-3 mb-0'>Success! Account has been edited.</h3>
                     <div class='form-receipt-container p-3'>
                         <ul class='receipt-content list-group list-group-flush'>

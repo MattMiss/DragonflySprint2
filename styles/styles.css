@@ -349,7 +349,7 @@ nav .nav-link:hover {
     border-radius: 50%;
     padding: 4px 4px 4px 4px;
     margin-top: 2px;
-    margin-bottom: 2px;
+    margin-bottom: 3px;
     width: 20px;
     height: 20px;
 }
@@ -467,6 +467,20 @@ nav .nav-link:hover {
     font-weight: 600;
     padding: 7px 10px 7px 10px;
     transition: .75s;
+}
+
+.new-app-btn{
+    background-color: var(--submit-color);
+    border: 1px solid var(--submit-border-color);
+    border-radius: 2px;
+    color: var(--submit-text-color);
+    font-weight: 600;
+    padding: 7px 10px 7px 10px;
+    display: inline;
+}
+
+.submit-btn i, .new-app-btn i {
+    color: var(--submit-text-color);
 }
 
 .warning {
@@ -983,7 +997,7 @@ a {
     width: 200px;
 }
 
-#user-edit-modal-roles{
+#user-edit-modal-roles, .url{
     word-break: break-all;
 }
 
@@ -1264,6 +1278,10 @@ a {
     .resources-last{
         display: none;
     }
+
+    .receipt-message, .form-receipt-container {
+        width: 80%;
+    }
 }
 
 @media screen and (max-width: 768px) {
@@ -1275,6 +1293,9 @@ a {
         right: 80px;
     }
 
+    .receipt-message, .form-receipt-container {
+        width: 70%;
+    }
 }
 
 @media screen and (max-width: 575px) {
@@ -1358,4 +1379,7 @@ a {
         font-size: 0.6rem;
     }
 
+    .receipt-message, .form-receipt-container {
+        width: 90%;
+    }
 }
