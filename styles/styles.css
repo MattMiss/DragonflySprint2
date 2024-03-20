@@ -270,6 +270,10 @@ nav .nav-link:hover {
 }
 
 .btn-log-in-out{
+    width: 80px;
+}
+
+.btn-log-in-out, .btn-new-app{
     background-color: var(--submit-color);
     border: 1px solid var(--submit-border-color) !important;
     border-radius: 2px;
@@ -277,16 +281,20 @@ nav .nav-link:hover {
     font-weight: 600;
     font-size: 0.8rem;
     padding: 4px 8px;
-    width: 80px;
-}
-.btn-log-in-out i{
-    color: var(--submit-text-color) !important;
+
+    i{
+        color: var(--submit-text-color) !important;
+    }
 }
 
 .btn-log-in-out:disabled{
     background-color: var(--disabled-btn-bg-color) !important;
     border: 1px solid var(--disabled-btn-font-color) !important;
     color: var(--disabled-btn-font-color) !important;
+
+    i{
+        color: var(--disabled-btn-font-color) !important;
+    }
 }
 
 .btn-log-in-out:hover{
@@ -470,17 +478,7 @@ nav .nav-link:hover {
     transition: .75s;
 }
 
-.new-app-btn{
-    background-color: var(--submit-color);
-    border: 1px solid var(--submit-border-color);
-    border-radius: 2px;
-    color: var(--submit-text-color);
-    font-weight: 600;
-    padding: 7px 10px 7px 10px;
-    display: inline;
-}
-
-.submit-btn i, .new-app-btn i {
+.submit-btn i {
     color: var(--submit-text-color);
 }
 
@@ -669,20 +667,46 @@ table td {
     background-color: #8a6d33;
 }
 
-.more-apps-btn {
+.btn-more-apps{
     background-color: #0b65c4;
     border: 1px solid #0b65c4;
-    border-radius: 2px;
     color: white;
+    border-radius: 2px;
     font-weight: 600;
+    font-size: 0.8rem;
     padding: 7px 10px 7px 10px;
+
+    i{
+        color: white;
+    }
 }
 
-.more-apps-btn:hover {
+.btn-more-apps:hover{
     background-color: #033a94;
     border: 1px solid  #033a94;
+    text-decoration: none;
+    transition: .75s;
+}
+
+.btn-new-app{
+    background-color: var(--submit-color);
+    border: 1px solid var(--submit-border-color) !important;
+    color: var(--submit-text-color) !important;
     border-radius: 2px;
+    font-weight: 600;
+    font-size: 0.8rem;
     padding: 7px 10px 7px 10px;
+
+    i{
+        color: var(--submit-text-color) !important;
+    }
+}
+
+.btn-new-app:hover{
+    background-color: var(--submit-hover-color);
+    text-decoration: none;
+    border: 1px solid var(--submit-border-hover-color) !important;
+    color: var(--submit-text-hover-color) !important;
     transition: .75s;
 }
 
@@ -1215,7 +1239,7 @@ a {
     border-radius: 4px;
     opacity: 0;
     color: white;
-
+    color: white;
     transition: top .5s ease-in-out, opacity .5s ease-in-out;
 }
 
@@ -1233,10 +1257,8 @@ a {
 /*********************** mobile **************************/ /*********************** mobile **************************/
 
 @media screen and (min-width: 768px) and (max-width: 909px) {
-    nav {
-        a, #navbarDropdown {
-            font-size: 1.18rem !important;
-        }
+    nav>a, nav #navbarDropdown{
+        font-size: 1.18rem !important;
     }
 }
 

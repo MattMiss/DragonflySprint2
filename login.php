@@ -35,7 +35,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! empty($_POST)) {
     $sqlUserPass = "SELECT `user_id`, `email`, password, permission, fname  FROM users WHERE `email`='$email' AND `users`.is_deleted = 0 ";
 
     $result = mysqli_query($cnxn, $sqlUserPass);
-
     if(mysqli_num_rows($result)===1) {
         $row = mysqli_fetch_assoc($result);
         $retrievedHashPass = $row['password'];

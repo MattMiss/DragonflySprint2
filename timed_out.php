@@ -22,7 +22,7 @@ echo "<!DOCTYPE html>
         <head>
             <meta charset='UTF-8'>
             <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-            <meta http-equiv='refresh' content='$header'/>
+            <!--<meta http-equiv='refresh' content='$header'/>-->
             <title>$pageTitle</title>
             <!-- Load theme from localstorage -->
             <script src='js/themescript.js'></script>
@@ -42,9 +42,11 @@ echo "<main>
     <div class='container p-3' id='main-container'>
         <div class='empty-form-msg pt-5 d-flex flex-column justify-content-center'>
             <h4 class='align-self-center'>You have been logged out due to inactivity. You will be redirected to the login screen shortly.</h4>
-            <button class='btn-log-in-out m-auto pb-1' type='button'>
-               <a href='$loginLocation'><i class='fa-solid fa-arrow-right-from-bracket pe-1'></i>Login</a>
-           </button>
+            <form class='m-auto' method='post' action='$loginLocation'>
+                <button class='btn-log-in-out'>
+                    <i class='fa-solid fa-arrow-right-from-bracket pe-2'></i>Login
+                </button>
+            </form>
         </div>
     </div>
 </main>";
