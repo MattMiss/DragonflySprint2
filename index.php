@@ -385,7 +385,6 @@ while ($row = mysqli_fetch_assoc($appReminders)) {
         announceWasDeleted : false
     }
 </script>
-<script src="js/main.js"></script>
 <script src="js/dash-functions.js"></script>
 <script src="js/dash-apps.js"></script>
 <script src="js/dash-announcements.js"></script>

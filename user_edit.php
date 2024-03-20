@@ -166,6 +166,5 @@ include 'php/nav_bar.php' ?>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="js/user-edit.js"></script>
 <!-- Special Javascript to allow special signup things work -->
-<script src="js/main.js"></script>
 </body>
 </html>

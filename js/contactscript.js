@@ -12,7 +12,7 @@ function validateForm(){
     let isMessageValid = validateMessage() === true;
 
     let isValid = isNameValid && isEmailValid && isMessageValid;
-
+    console.log(isValid);
     return isValid;
 }
 

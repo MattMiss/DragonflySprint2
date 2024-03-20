@@ -722,7 +722,6 @@ while ($row = mysqli_fetch_assoc($announceResult)){
     }
 </script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-<script src="js/main.js"></script>
 <script src="js/dash-functions.js"></script>
 <script src="js/dash-apps.js"></script>
 <script src="js/dash-users.js"></script>

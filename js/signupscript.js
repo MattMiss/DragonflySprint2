@@ -77,7 +77,6 @@ function validateEmail() {
     let isValid = re.test(email.value.trim());
     const emailError = document.getElementById("email-error");
 
-
     if(isValid === true) {
         emailError.style.visibility = "hidden";
         email.setAttribute("class", "form-control");

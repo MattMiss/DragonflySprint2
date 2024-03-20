@@ -51,7 +51,11 @@ if (isset($_COOKIE['theme'])){
             </div>
             <div class='modal-footer'>
                 <button type='button' class='btn btn-danger modal-close-secondary' data-bs-dismiss='modal'>Cancel</button>
-                <button type='submit' class='modal-delete'><a href='?logout=true'>Logout</a></button>
+                <form method='post' action='?logout=true'>
+                    <button class='modal-delete' type="submit">
+                        Logout
+                    </button>
+                </form>
             </div>
         </div>
     </div>
