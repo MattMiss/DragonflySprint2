@@ -63,6 +63,5 @@ include 'php/nav_bar.php' ?>
 <?php include 'php/footer.php' ?>
 <!-- Special Javascript to allow special contact things work -->
 <script src="js/contactscript.js"></script>
-<script src="js/main.js"></script>
 </body>
 </html>

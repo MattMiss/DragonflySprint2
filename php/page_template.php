@@ -12,6 +12,5 @@ include '../php/nav_bar.php' ?>
 
 <?php include '../php/footer.php' ?>
 <script src="../js/contactscript.js"></script>
-<script src="../js/main.js"></script>
 </body>
 </html>

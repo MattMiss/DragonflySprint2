@@ -22,25 +22,22 @@ function validateForm() {
     let isCohortNumValid = validateCohortNum();
     let isStatusValid = validateStatus();
     let isRolesValid = validateRoles();
-
     let isValid = isNameValid && isEmailValid && isPasswordValid && isCohortNumValid && isStatusValid && isRolesValid;
 
     if(isValid === false) {
-
         window.scroll({
             top: 70,
             left: 100,
             behavior: "smooth",
         });
     }
-
     return isValid;
 }
 
 // validates first and last name
 function validateName() {
-    let isFirstValid = firstName.value.length !== 0;
-    let isLastValid = lastName.value.length !== 0;
+    let isFirstValid = firstName.value.trim().length !== 0;
+    let isLastValid = lastName.value.trim().length !== 0;
     let isValid = isFirstValid === true && isLastValid === true;
 
     // selects message if it exists
@@ -48,7 +45,6 @@ function validateName() {
     const nameMessage = "Please enter your first and last name";
     const firstNameMessage = "Please enter your first name";
     const lastNameMessage = "Please enter your last name";
-
 
     // decides which message to display (if any)
     if(isValid === true) {
@@ -69,7 +65,6 @@ function validateName() {
             lastName.classList.add("form-input-error");
             firstName.classList.remove("form-input-error");
         }
-
         nameError.style.visibility = "visible";
     }
 
@@ -79,8 +74,7 @@ function validateName() {
 // validates email
 function validateEmail() {
     let re = /[^\s@]+@[^\s@]+\.[^\s@]+/;
-    let isValid = re.test(email.value);
-
+    let isValid = re.test(email.value.trim());
     const emailError = document.getElementById("email-error");
 
     if(isValid === true) {
@@ -97,7 +91,7 @@ function validateEmail() {
 // validates password
 function validatePassword() {
     let re = /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z\d!@#$%&*_\-.]{8,16}$/;
-    let isValid = re.test(password.value) && (password.value === passwordConfirm.value);
+    let isValid = re.test(password.value.trim()) && (password.value.trim() === passwordConfirm.value.trim());
     const passwordError = document.getElementById("password-error");
 
     if(isValid === false) {
@@ -136,6 +130,7 @@ function validateStatus() {
     let isValid = true;
     let isValidStatus = false;
     let checked = 0;
+
 
     const notSearching = document.getElementById("notSearching");
     const seekingJob = document.getElementById("seekingJob");
@@ -182,13 +177,12 @@ function validateStatus() {
     } else {
         statusError.style.visibility = "hidden";
     }
-
     return isValid;
 }
 
 // validates roles input
 function validateRoles() {
-    let isValid = (roles.value.length >= MIN_CHARACTERS) && (roles.value.length <= MAX_CHARACTERS);
+    let isValid = (roles.value.trim().length >= MIN_CHARACTERS) && (roles.value.trim().length <= MAX_CHARACTERS);
     const rolesError = document.getElementById("roles-error");
 
     if(isValid === false) {
@@ -196,11 +190,8 @@ function validateRoles() {
     } else {
         rolesError.style.visibility = "hidden";
     }
-
     return isValid;
 }
-
-// event listeners
 
 password.addEventListener("input", (Event) => {
     const numberExp = /\d/;
@@ -209,8 +200,7 @@ password.addEventListener("input", (Event) => {
     let isLength = password.value.length >= 8 && password.value.length <= 16;
     let areMatching = (password.value === passwordConfirm.value) && (password.value.length > 0);
 
-    console.log('here');
-    if(hasNumber === true) {
+    if (hasNumber === true) {
         passwordList[1].classList.remove("fa-circle-xmark");
         passwordList[1].classList.add("fa-circle-check");
         passwordList[1].style.color = "#6cb443";
@@ -255,3 +245,4 @@ passwordConfirm.addEventListener("input", (Event) => {
         passwordList[2].style.color = "#D14900";
     }
 });
+
