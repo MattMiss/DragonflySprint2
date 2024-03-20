@@ -33,10 +33,10 @@ if(! empty($_POST)) {
         $value = trim($value);
         $value = strip_tags(filter_var($value, FILTER_SANITIZE_ADD_SLASHES));
 
-        if ((strlen($value) > 0 && strlen(trim($value)) == 0) || (strlen($value) == 0)){
+        if ((strlen($value) > 0 && strlen(trim($value)) === 0) || (strlen($value) === 0)){
             if($key !== 'job-description' && $key !== 'follow-updates'){
                 $finished++;
-                if ($finished == 1) {
+                if ($finished === 1) {
                     echo "
                 <div class='content'>
                     <h2>Failed to send.</h2>
@@ -49,10 +49,10 @@ if(! empty($_POST)) {
                 }
             }
         }
-        if($key == 'application-status') {
-            if ($value == 'select') {
+        if($key === 'application-status') {
+            if ($value === 'select') {
                 $finished++;
-                if ($finished == 1) {
+                if ($finished === 1) {
                     echo "
                 <div class='content'>
                     <h2>Failed to send.</h2>

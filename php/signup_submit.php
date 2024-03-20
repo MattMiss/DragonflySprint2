@@ -48,10 +48,12 @@ if(! empty($_POST)) {
     foreach ($_POST as $value) {
         $value = trim($value);
 
-        if (empty($value)) {
-            echo "<script>console.log('Empty _POST Value');</script>";
-            echoError();
-            return;
+        if($value !== $_POST['roles']) {
+            if (empty($value)) {
+                echo "<script>console.log('Empty _POST Value');</script>";
+                echoError();
+                return;
+            }
         }
     }
 
@@ -100,6 +102,8 @@ if(! empty($_POST)) {
         return;
     }
 
+
+
     // cohort number
     if(! ($cohortNum >= $MIN_COHORT_NUM && $cohortNum <= $MAX_COHORT_NUM)) {
         echoError();
@@ -144,7 +148,6 @@ if(! empty($_POST)) {
     }
 
     //  status
-
     if(! in_array($status, $RADIO_VALUES)) {
         echoError();
         return;
