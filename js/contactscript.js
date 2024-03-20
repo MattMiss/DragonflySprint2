@@ -23,8 +23,8 @@ function validateForm() {
 function validateName() {
     // removes whitespaces and checks length
     let isFirstValid = firstName.value.trim().length !== 0;
-    let isLastValid = lastName.value.length.trim().length !== 0;
-    let isValid = isFirstValid === true && isLastValid === true;
+    let isLastValid = lastName.value.trim().length !== 0;
+    let isValid = (isFirstValid === true) && (isLastValid === true);
 
     // gets error message
     const nameError = document.getElementById("contact-name-error");
