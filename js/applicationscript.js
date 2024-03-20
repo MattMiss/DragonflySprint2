@@ -2,6 +2,7 @@
 const STATUS_VALUES = ["select", "need-to-apply", "applied", "interviewing", "rejected", "accepted", "inactive"];
 const MAX_CHARACTERS = 60;
 const MAX_URL = 500;
+const DATE_LENGTH = 10;
 
 // elements
 const jobName = document.getElementById("job-name");
@@ -61,16 +62,16 @@ function validateEmployer() {
     let isValid = isValidLength && isNotEmpty;
 
     let employerError = document.getElementById("app-employer-error");
-    let message = `Please enter between 0 and ${MAX_URL} characters`;
+    let message = `Please enter between 1 and ${MAX_URL} characters`;
     let emptyMessage = "Please enter an employer";
 
     if(isValid === true) {
         employer.classList.remove("form-input-error");
         employerError.style.visibility = "hidden";
     } else {
-        if((isNotEmpty === false && isValidLength === false) || isValid === false) {
+        if((isNotEmpty === false && isValidLength === false) || (isNotEmpty === true && isValidLength === false)) {
             employerError.innerText = message;
-        } else if(isNotEmpty === false) {
+        } else if(isNotEmpty === false && isValidLength === true) {
             employerError.innerText = emptyMessage;
         }
 
@@ -83,7 +84,7 @@ function validateEmployer() {
 
 function validateJobURL() {
     let re = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
-    let isValidLength = jobURL.value.length <= MAX_URL;
+    let isValidLength = jobURL.value.trim().length <= MAX_URL;
     let isValidFormat = re.test(jobURL.value);
     let isValid = isValidLength && isValidFormat;
 
@@ -112,11 +113,10 @@ function validateJobURL() {
 }
 
 function validateAppDate() {
-    let isValid = appDate.value !== null;
+    let isValid = appDate.value.trim().length === DATE_LENGTH;
     let appDateError = document.getElementById("app-date-error");
 
     if(isValid === false) {
-        appDateError.innerText = "Please select a date";
         appDateError.style.visibility = "visible";
     } else {
         appDateError.style.visibility = "hidden";
@@ -126,11 +126,10 @@ function validateAppDate() {
 }
 
 function validateFollowupDate() {
-    let isValid = followupDate.value !== null;
+    let isValid = followupDate.value.trim().length === DATE_LENGTH;
     let appDateError = document.getElementById("app-followup-error");
 
     if(isValid === false) {
-        appDateError.innerText = "Please select a date";
         appDateError.style.visibility = "visible";
     } else {
         appDateError.style.visibility = "hidden";

@@ -45,7 +45,7 @@ include 'php/nav_bar.php'
                 </div>
                 <div class="mb-4">
                     <label for="today" class="form-label">Date of Application*</label>
-                    <small id="app-date-error" class="warning"></small>
+                    <small id="app-date-error" class="warning">Please select a date</small>
                     <input type="date" class="form-control" id="today" name="app-date">
                 </div>
                 <div class="mb-4">
@@ -68,8 +68,8 @@ include 'php/nav_bar.php'
                 </div>
 
                 <div class="mb-4">
-                    <label for="two-weeks" class="form-label">Follow up date*</label>
-                    <div id="app-followup-error" class="warning"></div>
+                    <label for="two-weeks" class="form-label">Follow-up Date*</label>
+                    <div id="app-followup-error" class="warning">Please select a date</div>
                     <input type="date" class="form-control" id="two-weeks" name="followup-date">
                 </div>
 
