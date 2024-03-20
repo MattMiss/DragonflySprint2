@@ -46,6 +46,7 @@ function validateJobName() {
 function validateEmployer() {
     let isValidLength = employer.value.length <= MAX_CHARACTERS;
     let isNotEmpty = employer.value.length > 0;
+    console.log(employer.value.length > 0);
     let isValid = isValidLength && isNotEmpty;
     let employerError = document.getElementById("app-employer-error");
 

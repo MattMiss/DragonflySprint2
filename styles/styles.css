@@ -967,15 +967,15 @@ a {
     width: 70px;
 }
 
-.app-date-col, .announce-date-col, .announce-job-type-col {
+.app-date-col, .announce-date-col{
     width: 120px;
 }
 
-.app-status-col, .app-url-col, .user-status-col{
+.app-status-col, .app-url-col, .user-status-col, .announce-job-type-col {
     width: 160px;
 }
 
-.app-employer-col{
+.app-employer-col, .announce-url-col{
     width: 180px;
 }
 
@@ -987,7 +987,7 @@ a {
     width: 220px;
 }
 
-.announce-position-col, .announce-url-col{
+.announce-position-col {
     width: 250px;
 }
 
