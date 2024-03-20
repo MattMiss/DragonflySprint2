@@ -515,6 +515,19 @@ nav .nav-link:hover {
     visibility: hidden;
 }
 
+#contact-name-error {
+    visibility: hidden;
+}
+
+#contact-email-error {
+    visibility: hidden;
+}
+
+#contact-message-error {
+    visibility: hidden;
+}
+
+
 .status-select{
     background-image: var(--select-icon-img);
 }
