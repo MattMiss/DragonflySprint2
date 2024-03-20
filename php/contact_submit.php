@@ -40,7 +40,7 @@ if(! empty($_POST)) {
             echo "
                 <div class='form-error'>
                     <h3>Message failed to send, please try again.</h3>
-                    <a class='link' href='../contactForm.html'>Return to contact form</a>
+                    <a class='link' href='../contact_form.php'>Return to contact form</a>
                 </div>
             ";
             return;

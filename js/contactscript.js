@@ -9,7 +9,7 @@ const email = document.getElementById("contact-email");
 const message = document.getElementById("contact-message");
 
 // calls all validate functions
-function validateForm(){
+function validateForm() {
     let isNameValid = validateName();
     let isEmailValid = validateEmail();
     let isMessageValid = validateMessage();
