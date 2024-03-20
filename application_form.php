@@ -83,6 +83,5 @@ include 'php/nav_bar.php'
 <?php include 'php/footer.php' ?>
 <!-- Special Javascript to allow special application things work -->
 <script src="js/applicationscript.js"></script>
-<script src="js/main.js"></script>
 </body>
 </html>

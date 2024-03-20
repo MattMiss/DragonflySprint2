@@ -82,7 +82,7 @@ include 'php/nav_bar.php' ?>
                                maxlength="60"
                                value="<?php echo $email?>">
                         <small id="email-note">Note: an @greenriver.edu email is preferred</small>
-<!--                        <small id="edit-email-error" class="warning">Please enter a valid email</small>-->
+                        <small id="edit-email-error" class="warning" style="visibility: hidden">Please enter a valid email</small>
                     </div>
 
                     <div class="mb-3">
@@ -93,7 +93,7 @@ include 'php/nav_bar.php' ?>
                         </select>
                     </div>
 
-                    <div class="row mb-3 hidden" id="user-edit-new-pass">
+                    <div class="row mb-3" id="user-edit-new-pass">
                         <div class="col">
                             <label for="input-password" class="form-label">New Password*</label>
                             <input type="password" class="form-control" id="input-password" autocomplete="new-password" name="password" minlength="8" maxlength="16" value="">
@@ -146,7 +146,7 @@ include 'php/nav_bar.php' ?>
                     </div>
 
                     <div class="mb-3">
-                        <label for="edit-roles" class="form-label">What roles are you looking for?*</label>
+                        <label for="edit-roles" class="form-label">What roles are you looking for?</label>
                         <textarea class="form-control" id="edit-roles" name="roles"
                                   minlength="0" maxlength="500" placeholder="Type here..."><?php echo $roles?></textarea>
                         <small id="edit-roles-error" class="warning" style="visibility: hidden">You have exceeded the maximum character limit of 500</small>
@@ -166,7 +166,5 @@ include 'php/nav_bar.php' ?>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="js/user-edit.js"></script>
 <!-- Special Javascript to allow special signup things work -->
-<!--<script src="js/signupscript.js"></script>-->
-<script src="js/main.js"></script>
 </body>
 </html>

@@ -21,15 +21,17 @@ $(window).on('load', () => {
     validatePass = false;
    $('#user-edit-pass-select').on('change', (e) => {
        if (e.target.value === 'new'){
-           newPassDiv.removeClass('hidden');
-           passReqsDiv.removeClass('hidden');
+           newPassDiv.show()
+           passReqsDiv.show()
            validatePass = true;
        }else if(e.target.value === 'same'){
            validatePass = false;
-           newPassDiv.addClass('hidden');
-           passReqsDiv.addClass('hidden');
+           newPassDiv.hide()
+           passReqsDiv.hide()
        }
     })
+    newPassDiv.hide();
+    passReqsDiv.hide();
 });
 
 function validateForm() {
@@ -56,8 +58,8 @@ function validateForm() {
 
 // validates first and last name
 function validateName() {
-    let isFirstValid = firstName.value.length !== 0;
-    let isLastValid = lastName.value.length !== 0;
+    let isFirstValid = firstName.value.trim().length !== 0;
+    let isLastValid = lastName.value.trim().length !== 0;
     let isValid = isFirstValid === true && isLastValid === true;
 
     // selects message if it exists
@@ -96,7 +98,7 @@ function validateName() {
 // validates email
 function validateEmail() {
     let re = /[^\s@]+@[^\s@]+\.[^\s@]+/;
-    let isValid = re.test(email.value);
+    let isValid = re.test(email.value.trim());
 
     const emailError = document.getElementById("edit-email-error");
 
@@ -114,7 +116,7 @@ function validateEmail() {
 // validates password
 function validatePassword() {
     let re = /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z\d!@#$%&*_\-.]{8,16}$/;
-    let isValid = re.test(password.value) && (password.value === passwordConfirm.value);
+    let isValid = re.test(password.value.trim()) && (password.value.trim() === passwordConfirm.value.trim());
     const passwordError = document.getElementById("edit-password-error");
 
     if(isValid === false) {
@@ -204,7 +206,7 @@ function validateStatus() {
 
 // validates roles input
 function validateRoles() {
-    let isValid = (roles.value.length >= MIN_CHARACTERS) && (roles.value.length <= MAX_CHARACTERS);
+    let isValid = (roles.value.trim().length >= MIN_CHARACTERS) && (roles.value.trim().length <= MAX_CHARACTERS);
     const rolesError = document.getElementById("edit-roles-error");
 
     if(isValid === false) {

@@ -30,10 +30,11 @@ include '../php/nav_bar.php';
     <div class="container p-3 text-center" id="main-container">
 <?php
 
-function echoError() {
+function echoError($errorMsg) {
     echo "
             <div class='form-error pt-5'>
                 <h3>Sign-up failed, please try again.</h3>
+                <p>$errorMsg</p>
                 <a class='link' href='../signup_form.php'>Go to sign-up form</a>
             </div>
             </div>
@@ -45,13 +46,11 @@ function echoError() {
 
 if(! empty($_POST)) {
     // removing
-    foreach ($_POST as $value) {
+    foreach ($_POST as $key => $value) {
         $value = trim($value);
-
-        if($value !== $_POST['roles']) {
-            if (empty($value)) {
-                echo "<script>console.log('Empty _POST Value');</script>";
-                echoError();
+        if (empty($value)) {
+            if ($key !== 'roles') {
+                echoError('As required field was left empty.');
                 return;
             }
         }
@@ -98,27 +97,25 @@ if(! empty($_POST)) {
 
     // names
     if (! (strlen($fname) >= $MIN_NAME && strlen($fname) <= $MAX_NAME) || ! (strlen($lname) >= $MIN_NAME && strlen($lname) <= $MAX_NAME)) {
-        echoError();
+        echoError('Name must be within ' . $MIN_NAME . ' and ' . $MAX_NAME . ' characters long.');
         return;
     }
 
-
-
     // cohort number
     if(! ($cohortNum >= $MIN_COHORT_NUM && $cohortNum <= $MAX_COHORT_NUM)) {
-        echoError();
+        echoError('Cohort number must be between ' . $MIN_COHORT_NUM . ' and ' . $MAX_COHORT_NUM . '.');
         return;
     }
 
     // roles
-    if(! (strlen($roles) >= $MIN_ROLES && strlen($roles) <= $MAX_ROLES)) {
-        echoError();
+    if(strlen($roles) > 0 && ! strlen($roles) <= $MAX_ROLES) {
+        echoError('Length of roles text must be less than' . $MAX_ROLES . 'characters.');
         return;
     }
 
     // email
     if(! preg_match("/[^\s@]+@[^\s@]+\.[^\s@]+/", $email) ) {
-        echoError();
+        echoError('Must use a real email.');
         return;
     }
 
@@ -127,29 +124,30 @@ if(! empty($_POST)) {
     $resultCheckEmail = @mysqli_query($cnxn, $checkEmail);
 
     if(mysqli_num_rows($resultCheckEmail) !== 0) {
-        echoError();
+        echoError('An account associated with this email already exists.');
         return;
     }
 
     // password
     if(strlen($plainPassword) < $MIN_PASSWORD || strlen($plainPassword) > $MAX_PASSWORD) {
-        echoError();
+        echoError('Password must be between ' . $MIN_PASSWORD . 'and ' . $MAX_PASSWORD);
         return;
     }
 
     if($plainPassword !== $passwordConfirm) {
-        echoError();
+        echoError('Both password fields must match.');
         return;
     }
 
     if(! preg_match("/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z\d!@#$%&*_\-.]{8,16}$/", $plainPassword)) {
-        echoError();
+        echoError('Password does not meet criteria.');
         return;
     }
 
     //  status
+
     if(! in_array($status, $RADIO_VALUES)) {
-        echoError();
+        echoError('A status must be selected');
         return;
     }
 
@@ -206,7 +204,5 @@ if(! empty($_POST)) {
 
 <?php include '../php/footer.php' ?>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-<script src="../js/main.js"></script>
-<script src="../js/signupscript.js"></script>
 </body>
 </html>

@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $role = 0;
 
 $date = date('Y-m-d', time());
-$start = date('Y-m-d', strtotime($date . '-15days'));
+$start = date('Y-m-d', strtotime($date . '-5days'));
 $finish = date('Y-m-d', strtotime($date . '+5days'));
 
 $sqlRecentAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 AND (date_created BETWEEN '$start' AND '$date')
@@ -198,14 +198,16 @@ while ($row = mysqli_fetch_assoc($appReminders)) {
                     </tbody>
                 </table>
                 <div class="col text-center pt-2 pb-2 hidden" id="more-apps">
-                    <button type='button' class='more-apps-btn m-auto py-2 my-3' onclick='loadMoreApps()'>
+                    <button type='button' class='btn-more-apps py-2 my-3' onclick='loadMoreApps()'>
                         <i class='fa-solid fa-plus pe-2'></i><a>Load More</a>
                     </button>
                 </div>
-                <div class="d-flex pt-2" id="new-app-container">
-                    <div class="new-app-btn m-auto">
-                       <a href='application_form.php'><i class='fa-solid fa-pen pe-2'></i>New Application</a>
-                    </div>
+                <div class="d-flex pt-2 justify-content-center" id="new-app-container">
+                    <form method='post' action='application_form.php'>
+                        <button class='btn-new-app'>
+                            <i class='fa-solid fa-pen pe-2'></i>New Application
+                        </button>
+                    </form>
                 </div>
 
             </div>
@@ -380,11 +382,9 @@ while ($row = mysqli_fetch_assoc($appReminders)) {
         appWasDeleted : <?php echo json_encode($appWasDeleted) ?>,
         userWasDeleted : false,
         userWasUnDeleted : false,
-        announceWasDeleted : false,
-        passwordWasReset : false
+        announceWasDeleted : false
     }
 </script>
-<script src="js/main.js"></script>
 <script src="js/dash-functions.js"></script>
 <script src="js/dash-apps.js"></script>
 <script src="js/dash-announcements.js"></script>

@@ -168,7 +168,6 @@ if(! empty($_POST)) {
 
 <?php include '../php/footer.php' ?>
 
-<script src="../js/main.js"></script>
 </body>
 </html>
 

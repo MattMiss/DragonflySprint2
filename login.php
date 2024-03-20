@@ -35,7 +35,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! empty($_POST)) {
     $sqlUserPass = "SELECT `user_id`, `email`, password, permission, fname  FROM users WHERE `email`='$email' AND `users`.is_deleted = 0 ";
 
     $result = mysqli_query($cnxn, $sqlUserPass);
-
     if(mysqli_num_rows($result)===1) {
         $row = mysqli_fetch_assoc($result);
         $retrievedHashPass = $row['password'];
@@ -101,6 +100,5 @@ echo "<main>
 
 <?php include 'php/footer.php'?>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-<script src="js/main.js"></script>
 </body>
 </html>
