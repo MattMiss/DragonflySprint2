@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `users` (
     `fname` varchar(30) NOT NULL,
     `lname` varchar(30) NOT NULL,
     `email` varchar(60) NOT NULL,
-    `password` varchar(30) NOT NULL,
+    `password` varchar(255) NOT NULL,
     `cohortNum` int(3) NOT NULL,
     `status` varchar(30) NOT NULL,
     `roles` varchar(500) DEFAULT NULL,
@@ -35,18 +35,27 @@ CREATE TABLE IF NOT EXISTS `users` (
     ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
 -- Dumping data for table `users`
+-- !!!! Please change admin value after you use this sql dump. !!!!
+-- ADMIN pass is admin123
 
 INSERT INTO `users` (`user_id`, `permission`, `fname`, `lname`, `email`, `password`, `cohortNum`, `status`, `roles`)
     VALUES
-        ('0', '1', 'admin', 'admin', 'admin@admin', 'admin123', '0', 'admin', 'admin');
+        ('0', '1', 'admin', 'admin', 'admin@admin', '$2y$10$aWN31xFtkrVKY8LE0HMB5eAN/9CahamKZ825zwlPTqWNTv14NVYOa', '0', 'admin', 'admin');
+
+
+-- John pass is abc123456
+-- Ximena pass is password1
+-- Grayson pass is pass1234
+-- Dana pass is qwerty123
+-- Kris pass is aaaa1111
 
 INSERT INTO `users` (`permission`, `fname`, `lname`, `email`, `password`, `cohortNum`, `status`, `roles`)
     VALUES
-        ('0', 'John', 'Brown', 'jbrown1236@student.greenriver.edu', '123456', '18', 'Seeking Internship', 'Anything'),
-        ('0', 'Ximena', 'Lopez', 'menalopez1999@student.greenriver.edu', 'password', '16', 'Seeking Job', 'QA Tester'),
-        ('0', 'Grayson', 'Choi', 'graysonc21@student.greenriver.edu', '12345678', '19', 'Seeking Internship', 'Software Support'),
-        ('0', 'Dana', 'Felder','danafelder456@student.greenriver.edu', 'qwerty', '15', 'Not Actively Searching', 'Nothing'),
-        ('0', 'Kris', 'Bartkowski', 'kbartkowskireal2@student.greenriver.edu', '111111', '19', 'Not Actively Searching', 'Nothing');
+        ('0', 'John', 'Brown', 'jbrown1236@student.greenriver.edu', '$2y$10$hQ3TWIvBzwmTWoUIYrNCNOy/99QbhEquUVxm2h6meNV461d9VBINy', '18', 'Seeking Internship', 'Anything'),
+        ('0', 'Ximena', 'Lopez', 'menalopez1999@student.greenriver.edu', '$2y$10$byK16/DXeniGvaCpd20FHOtxDEDYdFSGMLP4O.Hey/T/IKXAs2qe2', '16', 'Seeking Job', 'QA Tester'),
+        ('0', 'Grayson', 'Choi', 'graysonc21@student.greenriver.edu', '$2y$10$YnWFWrwblNssw9uWvM3ae.Dh4jHs3NPBhSCjED8q9dEUiHxhITtR.', '19', 'Seeking Internship', 'Software Support'),
+        ('0', 'Dana', 'Felder','danafelder456@student.greenriver.edu', '$2y$10$TvLDYguHnv5KaYPg.mdjC.YwPR.kgY6ak7kZMpRAtj2N.cKQ0pmUi', '15', 'Not Actively Searching', 'Nothing'),
+        ('0', 'Kris', 'Bartkowski', 'kbartkowskireal2@student.greenriver.edu', '$2y$10$rPGG7eNTquozushAj6tl3e0xvF9yrgqMJ2u5UKcTWdLh8.JMC8DEy', '19', 'Not Actively Searching', 'Nothing');
 
 -- ---------------------------------------------------------
 -- Table structure for table `applications`
