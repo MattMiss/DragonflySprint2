@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $role = 0;
 
 $date = date('Y-m-d', time());
-$start = date('Y-m-d', strtotime($date . '-15days'));
+$start = date('Y-m-d', strtotime($date . '-5days'));
 $finish = date('Y-m-d', strtotime($date . '+5days'));
 
 $sqlRecentAnnounce = "SELECT * FROM announcements WHERE is_deleted = 0 AND (date_created BETWEEN '$start' AND '$date')

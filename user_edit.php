@@ -146,7 +146,7 @@ include 'php/nav_bar.php' ?>
                     </div>
 
                     <div class="mb-3">
-                        <label for="edit-roles" class="form-label">What roles are you looking for?*</label>
+                        <label for="edit-roles" class="form-label">What roles are you looking for?</label>
                         <textarea class="form-control" id="edit-roles" name="roles"
                                   minlength="0" maxlength="500" placeholder="Type here..."><?php echo $roles?></textarea>
                         <small id="edit-roles-error" class="warning" style="visibility: hidden">You have exceeded the maximum character limit of 500</small>
