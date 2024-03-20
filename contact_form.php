@@ -27,7 +27,7 @@ include 'php/nav_bar.php' ?>
                     <form method="post" action="php/contact_submit.php" onsubmit="return validateForm()" name="contact" class="my-3">
                         <div class="mb-3">
                             <label for="name" class="form-label">Name*</label>
-                            <small id="contact-name-error" class="warning ps-1" style="visibility: hidden">Please enter your first and last name</small>
+                            <small id="contact-name-error" class="warning ps-1">Please enter your first and last name</small>
                             <div class="row">
                                 <div class="col-sm">
                                     <input type="text" id="contact-first-name" class="form-control" name="firstName" placeholder="First name"
@@ -42,13 +42,13 @@ include 'php/nav_bar.php' ?>
 
                         <div class="mb-4">
                             <label for="contact-email" class="form-label">Email*</label>
-                            <small id="contact-email-error" class="warning ps-1" style="visibility: hidden">Please enter a valid email</small>
+                            <small id="contact-email-error" class="warning ps-1">Please enter a valid email</small>
                             <input type="email" class="form-control" id="contact-email" name="email" placeholder="e.g. example@email.com">
                         </div>
 
                         <div class="mb-4">
                             <label for="contact-message" class="form-label">Message*</label>
-                            <small id="contact-message-error" class="warning ps-1" style="visibility: hidden">Please enter a message between 25 and 1000 characters</small>
+                            <small id="contact-message-error" class="warning ps-1">Please enter a message between 25 and 1000 characters</small>
                             <textarea class="form-control" id="contact-message" name="message" placeholder="Type your message here..." rows="4" minlength="25" maxlength="1000"></textarea>
                         </div>
 
