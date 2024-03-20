@@ -486,6 +486,7 @@ nav .nav-link:hover {
 
 .warning {
     color: #D14900;
+    visibility: hidden;
 }
 
 .form-input-error {
@@ -493,42 +494,65 @@ nav .nav-link:hover {
     box-shadow: 0 0 5px rgb(209, 73, 0, 1) !important;
 }
 
-#name-error {
-    visibility: hidden;
-}
+/*#name-error {*/
+/*    visibility: hidden;*/
+/*}*/
 
-#email-error {
-    visibility: hidden;
-}
+/*#email-error {*/
+/*    visibility: hidden;*/
+/*}*/
 
-#password-error {
-    visibility: hidden;
-}
+/*#password-error {*/
+/*    visibility: hidden;*/
+/*}*/
 
-#cohort-error {
-    visibility: hidden;
-}
+/*#cohort-error {*/
+/*    visibility: hidden;*/
+/*}*/
 
-#status-error {
-    visibility: hidden;
-}
+/*#status-error {*/
+/*    visibility: hidden;*/
+/*}*/
 
-#roles-error {
-    visibility: hidden;
-}
+/*#roles-error {*/
+/*    visibility: hidden;*/
+/*}*/
 
-#contact-name-error {
-    visibility: hidden;
-}
+/*#contact-name-error {*/
+/*    visibility: hidden;*/
+/*}*/
 
-#contact-email-error {
-    visibility: hidden;
-}
+/*#contact-email-error {*/
+/*    visibility: hidden;*/
+/*}*/
 
-#contact-message-error {
-    visibility: hidden;
-}
+/*#contact-message-error {*/
+/*    visibility: hidden;*/
+/*}*/
 
+/*#app-job-name-error {*/
+/*    visibility: hidden;*/
+/*}*/
+
+/*#app-employer-error {*/
+/*    visibility: hidden;*/
+/*}*/
+
+/*#app-url-error {*/
+/*    visibility: hidden;*/
+/*}*/
+
+/*#app-date-error {*/
+/*    visibility: hidden;*/
+/*}*/
+
+/*#app-status-error {*/
+/*    visibility: hidden;*/
+/*}*/
+
+/*#app-followup-error {*/
+/*    visibility: hidden;*/
+/*}*/
 
 .status-select{
     background-image: var(--select-icon-img);
@@ -538,7 +562,6 @@ nav .nav-link:hover {
 input::-webkit-calendar-picker-indicator {
     filter: invert(var(--calendar-invert-amount));
 }
-
 
 
 /*********************** form receipt **************************/ /*********************** form receipt **************************/
