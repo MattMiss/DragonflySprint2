@@ -79,7 +79,7 @@ if(! empty($_POST)) {
     // constants
     $RADIO_VALUES = array("Seeking Internship", "Seeking Job", "Not Actively Searching");
     $MIN_COHORT_NUM = 1;
-    $MAX_COHORT_NUM = 100;
+    $MAX_COHORT_NUM = 3000;
     $MIN_ROLES = 0;
     $MAX_ROLES = 500;
     $MIN_PASSWORD = 8;
@@ -123,7 +123,7 @@ if(! empty($_POST)) {
     }
 
     // roles
-    if(strlen($roles) > 0 && ! strlen($roles) <= $MAX_ROLES) {
+    if(strlen($roles) > $MAX_ROLES) {
         echoError('Length of roles text must be less than ' . $MAX_ROLES . ' characters.');
         return;
     }

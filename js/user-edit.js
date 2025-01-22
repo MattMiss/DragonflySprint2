@@ -9,7 +9,7 @@ const status = document.querySelectorAll("input[name='status']");
 const roles = document.getElementById("edit-roles");
 const passwordList = document.getElementsByClassName('requirement');
 const MIN_COHORT = 1;
-const MAX_COHORT = 100;
+const MAX_COHORT = 3000;
 const MIN_CHARACTERS = 0;
 const MAX_CHARACTERS = 500;
 const STATUS = ["Seeking Internship", "Seeking Job", "Not Actively Searching"];
@@ -206,6 +206,7 @@ function validateStatus() {
 
 // validates roles input
 function validateRoles() {
+    console.log(roles.value.trim().length);
     let isValid = (roles.value.trim().length >= MIN_CHARACTERS) && (roles.value.trim().length <= MAX_CHARACTERS);
     const rolesError = document.getElementById("edit-roles-error");
 

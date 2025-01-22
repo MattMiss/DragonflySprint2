@@ -1,6 +1,6 @@
 # Application Tracking Tool For Green River College
 
-This project's final presentation was on March 19th, 2024 for Green River College's staff. 
+This project's final presentation was on March 19th, 2025 for Green River College's staff. 
 Five two-week-long sprints were used in order to complete this project.
 
 ## Overview

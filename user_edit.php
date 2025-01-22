@@ -114,9 +114,9 @@ include 'php/nav_bar.php' ?>
 
                     <div class="mb-3">
                         <label for="edit-cohort-num" class="form-label">Cohort Number*</label>
-                        <small id="edit-cohort-error" class="warning ps-1" style="visibility: hidden">Please enter a number between 1 and 100</small>
-                        <input type="number" class="form-control" id="edit-cohort-num" name="cohort-num" min="1" max="100"
-                               placeholder="1-100" value="<?php echo $cohortNum?>">
+                        <small id="edit-cohort-error" class="warning ps-1" style="visibility: hidden">Please enter a number between 1 and 3000</small>
+                        <input type="number" class="form-control" id="edit-cohort-num" name="cohort-num" min="1" max="3000"
+                               placeholder="1-3000" value="<?php echo $cohortNum?>">
                     </div>
 
                     <div class="mb-3">

@@ -18,7 +18,8 @@ include 'php/roles/user_check.php';
 // Redirect admins to admin dashboard
 include 'php/roles/admin_kick.php';
 
-$indexLocation =  'http://localhost:63342/Sprint4/index.php'; // local (may need to change port number)
+$indexLocation = '/index.php';
+//$indexLocation =  'http://localhost:63342/Sprint4/index.php'; // local (may need to change port number) PHP Storm location
 //$indexLocation =  'https://dragonfly.greenriverdev.com/sprint5/index.php'; //cpanel
 
 // Redirect back to index if a user navigates here without supplying an app_id
